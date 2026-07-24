@@ -266,71 +266,71 @@ Rf = 1/Q;
 Rd = Rf;
 
 % ---- CAPITAL-GOODS PRODUCER & CAPITAL ACCUMULATION ----------------------
-% (9) Tobin's Q                                                        (B.6)
+% (9) Tobin's Q                                                        (B.5)
 Qtob = 1/(1 - tau*(i/k(-1) - STEADY_STATE(i)/STEADY_STATE(k)));
 % (10) detrended capital law of motion (Gourio factor cancels)         (B.1)
 k = ((1-delta0*u^eta)*k(-1) + (i/k(-1) - tau/2*((i/k(-1) - STEADY_STATE(i)/STEADY_STATE(k))^2))*k(-1))/exp(muz);
 
 % ---- FIRMS & PRICE SETTING ---------------------------------------------
-% (11) aggregate production                                            (B.15)
+% (11) aggregate production                                            (B.14)
 y = ktilde^alpha * L^(1-alpha) / Omega;
-% (12) real wage                                                       (B.8)
+% (12) real wage                                                       (B.6)
 w = mc*(1-alpha)*(ktilde/L)^alpha;
-% (13) real rental rate                                                (B.9)
+% (13) real rental rate                                                (B.7)
 Pkr = mc*alpha*(ktilde/L)^(alpha-1);
-% (14) effective capital                                               (B.10)
+% (14) effective capital                                               (B.8)
 ktilde = u*k(-1);
-% (15) reset inflation                                                 (B.11)
+% (15) reset inflation                                                 (B.9)
 pireset = pi*upsilon/(upsilon-1)*X1/X2;
-% (16) price dispersion                                                (B.16)
+% (16) price dispersion                                                (B.13)
 Omega = (1-zeta)*pireset^(-upsilon)*pi^upsilon + zeta*pi^upsilon*Omega(-1);
 % (17) aggregate inflation                                             (B.14)
 pi^(1-upsilon) = (1-zeta)*pireset^(1-upsilon) + zeta;
-% (18) Calvo auxiliary X1                                              (B.12)
+% (18) Calvo auxiliary X1                                              (B.10)
 X1 = y*mc + zeta*Q*(1-theta*Deltak)*exp(muz)*X1(+1)*pi(+1)^upsilon;
-% (19) Calvo auxiliary X2                                              (B.13)
+% (19) Calvo auxiliary X2                                              (B.11)
 X2 = y + zeta*Q*(1-theta*Deltak)*exp(muz)*X2(+1)*pi(+1)^(upsilon-1);
 
 % ---- ENTREPRENEURS (Bernanke-Gertler-Gilchrist 1999) --------------------
-% (20) utilisation FOC                                                 (B.17)
+% (20) utilisation FOC                                                 (B.15)
 Pkr = Qtob*delta0*eta*u^(eta-1);
-% (21) realised (disaster-free, x=0) return on capital                 (B.18)
+% (21) realised (disaster-free, x=0) return on capital                 (B.16)
 RK = (Pkr*u + Qtob*(1-delta0*u^eta))/Qtob(-1);
-% (22) CAPITAL DEMAND / external finance premium  E[R^K]=R^L*premium   (B.19+B.20)
+% (22) CAPITAL DEMAND / external finance premium  E[R^K]=R^L*premium   (B.17+B.28)
 %      Consolidates free-entry (R^L=E[R^K]) and EFP into one BGG wedge.
 (1-theta*Deltak)*RK(+1) = RL * s0 * (Ne/(Qtob*k))^(-chie);
-% (23) entrepreneur net-worth accumulation                            (B.21)
+% (23) entrepreneur net-worth accumulation                            (B.19)
 Ne = tau_e*( RK*Qtob(-1)*k(-1) - RL(-1)*(Qtob(-1)*k(-1) - exp(-muz)*Ne(-1)) ) + iotae;
-% (24) entrepreneur balance sheet  (defines loan value QL)             (B.22)
+% (24) entrepreneur balance sheet  (defines loan value QL)             (B.20)
 QL = Qtob*k - Ne;
 
 % ---- BANKS (Gertler-Karadi 2011 + home bias) ----------------------------
-% (25) home-bias portfolio identity                                    (B.25)
+% (25) home-bias portfolio identity                                    (B.23)
 QbB = phi/(1-phi)*QL;
-% (26) binding leverage constraint  A = lambda*N^b                     (B.24)
+% (26) binding leverage constraint  A = lambda*N^b                     (B.22)
 QL + QbB = lam*Nb;
-% (27) BANK NET WORTH  (bank earns the LOAN rate R^L on loans)         (B.26)
+% (27) BANK NET WORTH  (bank earns the LOAN rate R^L on loans)         (B.24)
 Nb = sigma_b*exp(-muz)*( (RL-Rd)*QL(-1) + (Rb-Rd)*QbB(-1) + Rd*Nb(-1) ) + iotab;
-% (28) bank balance sheet (defines deposits D)                         (B.23)
+% (28) bank balance sheet (defines deposits D)                         (B.21)
 QL + QbB = Nb + D;
 
 % ---- SOVEREIGN / DISASTER TRANSMISSION (Gabaix 2012 closed form) --------
 % (29) resilience                                                      (B.27)
 Hb = 1 - theta*Deltab*LambdaM;
-% (30) sovereign bond price                                            (B.28)
+% (30) sovereign bond price                                            (B.25)
 Qb = Hb/Rf;
-% (31) realised sovereign bond return (x=0)                            (B.29)
+% (31) realised sovereign bond return (x=0)                            (B.27)
 Rb = 1/Qb(-1);
 
 % ---- PUBLIC AUTHORITY ---------------------------------------------------
-% (32) Taylor rule                                                     (B.35)
+% (32) Taylor rule                                                     (B.32)
 r = rhor*r(-1) + (1-rhor)*( phipi*(pi-piss) + phiy*(y-STEADY_STATE(y)) + STEADY_STATE(r) ) + sigr*er;
 % ---- MARKET CLEARING ----------------------------------------------------
-% (33) aggregate resource constraint                                   (A.5.1)
+% (33) aggregate resource constraint                                   (A.33)
 y = c + i;
 
 % ---- REPORTING (definitional) -------------------------------------------
-% (34) sovereign spread                                                (B.31)
+% (34) sovereign spread                                                (B.29)
 spread = 1/Qb - Rf;
 % (35) bank leverage
 lev = (QL + QbB)/Nb;
