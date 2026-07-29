@@ -38,12 +38,24 @@ if isempty(which('dynare'))
 end
 
 %% ---------------------- user settings -----------------------------------
-MODEL      = 'thesis_model';   % .mod file name (without extension)
+MODEL      = 'thesis_model_v3';   % .mod file name (without extension)
+                               % MUST match the actual .mod filename exactly --
+                               % this project has previously had a 'thesis_model.mod'
+                               % that silently diverged from the file actually being
+                               % edited. If a stale thesis_model.mod exists anywhere
+                               % on the MATLAB path, dynare() will find and run THAT
+                               % one instead, with no error and no warning.
+                               % Check `which thesis_model.mod` before running if in doubt.
 burnin     = 10000;            % periods to reach the ergodic mean
 nIrf       = 20;               % IRF horizon (quarters)
 shockName  = 'etheta';         % shock to study ('etheta' or 'er')
 shockSize  = 0.01;             % innovation size (log units); IS2017 used 0.01
 korder     = 3;                % MUST equal order= in stoch_simul (=3)
+                                % If you follow the order=1 debug tip above (editing
+                                % the .mod's @#define ORDER = 1, or passing -DORDER=1),
+                                % you MUST also set korder=1 here, or simult_ below will
+                                % reconstruct the pruned state space at the wrong order
+                                % and fail confusingly. These two are not auto-synced.
 
 % Scenarios: {label, extra dynare macro-define, line style}
 scen = { ...
@@ -102,9 +114,9 @@ plotVars = { ...
    'r',        'Nominal rate'; ...
    'spread',   'Sovereign spread'; ...
    'Nb',       'Bank net worth N^b'; ...
-   'Ne',       'Entrepreneur net worth N^e'; ...
-   'RL',       'Loan rate R^L'; ...
-   'Qb',       'Bond price Q^b'};
+   'Ne',       'Entrepreneur net worth N^e'; ...   % 2026-07-30: BGG reinstated (double accelerator)
+   'lev',      'Bank leverage (endogenous)'; ...
+   'RS',       'Loan rate R^S'};   % was 'RL' -- no such variable; loan rate is RS
 
 figure('Name','GIRF to a disaster-risk shock','Position',[80 80 1200 900]);
 for p = 1:size(plotVars,1)
