@@ -1135,3 +1135,70 @@ describe this final state (BGG+GK double accelerator, endogenous
 leverage). Next step: rederive Appendix A/B/C to match this specification
 exactly, in the user's own derivation/notation style, documented as its
 own changelog subsection for full retraceability.
+
+---
+
+## 2026-07-30 — Appendix A review vs. the final model; numerical test of
+### the "perceived risk without realised default" channel
+
+Reviewing Appendix A equation-by-equation against `thesis_model_v3.mod`
+(user handling the mechanical LaTeX edits directly): A.1 (Households) and
+A.2 (Firms) are untouched by the BGG/GK work and match exactly. A.3.1
+(entrepreneurs/BGG, eq. A.3.1.1-A.3.1.6) matches the reinstated BGG
+equations in the .mod file verbatim. A.3.2.2-A.3.2.3 (banker value
+function, incentive constraint) already derive, in prose, the EXACT
+theory now implemented in Dynare (ν_t, η_t, Ω_t, λ_t=ν_t/(θᵇ-η_t)) — the
+fix did not introduce new theory, it made the .mod file actually
+implement what this section already derived, rather than the "baseline
+implementation... λ_t=λ fixed" approximation described in the paragraph
+immediately after eq. (A.3.2.3), which is now factually outdated. Two
+further mechanical inconsistencies found: eq. (A.3.2.5) uses R^d_t
+(current) where Appendix B's already-corrected eq. (B.23) and the .mod's
+eq(27) use R^d_{t-1}; eq. (A.5.4) and its companion prose write the loan
+supply identity with constant λ where it should now read λ_t.
+
+**Numerical test of whether perceived risk (without realised default) can
+move the model — the question behind Appendix A.3.3's propagation-chain
+claim that the mechanism "operates through realised sovereign default,
+not through perceived risk alone."** Order-1 IRF to a `+1 std etheta`
+shock, impact period (t=0) values:
+
+```
+          t=0        t=1        t=2        t=3        t=4
+lev    0.014793   0.040365   0.056938   0.066111   0.070072
+QS     0.008183   0.015066   0.018462   0.020449   0.021719
+QbB    0.002046   0.003767   0.004615   0.005112   0.005430
+Nb     0.000000  -0.002269  -0.004073  -0.005038  -0.005326
+etaB  -0.001814  -0.001060  -0.000457  -0.000042   0.000224
+nuB    0.011801   0.016647   0.019329   0.020487   0.020642
+Qb    -0.006433  -0.004168  -0.003010  -0.002300  -0.001815
+Rb     0.000000   0.006661   0.004316   0.003116   0.002382
+```
+
+`Nb` (bank net worth) is **exactly zero at impact** — a true
+predetermined state, it cannot respond contemporaneously. `lev`, `QS`,
+`QbB`, `etaB`, `nuB` all move **immediately**, before `Nb` has changed at
+all — because `lev` is a jump variable (η_t depends on `E_t[R^b_{t+1}]`,
+a forward-looking object). By period 5 this impact-period jump in `lev`
+(0.0148) is ~21% of the eventual peak response (0.0706) — quantitatively
+material, not noise. `Rb` itself is zero at impact (it depends on
+`Qb(-1)`, the pre-shock price) and only moves from t=1 — consistent with
+a *second*, lagged mark-to-market channel operating through realised
+bond returns into `Nb`'s accumulation equation, separate from the
+leverage channel.
+
+**Conclusion: the "realised default only" claim in Appendix A.3.3 is
+incorrect for the model as implemented.** Two distinct channels are
+present: (1) an immediate perceived-risk channel operating through the
+now-endogenous bank leverage margin (η_t/ν_t respond to *expected* future
+bond returns), and (2) a lagged mark-to-market channel operating through
+bank net worth (as `Rb` falls following a `Qb` decline). Notably, a
+sentence describing channel (2) already exists in Appendix A, currently
+commented out, superseded by the (now incorrect) "realised default only"
+claim a few paragraphs later. Recommendation: this strengthens rather
+than weakens the thesis's contribution — "perceived risk transmits via
+leverage immediately, realised losses transmit via net worth with a lag"
+is a richer and more literature-consistent finding (matches IS2017's own
+headline claim that perceived risk alone can generate recessions) than
+"only realised default matters." The propagation-chain paragraph and the
+suppressed sentence should be revised to reflect both channels, not one.
