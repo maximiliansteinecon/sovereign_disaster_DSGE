@@ -1288,3 +1288,105 @@ whether to insert this directly (with the proposed B.21a-B.21d numbering)
 or write it in their own hand, given the precision of their existing
 notation conventions elsewhere in the document. Awaiting their decision
 before any edit is made to the thesis file for this item.
+
+**2026-08-01 update: user implemented the proposed B.21a-B.21d insertion.**
+Verified against the exact text handed over — matches verbatim, correctly
+placed (align block correctly split/reopened around B.21, both
+explanatory paragraphs present, table row correctly updated to "λ see
+B.21a-B.21d"). No discrepancy found; this item is CLOSED.
+
+Also verified the status of the three Appendix A edits flagged
+2026-07-30: (1) the "baseline implementation...λ fixed at SS" paragraph
+after eq. A.3.2.3 — NOT yet updated, still reads as before; (2) eq.
+A.3.2.5 timing (R^d_t to R^d_{t-1}) — CORRECTLY fixed, matches B.23 and
+the .mod's eq(27); (3) eq. A.5.4 lambda to lambda_t — the EQUATION itself
+is fixed, but the companion sentence immediately before it ("loan
+supply... Q_tS_t=(1-phi)*lambda*N^b_t") still uses plain lambda without
+the time subscript. Items (1) and the prose half of (3) remain open.
+
+---
+
+## 2026-08-01 — Appendix C review vs. the final model: a genuine
+### open question on the bank value-function's bond-return term
+
+Full equation-by-equation review of Appendix C (Non-Stochastic Steady
+State) against `thesis_model_v3.mod`, same process as Appendix A/B.
+
+**Confirmed matching, no action needed:**
+- D0 (definitions/conventions): sets up the nu^b/eta^b/Omega^b notation
+  correctly, consistent with the Appendix B insertion.
+- D2-D6 (discounting/risk-free rate, sovereign bond block, price setting,
+  capital/utilisation, production): all consistent with the .mod file,
+  untouched by the BGG/GK work.
+- D7 (Entrepreneur Block, eq. C.23-C.28): matches the reinstated BGG
+  equations and the .mod's steady-state block exactly (equity ratio
+  kappa, participation condition, net-worth accumulation, iotae residual)
+  — confirmed unaffected, as anticipated.
+- D8's balance-sheet and net-worth-accumulation equations (C.29-C.32):
+  match the .mod's steady-state block (Ass, QbBss, Nbss, Dss, iotab)
+  exactly, including using the REALISED (not theta-weighted) bond return
+  Rbss=1/Qbss directly inside the net-worth accumulation formula — same
+  convention as eq(27)/B.23.
+- D9, D10 (Public Authority, Solution Algorithm): consistent, no
+  BGG/GK-specific issues; D10's step-by-step solution ordering correctly
+  references the new D8 value-function block.
+
+**Substantive open question (not resolved unilaterally — flagged per the
+standing instruction):**
+
+D8's "Value-function coefficients and the diversion parameter" paragraph
+(eq. C.33-C.35) derives a CLOSED-FORM steady-state for nu^b, eta^b,
+theta^b under the claim that the bond's excess return contributes
+EXACTLY ZERO to eta^b at steady state — i.e. E[Q_bar*(R^b-R^d)]=0 — so
+that eta^b_bar = varsigma * nu^b_bar using ONLY the loan-side spread
+varsigma=(1-phi)(R^S-R^f)/R^f, with the bond term dropped entirely.
+
+**This E[Q(R^b-R^d)]=0 claim is mathematically correct** as a pure
+identity: E_t[Q*R^b_{t+1}]=1 exactly (by the Gabaix/Gourio bond-pricing
+construction, already documented in the .mod's header) and E_t[Q]*R^d=1
+(since R^d=R^f=1/E_t[Q] by definition and R^d is known at t), so their
+difference is exactly zero — PROVIDED the R^b_{t+1} used is the TRUE,
+properly theta-weighted expected return (i.e. averaging over both the
+disaster and no-disaster branches with the correct covariance between
+the SDF and the bond payoff).
+
+**But this is NOT the R^b object that either the .mod file or this same
+appendix's OWN eq. (C.31)/(C.32) actually use.** Both eq(27) in the .mod
+file and D8's own net-worth-accumulation derivation (C.31-C.32, a few
+paragraphs earlier in this SAME subsection) use "Rb"/"R^b_t" as the
+REALISED (x=0, "promised yield") value 1/Qb_{t-1} directly — NOT the
+theta-weighted true expectation. Numerically, at the .mod's steady state,
+this realised spread is Rbss-Rdss = 0.00696, which equals the sovereign
+spread exactly (by construction, spread=1/Qb-Rf) — clearly NOT zero.
+Verified directly: my Dynare steady-state formula for `spreadAss`
+(feeding into `etaBss`, hence `lambdadiv`) includes this nonzero
+`phi*(Rbss-Rdss)` term explicitly; it does NOT assume or enforce it away
+to zero the way eq. (C.33)-(C.35) does.
+
+**This is a genuine internal inconsistency, present within Appendix C
+itself, not something introduced by today's review:** eq. (C.31)/(C.32)
+and eq. (C.33)-(C.35), in the SAME subsection, use two DIFFERENT
+conventions for the same R^b object — realised-value in one, and
+theta-weighted-true-expectation in the other — and only one of these
+conventions (realised-value) is what the .mod file (and the rest of the
+appendix, including the dynamic eq. B.23) actually implements throughout.
+
+**Two ways to resolve this, neither of which I've applied:**
+1. **Match the .mod file / rest of the appendix**: rewrite eq.
+   (C.33)-(C.35) to use the realised bond spread directly (matching
+   C.31/C.32's own convention), which would make `eta^b_bar` include a
+   nonzero `phi*(Rbss-Rfss)` term rather than dropping the bond
+   contribution to zero — losing the clean closed-form but gaining
+   internal consistency with everything else in the model.
+2. **Fix the .mod file (and B.21a/B.21b) to properly theta-weight the
+   bond return** inside eta_t's formula (e.g. multiplying `Rb(+1)` by
+   `(1-theta*Deltab)`, mirroring how `RK(+1)` is explicitly weighted by
+   `(1-theta*Deltak)` in eq(22)) — matching the cleaner C.33-C.35 theory,
+   but requiring a full re-derivation, re-verification (resid/check/
+   stoch_simul for both phi scenarios), and a recheck of whether this
+   changes the magnitude of the 2026-07-30 "perceived risk via leverage"
+   finding, since that finding's quantitative size depends on exactly how
+   `etaB`/`nuB` respond to `Rb(+1)`.
+
+**Not resolved. Presented to the user for a decision before any further
+change to either the .mod file or the thesis text on this point.**

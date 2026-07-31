@@ -22,15 +22,22 @@ critique (`ToDoJuly30th.md`), roughly in priority order.
       paragraph to describe both channels rather than deleting the
       finding to preserve the old claim — but this is your call on
       framing since it touches the thesis's core narrative.
-- [ ] Once Appendix A is settled, move to **Appendix B** (Stationarization)
+- [x] Once Appendix A is settled, move to **Appendix B** (Stationarization)
       review — same process: equation-by-equation against the .mod file,
       confirm/flag, only rewrite what's verified. Note: B.21 (leverage
       constraint) currently still shows fixed λ — needs the same
       λ → λ_t treatment as A.3.2.3/A.5.4.
-- [ ] Then **Appendix C** (Non-Stochastic Steady State) — same process.
+      *(2026-08-01: done — B.21a-B.21d inserted and verified verbatim
+      against the .mod file; table row fixed.)*
+- [x] Then **Appendix C** (Non-Stochastic Steady State) — same process.
       Section D8 ("Bank Block") is the one most affected by the
       endogenous-leverage derivation; D7 ("Entrepreneur Block") should be
       unaffected (BGG reinstated verbatim).
+      *(2026-08-01: review done — D7 confirmed unaffected as anticipated;
+      D8 surfaced a genuine open question, see CHANGELOG "2026-08-01 —
+      Appendix C review" section: eq. C.33-C.35's "bond term = 0 exactly"
+      claim uses a different R^b convention than eq. C.31/C.32 and the
+      .mod file both actually use. NOT resolved — needs your decision.)*
 - [ ] Optional, lower priority: sanity-check the `phi=0` counterfactual's
       flagged numerical fragility (literal `Inf` and ~1e20 eigenvalues at
       that exact corner case, vs. a clean spectrum at `phi=0.10`/`0.20`)
