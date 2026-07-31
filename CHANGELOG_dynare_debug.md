@@ -1202,3 +1202,89 @@ is a richer and more literature-consistent finding (matches IS2017's own
 headline claim that perceived risk alone can generate recessions) than
 "only realised default matters." The propagation-chain paragraph and the
 suppressed sentence should be revised to reflect both channels, not one.
+
+**Also confirmed same day (safe-haven sign check):** the user separately
+asked whether `Qb`'s response to a pure-probability shock could flip
+positive (a risk-premium/safe-haven reversal, since `Qb=Hb/Rf` and `Rf`
+could in principle fall by more than `Hb`). Checked directly: `Qb` falls
+at every single period from t=0 to t=8 in the order-1 IRF, never flips
+sign; the `Δlog(Hb) - Δlog(Rf)` decomposition matches the actual `Qb`
+IRF to within ~1-2% at every point (the residual is the expected missing
+second-order cross-term from an additive log-decomposition of a ratio,
+not an error). `Rf` does rise briefly at impact before turning negative
+from period 2 onward, but `Hb`'s decline dominates at every horizon
+checked, so `Qb` never gets pushed positive. No sign error; the
+realised-loss/risk-premium framing (not a safe-haven reversal) is what
+this calibration actually produces.
+
+---
+
+## 2026-07-31 — Appendix B review vs. the final model
+
+Same process as the 2026-07-30 Appendix A review, applied to Appendix B
+(Stationarization), using the "July 31st (night)" thesis file. Full
+equation-by-equation comparison against `thesis_model_v3.mod`.
+
+**Confirmed matching, no action needed:**
+- B.1-B.14 (household capital accumulation/Bellman/SDF/consumption FOC/
+  Tobin's Q; firms/Calvo/production block): match the .mod exactly,
+  untouched by the BGG/GK work.
+- B.15-B.19 (entrepreneur/BGG block: utilisation FOC, return on capital,
+  participation/EFP condition, net worth, balance sheet): match the
+  reinstated BGG equations exactly, including the `k^n_{t+1}=exp(muz)*k`
+  detrending convention (verified: Dynare's `Qtob*exp(muz)*k` = thesis's
+  `Q_t*k^n_{t+1}`, given ε_z,t=0 in the baseline so Γ_{t+1}=e^μ exactly).
+- B.20 (bank balance sheet), B.22 (home-bias identity), B.24-B.32
+  (resilience, bond price, bond return, spread, Fisher equation, Taylor
+  rule, goods clearing): all match exactly, untouched.
+- B.29 (government budget constraint / T_t): same pre-existing,
+  already-disclosed gap noted in the .mod's own header (T_t not
+  implemented, no feedback) — not new, not introduced by this session's
+  work.
+
+**Already correctly updated (confirmed, not fixed):**
+- B.21 already reads `Q_ts_t + Q^b_tb^b_t <= lambda_t n^b_t` (time
+  subscript present) — the leverage-fixed-constant notation has already
+  been corrected here, consistent with the endogenous leverage now in
+  the .mod file. (Presumably done by the user following yesterday's
+  Appendix A findings.)
+
+**Substantive gap found:** the four equations that actually determine
+`lambda_t` (nu_t, eta_t, Omega_t, and lambda_t=nu_t/(theta^b-eta_t),
+fully derived in prose in Appendix A.3.2.2-A.3.2.3 and already
+implemented/validated in the .mod file as etaB/nuB/OmB/lev) are entirely
+ABSENT from Appendix B's stationarized equation list, which jumps
+directly from the balance sheet (B.20) to the leverage constraint (B.21)
+using `lambda_t` without ever stating what determines it. The Appendix C
+preamble already anticipates this (reserves notation nu^b/eta^b/Omega^b
+"to avoid collisions"), but the equations were never written into B.
+Verified these require NO additional detrending beyond the level-form
+derivation (they are ratios of same-trending value-function/net-worth
+objects, exactly analogous to how Q_t, R^S_t etc. need no detrending),
+and should be discounted with Q_{t,t+1} (not Theta_t), matching how the
+deposit Euler discounts the other stationary payoff R^d_t. Proposed
+equations (matching the .mod exactly, ready for the user to insert as
+B.21a-B.21d, following the existing B.3a/B.3b/B.3c sub-lettering
+precedent already used elsewhere in this same appendix):
+
+```
+eta^b_t   = E_t[Q_{t,t+1} * Omega^b_{t+1} * Rex_{t+1}],
+            Rex_{t+1} = (1-phi)*R^S_t + phi*R^b_{t+1} - R^d_t
+nu^b_t    = E_t[Q_{t,t+1} * Omega^b_{t+1} * R^d_t]
+Omega^b_t = (1-sigma^b) + sigma^b*(nu^b_t + lambda_t*eta^b_t)
+lambda_t  = nu^b_t / (theta^b - eta^b_t)
+```
+
+**Also found:** the summary table at the end of Appendix B (row "Banker
+value fn (A.3.2.2)") still reads "groundwork; lambda fixed at SS" —
+inconsistent with B.21 now showing lambda_t. Same correction needed as
+the analogous Appendix A paragraph flagged yesterday.
+
+**Status: presented to the user, not yet written into the .txt file.**
+This is a content addition (~4 new equations), not a verification-based
+correction, so — per the standing instruction to circle back on genuine
+judgment calls rather than decide unilaterally — the user was asked
+whether to insert this directly (with the proposed B.21a-B.21d numbering)
+or write it in their own hand, given the precision of their existing
+notation conventions elsewhere in the document. Awaiting their decision
+before any edit is made to the thesis file for this item.
