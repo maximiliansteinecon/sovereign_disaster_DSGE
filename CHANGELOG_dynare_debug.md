@@ -1456,3 +1456,121 @@ cross-references; C.34/C.35 kept, `varsigma`'s definition corrected to
 include the bond term via the already-defined steady-state `spread`
 object from eq. A.3.3.6). Not yet inserted into the thesis file --
 awaiting the user's own insertion, as with the Appendix B addition.
+
+**2026-08-01 update: user confirmed inserting the C.33-C.35 replacement.**
+Verified against the exact text handed over -- matches verbatim. Eq.
+C.33/`eq:D_bondnull` confirmed removed cleanly (was unreferenced, no
+dangling cross-references). This item is CLOSED.
+
+---
+
+## 2026-08-01 -- Full document consistency pass; one critical finding
+
+Full, independent re-read of the thesis file (August 1st morning
+version), checking Appendices A/B/C once more end to end for anything
+missed, PLUS the main text (Introduction, Theoretical Model sections),
+specifically looking for regressions or new inconsistencies rather than
+re-verifying already-closed items.
+
+**Confirmed clean:** no stale variable/equation counts, no remaining bare
+`\lambda` where a `\lambda_t` is needed (all remaining bare-`\lambda`
+usages are legitimately in Appendix C's steady-state context, where the
+document's own established convention already drops time subscripts,
+e.g. `\bar R^S`, consistent with C.29-C.32 which were never in
+question). Appendix B and C insertions both verified byte-for-byte
+against what was handed over.
+
+**CRITICAL FINDING (the most urgent item in the whole document right
+now):** the main-text hypothesis paragraph (Introduction, lines 112-114)
+has been restored/uncommented since the last review, correctly fixing
+the literature-review critique's top complaint (a "missing half" of the
+thesis's own hypothesis, per `ToDoJuly30th.md` item 1) -- but using the
+ORIGINAL, single-channel wording: *"The financial accelerator channel
+activates only upon a realised default... A realised sovereign haircut
+is therefore necessary."* This is the exact claim that was numerically
+falsified on 2026-07-30 (the impact-period leverage-channel test) and
+which Appendix A.3.3 was subsequently, correctly rewritten to contradict
+-- A.3.3 now explicitly states there are TWO channels, one of which
+("Immediate channel: perceived risk via the bank's incentive
+constraint") requires no realised default and is present "even along a
+sample path on which x_t=1 never realizes."
+
+**The thesis therefore currently contains a direct, textual, easy-to-spot
+contradiction between its own stated hypothesis (Introduction) and its
+own detailed mechanism derivation (Appendix A.3.3), on the single most
+important substantive claim in the paper.** This is exactly the kind of
+inconsistency an examiner reads the introduction and the appendix
+against each other and catches immediately. Restoring the commented-out
+sentence fixed the literature review's complaint about a missing half of
+the hypothesis without re-checking it against the two-channel finding
+that had, in the meantime, superseded it. Recommended fix: rewrite lines
+112-114 to state both channels (immediate, via bank leverage; lagged,
+via realised default and net worth), mirroring the A.3.3 language.
+NOT fixed here -- flagged to the user directly in this session's response
+along with the full to-do reconciliation; see `ToDoAugust1st.md` item 1.
+
+**Other things checked and confirmed NOT yet done** (user has indicated
+Sections 2/3 of the to-do list -- literature review and housekeeping --
+are being taken over personally; noted here only for completeness of the
+consistency pass, not acted on): the Abstract/Introduction still contain
+literal placeholder sentences ("We find that ", "The thesis is organised
+as follows " with nothing following); the Calibration and Main Results
+subsections of the main text are empty (Main Results has one commented-
+out line and nothing else); most literature-review to-do items remain
+open (only the `Gourieroux2021` typo fix and the financial-accelerator
+sentence restoration -- the latter now flagged as needing further work,
+see above -- show any change since 2026-07-30); `git status` still shows
+a large set of uncommitted changes and untracked Dynare-generated/scratch
+files, though the two previously-flagged deleted files no longer appear
+at all (resolved).
+
+---
+
+## 2026-08-01 (late) -- Taylor projection (Fernandez-Villaverde & Levintal
+### 2018) evaluated as an alternative solution method: NOT recommended
+
+User asked whether Taylor projection, per Fernandez-Villaverde & Levintal
+(2018, IER), could/should be used in place of the current order-3 Dynare
+perturbation solution, per the paper's own finding that perturbation can
+be inaccurate for rare-disaster models. Read the full paper. Conclusion:
+recommend AGAINST switching, for a specific, citable reason, not just
+time pressure.
+
+**The core finding.** FV&Levintal's motivating problem is perturbation's
+failure on a MODEL WHERE THE DISASTER EVENT ACTUALLY REALIZES along the
+simulated path (their `d_t in {0,1}`), which produces strong local
+nonlinearity in volatile asset prices. Their own footnote 1 states:
+"Isore and Szczerbowicz (2017) addressed this problem by designing the
+model such that the detrended variables are independent of the disaster
+shock." This is exactly the Gourio trick used throughout
+`thesis_model_v3.mod` and derived explicitly in Appendix B (e.g. "the
+detrended value v_{t+1} is invariant to the disaster draw... the entire
+disaster loading of the SDF is carried by the explicit trend factor").
+Because this model, like IS2017, analytically eliminates the discrete
+x_{t+1} jump BEFORE perturbation ever runs (replacing it everywhere with
+continuous theta_t-dependent objects: Dcal, Ecal, Hb, Theta), the
+specific failure mode FV&Levintal document is substantially pre-empted
+by construction -- for the same reason it doesn't bind for IS2017 itself,
+whose own order-3-perturbation solution this thesis extends.
+
+**Practical scope, for the record.** Taylor projection is not a Dynare
+option -- it requires the model recast into FV&Levintal's own
+`f(y_{t+1},y_t,x_{t+1},x_t)=0` / `g` / `h` form and their own MATLAB
+toolbox (Levintal 2018) with its chain-rule differentiation machinery.
+The current model (42 variables, ~12 state variables) is comparable in
+scale to their largest tested case (version 8, 12 states, ~150s at
+3rd-order Taylor projection) -- not infeasible on size grounds, but a
+from-scratch reimplementation of an already-validated 42-equation model,
+four weeks from the deadline. Only the paper PDF was provided, not the
+toolbox; no code was touched for this evaluation.
+
+**Recommendation:** do not reimplement. Instead, (1) cite
+Fernandez-Villaverde & Levintal (2018) explicitly in the thesis as a
+considered-and-rejected alternative, using the footnote-1 argument above
+as a pre-emptive defense of the order-3 perturbation choice; (2) fold a
+targeted Euler-residual accuracy check of the CURRENT order-3 solution
+(same style as their own Table 4/5 diagnostic) into the already-planned
+"GIRF magnitude cross-check against IS2017" to-do item, rather than
+opening new scope. Both added to `ToDoAugust1st.md` section 5.
+
+This exploration is CLOSED with a recommendation, not left open.

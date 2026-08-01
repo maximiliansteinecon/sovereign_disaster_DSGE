@@ -32,6 +32,11 @@ pass. Roughly in priority order.
 - [ ] Optional: cross-check headline GIRF magnitudes (consumption,
       investment, labour) against IS2017's own published IRFs as a final
       sanity check before drafting results.
+      *(2026-08-01: scope for this item now includes a targeted
+      Euler-residual accuracy check of the current order-3 solution, same
+      style as Fernandez-Villaverde & Levintal (2018)'s own Table 4/5
+      diagnostic -- see item 6 below for why this replaces a full
+      Taylor-projection reimplementation.)*
 
 ## 3. Literature review (user taking this over personally)
 
@@ -98,3 +103,23 @@ pass. Roughly in priority order.
       sign check, and the calibration table all need to actually be
       written up with numbers and interpretation, not just exist as
       Dynare output sitting in `.mat`/`.fig` files.
+
+## 6. Solution method: Taylor projection — evaluated, CLOSED
+
+- [x] **Taylor projection (Fernandez-Villaverde & Levintal 2018) evaluated
+      as an alternative to order-3 Dynare perturbation.** Read the full
+      paper (2026-08-01, late). Recommendation: do NOT reimplement.
+      Their own footnote 1 credits Isore-Szczerbowicz (2017)'s
+      detrending-invariance construction — the same Gourio trick this
+      thesis uses throughout — with pre-empting the specific failure mode
+      (discrete disaster realization breaking perturbation's local
+      accuracy) their paper is built to solve. Full reasoning in
+      CHANGELOG "2026-08-01 (late) — Taylor projection... NOT
+      recommended". Two concrete, low-cost follow-ups instead (folded
+      into item 2's GIRF cross-check above, not new scope):
+      (a) cite FV&Levintal (2018) explicitly in the thesis as a
+      considered-and-rejected alternative, using the footnote-1 argument
+      as a pre-emptive methodological defense;
+      (b) a targeted Euler-residual accuracy check of the current order-3
+      solution (their own Table 4/5 diagnostic style) as evidence for
+      that defense.
