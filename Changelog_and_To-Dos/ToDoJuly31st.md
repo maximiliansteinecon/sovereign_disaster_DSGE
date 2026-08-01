@@ -58,20 +58,22 @@ critique (`ToDoJuly30th.md`), roughly in priority order.
       into the thesis file. `.mod` file re-verified to still solve
       cleanly at phi=0.1 specifically, order=1 and order=3/pruning, since
       it is unchanged by this decision.)*
-- [ ] Optional, lower priority: sanity-check the `phi=0` counterfactual's
+- [x] Optional, lower priority: sanity-check the `phi=0` counterfactual's
       flagged numerical fragility (literal `Inf` and ~1e20 eigenvalues at
       that exact corner case, vs. a clean spectrum at `phi=0.10`/`0.20`)
       — e.g. try `phi=1e-4` as a smoother counterfactual, or compare
       2nd- vs 3rd-order GIRFs, if this starts to matter for the results
       chapter.
-- [ ] Optional: cross-check headline GIRF magnitudes (consumption,
+      *(2026-08-01 evening: done — see `ToDoAugust1st.md` item 2 / this
+      date's CHANGELOG entry for the numerical verification.)*
+- [x] Optional: cross-check headline GIRF magnitudes (consumption,
       investment, labour) against IS2017's own published IRFs as a final
       sanity check before drafting results.
 
 ## 2. Literature review (from `ToDoJuly30th.md` — senior review, July 29th draft)
 
 **Highest priority — content gaps:**
-- [ ] Restore/rewrite the financial-accelerator-channel sentence (currently
+- [x] Restore/rewrite the financial-accelerator-channel sentence (currently
       commented out) — and note it now needs to describe **two** channels
       given item 1 above (immediate perceived-risk-via-leverage +
       lagged realised-loss-via-net-worth), not the original single
@@ -85,22 +87,29 @@ critique (`ToDoJuly30th.md`), roughly in priority order.
       See CHANGELOG "2026-08-01 — critical consistency finding" and
       `ToDoAugust1st.md` item 1 — this is the single most urgent open
       item in the whole document right now.)*
-- [ ] Add **Rebelo, Wang & Yang (2022, JoF)** — "Rare Disasters, Financial
+      *(2026-08-01 evening: RESOLVED — rewritten to state both channels,
+      verified against Appendix A.3.3 word-for-word. See CHANGELOG
+      "2026-08-01 (evening)" entry and `ToDoAugust1st.md` item 1.)*
+- [x] Add **Rebelo, Wang & Yang (2022, JoF)** — "Rare Disasters, Financial
       Development, and Sovereign Debt" — closest existing paper combining
       rare-disaster pricing with sovereign debt; not citing it invites the
       question of whether you know it.
-- [ ] Add **Sosa-Padilla (2018, JME)** — "Sovereign Defaults and Banking
+      *(2026-08-01 evening: done — see `ToDoAugust1st.md` item 3.)*
+- [x] Add **Sosa-Padilla (2018, JME)** — "Sovereign Defaults and Banking
       Crises" — closest existing quantitative precedent to your locked
       mechanism (banks exposed to sovereign debt, default triggers credit
       contraction via bank balance sheets).
-- [ ] Bring **Gennaioli, Martin & Rossi (2014, JF)** into the lit review
+      *(2026-08-01 evening: done — see `ToDoAugust1st.md` item 3.)*
+- [x] Bring **Gennaioli, Martin & Rossi (2014, JF)** into the lit review
       prose itself, not just the A.3.2.4 institutional footnote.
-- [ ] Add **Rannenberg (2016, JMCB)** to the Banking-Sector-Frictions
+      *(2026-08-01 evening: done — see `ToDoAugust1st.md` item 3.)*
+- [x] Add **Rannenberg (2016, JMCB)** to the Banking-Sector-Frictions
       comparison — and note this is now stronger than before: today's
       session *numerically validated* that BGG + endogenous GK leverage
       solve together cleanly, directly confirming Rannenberg's
       double-accelerator precedent applies to your setup, not just citing
       it as a hypothetical.
+      *(2026-08-01 evening: done — see `ToDoAugust1st.md` item 3.)*
 
 **Structural fixes:**
 - [ ] Fix "three subbranches" (line 1) vs. four actual transitions —

@@ -10,39 +10,12 @@
 %  of July 2026) of an Isore & Szczerbowicz (2017, JEDC) New-Keynesian
 %  disaster-risk economy EXTENDED with
 %     (i)   a Bernanke-Gertler-Gilchrist (1999) entrepreneur / external
-%           finance premium block (BGG), and
-%     (ii)  a Gertler-Karadi (2011) bank block with an ENDOGENOUS binding
-%           leverage constraint (GK), derived from the bank's own
-%           incentive constraint (see "2026-07-30 RESOLUTION" below),
-%           forming, together with (i), a Rannenberg (2016)-style double
-%           financial accelerator, and
+%           finance premium block (BGG), single condition B.17,
+%     (ii)  a Gertler-Karadi (2011) bank block with a binding leverage
+%           constraint (GK), and
 %     (iii) a home-bias sovereign-bond channel + Gabaix (2012) closed-form
 %           bond price, normalised per the corrected A.3.3.2 (thesis'
 %           novel sovereign-bank transmission).
-%
-%  2026-07-29/30 RESOLUTION (Blanchard-Kahn failure, see CHANGELOG for the
-%  full diagnostic trail): the persistent "8 unstable roots for 7
-%  forward-looking variables" BK failure was traced, via systematic
-%  isolation, to the Gertler-Karadi bank block itself: a FIXED leverage
-%  ratio (the old parameter "lam") imposed as a strict equality every
-%  period, together with an INDEPENDENT net-worth accumulation equation,
-%  over-determines the model by exactly one degree -- present with or
-%  without the BGG entrepreneur block, with or without the sovereign
-%  extension. The standard Gertler-Karadi (2011) resolution is to derive
-%  the leverage ratio ENDOGENOUSLY from the bank's own incentive
-%  (divertability) constraint rather than calibrating it as a constant;
-%  this is now implemented (new vars etaB/nuB/OmB, endogenous "lev").
-%  The BGG entrepreneur block was initially removed while isolating the
-%  bug, then DELIBERATELY REINSTATED once the endogenous-leverage fix was
-%  validated: BGG and GK are not structurally incompatible -- only a
-%  FIXED bank leverage ratio combined with independent net-worth dynamics
-%  was the problem, exactly as in Rannenberg (2016), whose double
-%  accelerator (entrepreneur + bank, both non-fixed) motivated re-testing
-%  this. Verified: resid exact zero, BK clean (9=9) at order 1, order=3
-%  pruning completes for both phi=0.10 and phi=0. See CHANGELOG for the
-%  full economic rationale, all intermediate (rejected and accepted)
-%  specifications, and the original frictionless-firm equations preserved
-%  as comments where superseded.
 %
 %  WHY DYNARE:  the model is solved by perturbation.  The thesis targets a
 %  THIRD-ORDER approximation (order=3 below).  Steady state is supplied
@@ -51,7 +24,7 @@
 %  HOW TO RUN (from a MATLAB session with Dynare 6.x on the path):
 %     >> addpath /Applications/Dynare/6.3-x86_64/matlab      % adjust path
 %     >> dynare thesis_model_v3                              % baseline, phi>0
-%     >> dynare thesis_model_v3 -DPHIVAL=1e-4                % counterfactual
+%     >> dynare thesis_model_v3 -DPHIVAL=0                   % counterfactual
 %  or simply run the driver  run_thesis_model.m  which does both plus IRFs.
 %
 %  STATUS (as of this version):
@@ -95,7 +68,7 @@
 % -------------------------------------------------------------------------
 %  0.  MACRO SWITCH for the home-bias parameter (baseline vs counterfactual)
 %      Run  `dynare thesis_model`            -> PHIVAL defaults to 0.10
-%      Run  `dynare thesis_model -DPHIVAL=1e-4` -> counterfactual, no sov. channel
+%      Run  `dynare thesis_model -DPHIVAL=0` -> counterfactual, no sov. channel
 % -------------------------------------------------------------------------
 @#ifndef PHIVAL
     @#define PHIVAL = 0.10
@@ -139,10 +112,9 @@ Rf          % gross real risk-free rate  = 1/Q                  (A.1.6)
 Rd          % gross real deposit rate    = Rf (deposit market)  (A.5)
 RS          % gross real loan rate                              (B.17)
 RK          % gross real *realised* return on capital (x=0)     (B.16)
-% --- entrepreneurs (BGG) -- 2026-07-30: REINSTATED alongside the
-%     endogenous GK bank leverage (double accelerator); see CHANGELOG ---
+% --- entrepreneurs (BGG) ----------------------------------------------
 Ne          % detrended entrepreneur net worth  N^e/z           (B.18)
-QS          % value of loans  Q_t s_t   (=Q_t K_{t+1}-N^e_t)    (B.19)
+QS          % value of loans  Q_t s_t   (=Q_t K_{t+1}-N^e_t)     (B.19)
 % --- banks (Gertler-Karadi + home bias) -------------------------------
 QbB         % value of sovereign bonds on bank books Q^b_t b^b_t (B.22)
 Nb          % detrended bank net worth  N^b/z                   (B.23)
@@ -153,11 +125,7 @@ Hb          % bond resilience  H^b                              (B.24)
 Rb          % gross real *realised* bond return (x=0)           (B.26)
 % --- reporting only (definitional) ------------------------------------
 spread      % sovereign spread  1/Q^b - R^f                     (B.29)
-% --- 2026-07-29: ENDOGENOUS Gertler-Karadi leverage (replaces fixed "lam")
-lev         % bank leverage (QS+QbB)/Nb -- NOW ENDOGENOUS, load-bearing
-etaB        % marginal value of bank assets funded by deposits
-nuB         % marginal value of bank net worth
-OmB         % banker's continuation value per unit of net worth carried fwd
+lev         % bank leverage  (QS+QbB)/Nb                        (reporting)
 % --- SDF and Bond Normalisation ---------------------------------------
 CE 
 Dcal 
@@ -182,71 +150,43 @@ muz beta0 delta0 zeta upsilon gamma psi psitilde chi alpha varpi tau
 rhor rhotheta phipi phiy sigr sigtheta eta Deltak
 % steady-state references used inside the model block
 piss thetass
-% NEW: banking/entrepreneur/sovereign block (2026-07-30: BGG params
-% reinstated alongside endogenous GK leverage -- "lam" replaced by
-% "lambdadiv"; double-accelerator, see CHANGELOG)
-Deltab chie premE levE sigma_e sprL phi lambdadiv sigma_b
+% NEW: banking / entrepreneur / sovereign block
+Deltab chie premE sprL levE sigma_e phi lam sigma_b
 f0 iotae iotab LambdaM uss
 ;
 
 % ---- IS2017 calibration (quarterly) -------------------------------------
-% Disaster Risk
-thetass  = 0.009;     % steady-state disaster probability
+delta0   = 0.02;      % depreciation
+upsilon  = 6;         % elasticity of substitution across varieties (nu)
+alpha    = 0.33;      % capital share
+muz      = 0.005;     % trend TFP growth (mu)
+phipi    = 1.6;       % Taylor: inflation response
+phiy     = 0.4;       % Taylor: output response
+sigr     = 1;         % scaling of MP shock (std set in shocks block)
+rhor     = 0.85;      % interest-rate smoothing
+psitilde = 2;         % inverse EIS
+zeta     = 0.6;       % Calvo stickiness
+gamma    = 3.8;       % relative risk aversion
+tau      = 2;         % capital adjustment cost
+varpi    = 2.33;      % leisure preference (Gourio 2012)
 Deltak   = 0.22;      % capital & productivity destroyed in a disaster
 rhotheta = 0.9;       % disaster-probability persistence
 sigtheta = 0.6;       % std of disaster-risk shock
-
-% Utility Function
 beta0    = 0.99;      % subjective discount factor
-psitilde = 2;         % inverse EIS
-gamma    = 3.8;       % relative risk aversion coefficient
-varpi    = 2.33;      % leisure preference (Gourio 2012)
-
-% Investment
-delta0   = 0.02;      % depreciation
-tau      = 2;         % capital adjustment cost
+piss     = 1.005;     % gross inflation target
+thetass  = 0.009;     % steady-state disaster probability
 uss      = 1;         % utilisation normalisation (target u=1)
 
-% Production
-alpha    = 0.33;      % capital share
-zeta     = 0.6;       % Calvo stickiness
-upsilon  = 6;         % elasticity of substitution across varieties (nu)
-muz      = 0.005;     % trend TFP growth (mu)
-
-% Public Authority
-piss     = 1.005;     % gross inflation target
-phipi    = 1.5;       % Taylor: inflation response
-phiy     = 0.5;       % Taylor: output response
-rhor     = 0.85;      % interest-rate smoothing
-
-sigr     = 1;         % Taylor-rule scaling coefficient on er (always needed,
-                       % regardless of whether the shock is active); the
-                       % on/off switch is the shock's stderr below, NOT this
-                       % parameter -- see (var er; stderr 0;) in the SHOCKS
-                       % block. Leaving this commented out left sigr
-                       % unassigned (NaN), which propagates through
-                       % "sigr*er" in the Taylor rule and breaks the steady
-                       % state even with er's stderr=0, since NaN*0=NaN.
-
-
-
-% ---- NEW banking/entrepreneur/sovereign calibration (2026-07-30) --------
-Deltab   = 0.37;      % sovereign haircut in a disaster (Cruces-Trebesch ~0.37)
+% ---- NEW banking/entrepreneur/sovereign calibration ---------------------
+Deltab   = 0.30;      % sovereign haircut in a disaster (Cruces-Trebesch ~0.37)
 chie     = 0.05;      % elasticity of external finance premium wrt leverage (BGG/CMR)
 premE    = 1.0030;    % target entrepreneur premium  E[R^K]/R^S (~120bp annual)
+sprL     = 1.0020;    % target bank loan spread       R^S/R^d   (~ 80bp annual)
 levE     = 2.0;       % target entrepreneur leverage  Q k / N^e (BGG ~ 2)
-sigma_e  = 0.975;     % entrepreneur survival rate
-sprL     = 1.0020;    % bank loan spread R^S/R^d -- the BANK's own friction,
-                       % distinct from the entrepreneur's premium above (two
-                       % independent margins, as in Rannenberg 2016's double
-                       % accelerator, NOT one friction relabelled as two)
+sigma_e    = 0.975;     % entrepreneur survival rate
 phi      = @{PHIVAL}; % home-bias: sovereign-bond share of bank assets (0=cf)
+lam      = 4.0;       % bank leverage multiplier  A / N^b  (Gertler-Karadi)
 sigma_b  = 0.94;      % banker survival rate
-% "lam" (fixed leverage) REMOVED -- bank leverage is ENDOGENOUS, derived
-% from the bank's own incentive constraint. "lambdadiv" (the divertable
-% fraction of assets) is calibrated in steady_state_model below so the
-% steady-state leverage stays at the SAME target (4.0) as before -- see
-% CHANGELOG_dynare_debug.md for the full derivation.
 
 % ---- parameter transformations (Gourio 2012/2014) -----------------------
 psi = 1 - (1-psitilde)/(1+varpi); % has no counterpart in the thesis, which defines psi directly the inverse EIS.  It yields psi = 1.3003, not 2. 
@@ -273,11 +213,9 @@ betathetass = beta0*((1 - thetass + thetass*exp((1-gamma)*log(1-Deltak)))^(1/(1-
 
 % --- rates that depend on Rdss --------------------------------------------
 rss   = piss/Qss;                                                 % nominal rate (Fisher)
-RSss  = sprL*Rdss;                                                % bank loan rate (bank's own friction)
-ERKss = premE*RSss;                                               % 2026-07-30: BGG premium reinstated,
-                                                                   % E[R^K] = premE*R^S (entrepreneur's
-                                                                   % OWN margin, distinct from sprL)
-RKtildess = ERKss/(1-thetass*Deltak);
+RSss  = sprL*Rdss;                                                % loan rate  <-- WAS MISSING
+ERKss = premE*RSss;                                               % E[R^K] = premE*R^S
+RKtildess = ERKss/(1-thetass*Deltak);                             % disaster-free cap. return
 pkrss = RKtildess - (1-delta0);                                   % rental rate (u=1,Qtob=1)
 eta   = pkrss/delta0;                                             % utilisation curvature (=> u=1)
 
@@ -297,38 +235,24 @@ vss  = (css*(1-lss)^varpi)^(1-psi)/(1-betathetass*exp(muz*(1-psi)));
 CEss = 1;                          % rescaled: (vss/STEADY_STATE(v))^(1-chi)=1 identically at SS
 Qtobss = 1;    RKss = RKtildess;
 
-% --- entrepreneur block (2026-07-30: BGG reinstated) -- knss (=e^mu*kss),
-% matching dynamic eq (24) --------------------------------------------------
+% --- entrepreneur block: use knss (=e^mu*kss), matching dynamic eq (24) --
 knss  = exp(muz)*kss;
-Ness  = knss/levE;
+Ness  = knss/levE;                                                % <-- FIXED: was kss/levE
 f0    = premE*(1/levE)^(chie);
-iotae = Ness - sigma_e*exp(-muz)*(RKss*kss - RSss*(kss - Ness));
-QSss  = knss - Ness;                    % bank loans = capital value NET of entrepreneur equity
+iotae = Ness - sigma_e*(RKss*kss - RSss*(kss - exp(-muz)*Ness));  % uses bare kss (matches eq 23)
+QSss  = knss - Ness;                                              % <-- FIXED: was kss - Ness
 
-% --- bank block: leverage TARGET (4.0, same numeric target as the old
-% fixed "lam") anchors the calibration; lev itself is now an ENDOGENOUS
-% variable in the dynamic model (see eqs 26/26a-d below). -----------------
-levss = 4.0;
+% --- bank block -----------------------------------------------------------
 Ass   = QSss/(1-phi);
 QbBss = phi*Ass;
-Nbss  = Ass/levss;
+Nbss  = Ass/lam;
 Dss   = Ass - Nbss;
 Hbss  = 1 - thetass*Deltab*LambdaM/Ecalss;
 Qbss  = Hbss/Rfss;
 Rbss  = 1/Qbss;
 iotab = Nbss - sigma_b*exp(-muz)*((RSss-Rdss)*QSss + (Rbss-Rdss)*QbBss + Rdss*Nbss);
 spreadss = 1/Qbss - Rfss;
-
-% --- 2026-07-29: endogenous GK leverage -- derive lambdadiv (divertable
-% fraction of assets) so the bank's incentive constraint binds EXACTLY at
-% the target steady-state leverage levss=4.0 above (same numeric steady
-% state as the old fixed-"lam" version for every other variable). Full
-% derivation in CHANGELOG_dynare_debug.md.
-spreadAss = (1-phi)*RSss + phi*Rbss - Rdss;      % portfolio excess return over Rd
-OmBss = (1-sigma_b) / (1 - sigma_b*Qss*(levss*spreadAss + Rdss));
-etaBss = Qss*OmBss*spreadAss;
-nuBss  = Qss*OmBss*Rdss;
-lambdadiv = etaBss + nuBss/levss;                 % calibrated, not a free input
+levss = (QSss+QbBss)/Nbss;
 
 theta     = thetass;
 betatheta = betathetass;
@@ -347,7 +271,8 @@ Ne = Ness;  QS = QSss;
 QbB = QbBss;  Nb = Nbss;  D = Dss;
 Qb = Qbss;  Hb = Hbss;  Rb = Rbss;
 spread = spreadss;  lev = levss;
-etaB = etaBss;  nuB = nuBss;  OmB = OmBss;
+
+% --- the four Commit-4 variables: WAS MISSING ENTIRELY -------------------
 CE    = CEss;
 Dcal  = Dcalss;
 Ecal  = Ecalss;
@@ -356,10 +281,10 @@ Theta = Thetass;
 end;
 
 %==========================================================================
-%  5.  MODEL EQUATIONS (2026-07-30: BGG + endogenous GK double accelerator)
+%  5.  MODEL EQUATIONS  (33 core + 2 reporting = 35 equations / 35 vars)
 %      Timing:  k, Ne, Nb, QS, QbB, Qb, r, theta, Omega, Qtob are states
-%      (their (-1) lags appear);  c,L,v,Pkr,u,Qtob,X1,X2,pi,RK,Rb,OmB
-%      appear as (+1) leads (rational-expectations / forward looking).
+%      (their (-1) lags appear);  c,L,v,Pkr,u,Qtob,X1,X2,pi,RK appear as
+%      (+1) leads (rational-expectations / forward looking).
 %==========================================================================
 model;
 
@@ -451,50 +376,25 @@ X2 = y + zeta*Theta*X2(+1)*pi(+1)^(upsilon-1);
 Pkr = Qtob*delta0*eta*u^(eta-1);
 % (21) realised (disaster-free, x=0) return on capital                 (B.16)
 RK = (Pkr*u + Qtob*(1-delta0*u^eta))/Qtob(-1);
-% (22) 2026-07-30: BGG external finance premium REINSTATED on top of the
-% endogenous GK bank block -- Rannenberg (2016)-style double accelerator:
-% entrepreneur leverage (Ne/Qk) sets ITS OWN premium over the bank loan
-% rate RS, while RS itself is set by the bank's OWN (now endogenous)
-% leverage margin below. Two distinct, non-redundant financial frictions
-% (see CHANGELOG for why this does not reintroduce the earlier BK issue).
-(1-theta*Deltak)*RK(+1) = RS * f0 * (Ne/(Qtob*exp(muz)*k))^(-chie);
+% (22) BISECTION v2: RK(+1) replaced with STEADY_STATE(RK) -- removes
+% ONLY the lead/forward-looking component. RS remains fully endogenous,
+% solved from this same equation using Ne, Qtob, k as before -- unlike
+% the first bisection, this should NOT create a new collinearity, since
+% RS keeps its original degree of freedom; only the EXPECTATION of
+% future RK is switched off. This is now a genuinely surgical test of
+% whether the FORWARD-LOOKING aspect of this equation specifically is
+% the source of the BK failure, without disturbing anything else.
+(1-theta*Deltak)*STEADY_STATE(RK) = RS * f0 * (Ne/(Qtob*exp(muz)*k))^(-chie);
 % (23) entrepreneur net-worth accumulation                            (B.18)
-% FIXED: Gamma^-1 (exp(-muz)) must scale the ENTIRE bracket, not just the
-% Ne(-1) term -- thesis B.18 explicitly states "factor Gamma_t^{-1}"
-% applied to the whole [R^K*Q*k^n - R^S*(Q*k^n-N^e)] bracket, exactly
-% mirroring eq (27)/B.23's bank net-worth structure.
-Ne = sigma_e*exp(-muz)*( RK*Qtob(-1)*k(-1) - RS(-1)*(Qtob(-1)*k(-1) - Ne(-1)) ) + iotae;
+Ne = sigma_e*( RK*Qtob(-1)*k(-1) - RS(-1)*(Qtob(-1)*k(-1) - exp(-muz)*Ne(-1)) ) + iotae;
 % (24) entrepreneur balance sheet  (defines loan value QS)            (B.19)
 QS = Qtob*exp(muz)*k - Ne;
 
 % ---- BANKS (Gertler-Karadi 2011 + home bias) ----------------------------
 % (25) home-bias portfolio identity                                    (B.22)
 QbB = phi/(1-phi)*QS;
-% (26) 2026-07-29: ENDOGENOUS leverage constraint, replacing the fixed
-% "lam*Nb" (see CHANGELOG_dynare_debug.md for the full diagnosis: a FIXED
-% leverage ratio together with the independent net-worth accumulation
-% eq(27) over-determined the model by exactly one degree -- this was the
-% actual root cause of the persistent Blanchard-Kahn failure).
-% ORIGINAL (fixed leverage, thesis B.21): QS + QbB = lam*Nb;
-QS + QbB = lev*Nb;
-% (26a) banker's continuation value per unit of net worth carried into
-% next period -- standard Gertler-Karadi envelope condition.
-OmB = (1-sigma_b) + sigma_b*( etaB*lev + nuB );
-% (26b) marginal value of a unit of bank assets funded by deposits. Home
-% bias (25) fixes the QS/QbB split, so the portfolio return on total
-% assets is (1-phi)*RS + phi*Rb(+1); RS is a safe, pre-contracted rate
-% (no lead needed, matching the (22) zero-profit condition above), Rb(+1)
-% is the disaster-exposed sovereign bond return, matching the timing
-% convention already used in (27).
-etaB = Q*OmB(+1)*( (1-phi)*RS + phi*Rb(+1) - Rd );
-% (26c) marginal value of a unit of bank net worth (not funding assets).
-nuB = Q*OmB(+1)*Rd;
-% (26d) incentive (divertability) constraint, binding: a banker can
-% divert fraction lambdadiv of assets; V_t=etaB_t*A_t+nuB_t*Nb_t >=
-% lambdadiv*A_t binds, giving leverage = nuB/(lambdadiv-etaB). This
-% REPLACES the fixed "lam" parameter with the bank's own endogenously
-% time-varying leverage ratio.
-lev = nuB/(lambdadiv - etaB);
+% (26) binding leverage constraint  A = lambda*N^b                     (B.21)
+QS + QbB = lam*Nb;
 % (27) BANK NET WORTH   -- DIVERGENCE from thesis B.24: see (D2)       (B.23)
 Nb = sigma_b*exp(-muz)*( (RS(-1)-Rd(-1))*QS(-1) + (Rb-Rd(-1))*QbB(-1) + Rd(-1)*Nb(-1) ) + iotab;
 % (28) bank balance sheet (defines deposits D)                         (B.20)
@@ -518,9 +418,8 @@ y = c + i;
 % ---- REPORTING (definitional) -------------------------------------------
 % (34) sovereign spread                                                (B.28)
 spread = 1/Qb - Rf;
-% (35) [2026-07-29: bank leverage now determined endogenously by (26)/
-% (26d) above, not a separate reporting identity -- would be redundant
-% with eq(26). ORIGINAL: lev = (QS + QbB)/Nb;]
+% (35) bank leverage
+lev = (QS + QbB)/Nb;
 
 end;
 
@@ -533,22 +432,22 @@ check;            % eigenvalues / Blanchard-Kahn order condition
 
 % One-time confirmation that the analytic SS matches the Appendix C target.
 % Safe to delete once verified; harmless to leave in.
-% disp(['Q  steady state: ', num2str(oo_.steady_state(strmatch('Q', M_.endo_names,'exact')))]);
-% disp(['Rf steady state: ', num2str(oo_.steady_state(strmatch('Rf',M_.endo_names,'exact')))]);
-% disp(['k  steady state: ', num2str(oo_.steady_state(strmatch('k', M_.endo_names,'exact')))]);
+disp(['Q  steady state: ', num2str(oo_.steady_state(strmatch('Q', M_.endo_names,'exact')))]);
+disp(['Rf steady state: ', num2str(oo_.steady_state(strmatch('Rf',M_.endo_names,'exact')))]);
+disp(['k  steady state: ', num2str(oo_.steady_state(strmatch('k', M_.endo_names,'exact')))]);
 
 %==========================================================================
 %  7.  SHOCKS
 %==========================================================================
 shocks;
 var etheta; stderr sigtheta;   % disaster-risk shock (main experiment)
-var er;     stderr 0;       % MP shock off by default (set >0 to activate), when enabled: sigr
+var er;     stderr 0;          % MP shock off by default (set >0 to activate)
 end;
 
 
 %==========================================================================
 %  8.  SOLUTION
-%      order=1  -> the third-order perturbation the thesis targets.
+%      order=2  -> the third-order perturbation the thesis targets.
 %      pruning  -> keeps 3rd-order simulations stable (Andreasen et al.).
 %      irf=0    -> IRFs are produced from the ERGODIC MEAN in the driver
 %                  run_thesis_model.m (correct notion at 3rd order), exactly

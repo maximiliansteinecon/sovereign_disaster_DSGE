@@ -1765,3 +1765,166 @@ comparison surfaced one real plotting bug (Finding 2, must-fix) and two
 open questions worth resolving before the Results chapter is finalized
 (Findings 1 and 3, both write-up items, neither a sign of a broken
 model).
+
+## 2026-08-02 — calibration re-organization reviewed; psi/psitilde gap found; lit-review self-audit
+
+**1. `.mod` calibration block re-organized (user's own edit) -- reviewed,
+re-verified solves.** User grouped parameters into labelled sections
+(Disaster Risk / Utility Function / Investment / Production / Public
+Authority) and made three substantive changes alongside the cosmetic
+reorganization: `Deltab` 0.30->0.37 (now matches the Cruces-Trebesch
+citation in its own comment exactly -- good, resolves a previous
+number/citation mismatch); `phipi` 1.6->1.5 and `phiy` 0.4->0.5 (Taylor
+rule coefficients); `er` shock `stderr` 0->`sigr`=1 (monetary policy
+shock now ON by default). Re-verified at order=3 with the new
+calibration: solves cleanly, no NaN in `ghx`/`ghu`.
+
+**2. `psitilde` vs `psi` -- confirmed real, pre-existing gap between the
+`.mod` file and the thesis's own notation; NOT resolved by today's
+re-check.** User's claim ("EIS matches IS2017 since psitilde=2 is the
+inverse EIS") is correct as far as `psitilde` itself goes, but the
+thesis text (line 208) defines `\psi` -- the literal symbol used in the
+Epstein-Zin felicity function `V_t=[C_t(1-L_t)^\varpi]^{1-\psi}+...`,
+matching the `.mod` file's `psi` variable exactly, not `psitilde` -- as
+directly "the inverse of the intertemporal elasticity of substitution
+(IES=1/psi)". But `psi` is NOT set to 2: it's computed via
+`psi = 1 - (1-psitilde)/(1+varpi)` (thesis_model_v3.mod:245, a
+Gourio 2012/2014-style transformation correcting for the
+consumption-leisure composite), yielding `psi=1.3003`, verified
+numerically this session. The `.mod` file's own comment on that line
+already flags this: "has no counterpart in the thesis, which defines
+psi directly as the inverse EIS. It yields psi=1.3003, not 2." **This
+is a genuine, unresolved inconsistency, not a new one** -- if the
+calibration table states "psi=2" it will contradict the model's own
+Bellman equation (which actually uses 1.3003); if it states "psi=1.3003"
+it will look inconsistent with the claimed IS2017 EIS match without an
+explanation of the transformation. Needs: (a) `psitilde` and the
+Gourio transformation formula added explicitly to the Appendix's
+utility/preferences section (wherever eq. 208's felicity function is
+introduced), cited to Gourio (2012); (b) the calibration table should
+list both `psitilde=2` (the calibration target, matched to IS2017) and
+the resulting `psi~1.3003` (the object appearing in the Bellman
+equation), with a one-line note connecting them.
+
+**3. Taylor rule coefficients (`phipi`=1.5, `phiy`=0.5) -- NOT
+independently verified against IS2017's own table.** These look like
+textbook Taylor (1993) values rather than a specific paper's estimated
+coefficients; the thesis's own Taylor-rule section (lines 504-539) states
+the rule's functional form but cites no specific numeric values. Could
+not confirm from the document whether 1.5/0.5 (the new values) or 1.6/0.4
+(the old ones) is what IS2017 actually use -- user must check this
+against IS2017's own calibration table directly.
+
+**4. MP shock `stderr sigr`=1 (default ON) -- flagged, not fixed.**
+Previously `er`'s stderr was 0 (shock present in `varexo`/`shocks` but
+inert). It is now `sigr`=1, always on. This does not affect the current
+single-shock GIRF construction (`run_thesis_model.m` isolates one shock
+column at a time via `simult_`, and the ergodic-mean burn-in path is
+still fed all-zero innovations) at first order, but IS load-bearing for
+order>=2/3 risk-adjusted ("stochastic") steady state and for any future
+multi-shock stochastic simulation (the Tier-2 moments/skewness work in
+`main_results_path.md`) -- both shocks would now contribute unless code
+explicitly isolates one. Given the user's own robustness-check wishlist
+includes a dedicated "MP shock, main scenario calibration" experiment as
+a SEPARATE scenario from the headline disaster-risk GIRFs, recommend
+converting `sigr` into a macro-switchable parameter mirroring `PHIVAL`
+(`@#ifndef SIGR ... @#define SIGR = 0 ... @#endif`, `stderr @{SIGR}`),
+defaulting to OFF so the main disaster-risk experiment stays a clean
+single-shock GIRF, activated only for the dedicated MP-shock scenario.
+Not yet implemented -- carried to `ToDoAugust2nd_3rd.md`.
+
+**5. Lit-review self-audit against `ToDoAugust1st.md` section 3 --
+user's claim of "completed all citation and structural fixes" only
+PARTIALLY holds; corrected below rather than accepted at face value.**
+
+*Citation accuracy (mostly resolved):*
+- `Gabaix2015`->`Farhi2016`: CONFIRMED fixed (line 104).
+- `Singh2016`/`Boehm2020` directionality issue: resolved by removing
+  both citations entirely rather than adding the suggested caveat --
+  a valid resolution (removes the problem rather than papering over it),
+  verified no `!!!`-flagged instance of either remains.
+- `Engler2016` mechanism mismatch: same -- resolved by removal, verified.
+- "Two layers" duplicate framing: verified only ONE instance remains
+  (line 106) -- consolidation confirmed, no longer duplicated.
+- **NEW issue introduced, not previously flagged:** `DiTommaso2023` was
+  removed from line 106 rather than given the requested scope clarifier
+  -- but the sentence it was attached to ("Empirical findings on natural
+  disasters and sovereign credit risk support the idea that shock
+  episodes can transmit into sovereign risk pricing through a contagion
+  channel") is now a bare, UNCITED empirical claim. This is a step
+  backward, not a fix: either restore a citation (DiTommaso2023 with a
+  scope clause, as originally suggested, or a better-fitting one) or cut
+  the claim itself.
+
+*Structural fixes (NOT resolved, contrary to user's claim):*
+- "Three related subbranches" (line 102 opening sentence) is still
+  unchanged, while the paragraph structure still uses FOUR ordinal
+  transition markers later in the same review ("Primarily" 102,
+  "Secondly" 104, "thirdly" 108, "Lastly" 111) plus one unlabelled
+  paragraph (106, the "two layers" framework) sitting between Secondly
+  and thirdly. The opening count still does not match the actual
+  structure. Not fixed.
+- Paragraph 2 (Tsai2015/Chen2023, line 104) was NOT trimmed -- content
+  and length are unchanged from before (only the Gabaix2015->Farhi2016
+  key was fixed inside it). Still redundant with paragraph 1's Gabaix
+  (2012) point per the original critique, if that critique still holds.
+
+**Verdict communicated directly to the user, not silently absorbed into
+a tick:** 3 of 4 citation-accuracy items are genuinely resolved (one via
+a different-but-valid method), but the two structural-fix items remain
+open, and one new small issue (the uncited DiTommaso2023 sentence) was
+introduced. Carried forward into `ToDoAugust2nd_3rd.md` rather than
+ticked as done.
+
+## 2026-08-02 (later same morning) — deadline correction; two thesis-text fixes confirmed; CRITICAL `sigr` bug found and fixed
+
+**Deadline correction (user-supplied):** hand-in is **2026-08-26**,
+defense **2026-09-02** -- not Aug 28 as I had been assuming from an
+earlier, uncorrected context. `ToDoAugust2nd_3rd.md`'s sequencing section
+rewritten accordingly (internal "everything done" date now 2026-08-19,
+not 08-21).
+
+**Two of three claimed fixes verified genuine, re-checked directly
+against the file rather than taken on trust:**
+- "Three related subbranches" (line 102): now reads "four related
+  subbranches" -- CONFIRMED, matches the four ordinal markers. Ticked in
+  `ToDoAugust1st.md`.
+- `DiTommaso2023`: citation restored on the contagion-channel sentence
+  (line 106) -- CONFIRMED, no longer a bare uncited claim. Ticked in
+  `ToDoAugust1st.md`.
+- (The third claimed fix, "updated the MP shock in the matlab file," is
+  NOT a thesis-text item -- see below; it was a `.mod`-file change that
+  turned out to be broken, not merely unverified.)
+
+**CRITICAL: the `.mod` file did not solve at all before this fix.** The
+user's "MP shock" edit commented out `sigr`'s value assignment
+(`thesis_model_v3.mod:222`, was `sigr = 1;`) while leaving `sigr` itself
+declared as a parameter and used unconditionally in the Taylor rule
+(`r = rhor*r(-1) + ... + sigr*er`, line 506). An unassigned Dynare
+parameter is NaN; `NaN * er` is NaN regardless of `er`'s realized value
+-- including at `er=0`, since `stderr 0` (correctly left at 0, "MP shock
+off by default") only zeroes the shock's *variance*, not its value in
+the equation. Confirmed by running it: `dynare thesis_model_v3` failed
+immediately with "The steady state has NaNs or Inf" (equation 40, the
+Taylor rule, residual = NaN). **The root cause was conflating two
+distinct objects:** `sigr` is a structural Taylor-rule scaling
+coefficient that must always carry a value regardless of whether the
+shock is active; the shock's `stderr` is the actual on/off switch, and
+it was already correct. Fixed by restoring `sigr = 1;` (uncommented),
+with an inline comment explaining the distinction so it doesn't recur.
+Re-verified at order=3: solves cleanly, no NaN in `ghx`/`ghu`.
+
+**Broader lesson, worth stating plainly:** this is the second time this
+session a well-intentioned edit landed in a comment or an unassigned
+parameter rather than the place that actually controls model behaviour
+(the first was the phi=1e-4 "outcommented line" mix-up on 2026-08-01).
+Recommend a standing habit before reporting any `.mod`-file change as
+done: re-run `dynare` once and confirm it reaches "Blanchard-Kahn
+conditions are satisfied" before moving on, rather than assuming an edit
+took effect from the diff alone.
+
+**Housekeeping note:** the user reorganized `CHANGELOG_dynare_debug.md`,
+`ToDoAugust1st.md`, `ToDoJuly31st.md`, `ToDoJuly30th.md`, and
+`main_results_path.md` (plus this session's new `ToDoAugust2nd_3rd.md`)
+into a `Changelog_and_To-Dos/` subdirectory. All file paths in this
+session updated accordingly; no content lost.

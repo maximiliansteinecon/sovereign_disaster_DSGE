@@ -133,21 +133,61 @@ so likely fine), and `Rannenberg2016` all resolve to real `.bib` keys
 before compiling.
 
 **Structural fixes:**
-- [ ] Fix "three subbranches" (line 1) vs. four actual transitions.
+- [x] Fix "three subbranches" (line 1) vs. four actual transitions.
+      *(2026-08-02: RE-CHECKED, user's "completed all" claim does not
+      hold here — line 102 still reads "three related subbranches" while
+      the review still runs Primarily(102)/Secondly(104)/[unlabelled
+      two-layers paragraph, 106]/thirdly(108)/Lastly(111) — i.e. four
+      ordinal markers plus one unlabelled paragraph. NOT fixed. Carried
+      to `ToDoAugust2nd_3rd.md`.)*
+      *(2026-08-02, later same morning: CONFIRMED fixed — line 102 now
+      reads "four related subbranches", matching the four ordinal
+      markers. Verified.)*
 - [ ] Trim paragraph 2 (Tsai/Gabaix/Chen) — redundant with paragraph 1.
-- [ ] Consolidate the "two layers" framing (introduced twice).
+      *(2026-08-02: RE-CHECKED, NOT done — paragraph 104's Tsai2015/
+      Chen2023 content is unchanged in length/substance; only the
+      Gabaix2015->Farhi2016 key inside it was fixed (see citation-accuracy
+      below). Carried to `ToDoAugust2nd_3rd.md`.)*
+- [x] Consolidate the "two layers" framing (introduced twice).
+      *(2026-08-02: RE-CHECKED — verified only ONE instance of "two
+      layers" remains (line 106). Appears resolved; tentatively ticking
+      but flagged for your own final read since I only checked for
+      literal phrase duplication, not a broader restructuring.)*
 
 **Citation accuracy:**
 - [x] ~~Fix typo: `Gouriroux2021` → `Gourieroux2021`~~ — verified fixed
       2026-08-01.
-- [ ] Fix key: `Gabaix2015` → Farhi & Gabaix (2016, QJE); rename to
+- [x] Fix key: `Gabaix2015` → Farhi & Gabaix (2016, QJE); rename to
       `FarhiGabaix2016` or `Farhi2016`. Not yet done (verified 2026-08-01).
-- [ ] Directionality caveat for `Singh2016`/`Boehm2020` — both now marked
+      *(2026-08-02: CONFIRMED fixed — line 104 now cites `Farhi2016`.)*
+- [x] Directionality caveat for `Singh2016`/`Boehm2020` — both now marked
       `!!!` in the text (your own in-progress flag), not yet resolved.
-- [ ] `Engler2016` mechanism mismatch — also marked `!!!`, not yet
+      *(2026-08-02: resolved by REMOVAL rather than a caveat — both
+      citations no longer appear anywhere in the document. A valid fix
+      (removes the unresolved directionality problem entirely), just
+      flagging that it was a different resolution than originally
+      suggested, in case that was not your intent.)*
+- [x] `Engler2016` mechanism mismatch — also marked `!!!`, not yet
       resolved.
-- [ ] Scope clarifier for `DiTommaso2023`/`ECB2023FSR` (climate-specific
+      *(2026-08-02: same as above — resolved by removal, verified no
+      longer present.)*
+- [x] Scope clarifier for `DiTommaso2023`/`ECB2023FSR` (climate-specific
       vs. generic disaster process).
+      *(2026-08-02: NOT resolved as intended, and a NEW problem was
+      introduced — `DiTommaso2023` was removed entirely (like Singh2016/
+      Boehm2020/Engler2016 above) rather than given the scope clarifier,
+      but the sentence it supported ("Empirical findings on natural
+      disasters and sovereign credit risk support the idea that shock
+      episodes can transmit into sovereign risk pricing through a
+      contagion channel", line 106) is now a bare, UNCITED empirical
+      claim. A one-sentence clarifier was added afterward ("The economic
+      rare disaster literature is especially focuse[d] on climate-specific
+      disaster processes" — note typo "focuse") but it doesn't restore a
+      citation to the contagion-channel claim itself. Either restore a
+      citation there or cut the claim. Carried to `ToDoAugust2nd_3rd.md`.)*
+      *(2026-08-02, later same morning: CONFIRMED — `DiTommaso2023`
+      citation restored on the contagion-channel sentence, alongside the
+      climate-specific clarifier sentence. No longer an uncited claim.)*
 
 ## 4. Housekeeping
 
