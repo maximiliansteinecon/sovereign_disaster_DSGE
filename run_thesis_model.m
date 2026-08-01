@@ -8,7 +8,7 @@
 %  WHAT THIS SCRIPT DOES
 %   1. Solves the model with Dynare at THIRD ORDER (order=3, pruning) for
 %          (a) the BASELINE          phi = 0.10  (banks hold sovereign bonds)
-%          (b) the COUNTERFACTUAL    phi = 0     (sovereign-bank channel off)
+%          (b) the COUNTERFACTUAL    phi = 1e-4     (sovereign-bank channel off)
 %   2. Computes the ERGODIC MEAN in the absence of shocks (the correct
 %      centring point for nonlinear/3rd-order IRFs), exactly as in the
 %      Isore-Szczerbowicz (2017) replication code (uses Dynare's simult_).
@@ -49,7 +49,7 @@ MODEL      = 'thesis_model_v3';   % .mod file name (without extension)
 burnin     = 10000;            % periods to reach the ergodic mean
 nIrf       = 20;               % IRF horizon (quarters)
 shockName  = 'etheta';         % shock to study ('etheta' or 'er')
-shockSize  = 1;             % innovation size (log units); IS2017 used 0.01
+shockSize  = 0.01;             % innovation size (log units); IS2017 used 0.01
 korder     = 3;                % MUST equal order= in stoch_simul (=3)
                                 % If you follow the order=1 debug tip above (editing
                                 % the .mod's @#define ORDER = 1, or passing -DORDER=1),
@@ -59,8 +59,8 @@ korder     = 3;                % MUST equal order= in stoch_simul (=3)
 
 % Scenarios: {label, extra dynare macro-define, line style}
 scen = { ...
-    'Baseline  (\phi=0.10)',   '',            '-'  ; ...
-    'Counterfactual (\phi=0)', '-DPHIVAL=0',  '--' };
+    'Baseline  (\phi=0.10)',      '',              '-'  ; ...
+    'Counterfactual (\phi=1e-4)', '-DPHIVAL=1e-4', '--' };
 
 %% ---------------------- solve each scenario ------------------------------
 R = struct();                                   % results container

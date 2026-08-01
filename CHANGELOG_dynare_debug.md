@@ -1574,3 +1574,194 @@ targeted Euler-residual accuracy check of the CURRENT order-3 solution
 opening new scope. Both added to `ToDoAugust1st.md` section 5.
 
 This exploration is CLOSED with a recommendation, not left open.
+
+## 2026-08-01 (evening) — hypothesis rewrite verified; phi=1e-4 implemented and numerically validated; IS2017 cross-check blocked
+
+**1. Hypothesis-paragraph rewrite (lines 112-115) — VERIFIED, contradiction
+resolved.** Read the new paragraph side-by-side with Appendix A.3.3
+(`\paragraph{Immediate channel...}` / `\paragraph{Lagged channel...}`,
+lines 1638-1660). The rewrite now states both channels using the same
+language as A.3.3: an "immediate channel with perceived risk via the
+bank's incentive constraint" that operates "independent of whether a
+default ultimately occurs" (line 113), and a "lagged financial
+accelerator channel" that "activates only upon a realised default"
+(line 115), explicitly reusing the Bernanke1999-style feedback loop
+language and closing with "a realised sovereign haircut is therefore
+necessary, though the elevated perceived probability that precedes it is
+what the sovereign spread continuously prices" -- a direct, correct echo
+of A.3.3's own closing synthesis. **Verdict: the contradiction flagged as
+the URGENT item in `ToDoAugust1st.md` is resolved.** Ticked below.
+One cosmetic nit only, not blocking: line 115 has a stray space,
+`\textit{ lagged financial accelerator channel}` (leading space renders
+inside the italics) -- worth a one-character fix whenever convenient.
+
+**2. `phi=1e-4` — was NOT implemented anywhere; user's own edit was to a
+comment line, not functional code.** Checked `run_thesis_model.m` and
+`thesis_model_v3.mod` against `git diff`. The user's own uncommitted
+edits were: (a) `run_thesis_model.m` line 11, a *documentation* comment,
+changed from "phi = 0" to "phi = 1e-4"; (b) `thesis_model_v3.mod` line
+98, also a documentation comment, changed the same way; (c) usefully,
+`thesis_model_v3.mod`'s actual `@#define PHIVAL` default was changed
+0.20 -> **0.10** (this is a real, functional change -- it resolves the
+open φ-calibration ambiguity flagged in `main_results_path.md` §0 in
+favor of 0.10, assuming this was deliberate). None of the user's edits
+touched the actual scenario-selection code. The real counterfactual
+switch lives in `run_thesis_model.m`'s `scen` cell array (line 61-63),
+which still read `'-DPHIVAL=0'` -- confirms the user's own suspicion
+("the only line where I rewrote something has been outcommented").
+There is no file called `run_thesis_model_results.m`; that name is a
+conflation with `thesis_model_results.mat`, the *output* file the
+driver script saves to (line 137) -- the driver script itself is
+`run_thesis_model.m`.
+
+**Fixed directly** (in scope, technical/model item, not reserved by the
+user): `run_thesis_model.m`'s `scen` array row 2 now reads
+`'-DPHIVAL=1e-4'` with label `'Counterfactual (\phi=1e-4)'`; the
+matching example comment in `thesis_model_v3.mod` (was line 54) updated
+to match. No `.mod`-file structural change was needed -- the
+`@#ifndef PHIVAL` macro (lines 100-102) already accepts any numeric
+value via `-DPHIVAL=`.
+
+**Numerically validated, not just wired up** (this also closes
+`ToDoAugust1st.md` item 2, the optional phi=0 fragility check):
+compared `oo_.dr.eigval` at order=1 across three calibrations --
+
+| φ | # literal Inf | # finite eigenvalues >1e6 | magnitude of those |
+|---|---|---|---|
+| 0.10 (baseline, validated) | 1 | 3 | ~1e17 |
+| 1e-4 (new counterfactual) | 1 | 3 | ~1e17-1e18 |
+| 0 (old counterfactual) | 2 | 2 | ~1e18, ~3e20 |
+
+The φ=1e-4 spectrum is structurally indistinguishable from the
+fully-validated φ=0.10 baseline (same count of Inf/huge eigenvalues, same
+order of magnitude) -- confirming these are a harmless, generic artifact
+of the model's static-equation block at any φ, not evidence of fragility.
+The exact φ=0 corner is measurably worse (an extra literal Inf, and the
+finite pseudo-eigenvalues balloon to 1e18-1e20), consistent with the
+bank's sovereign-bond block (`QbB`, `Qb`, `Rb`, `Hb`) hitting a genuine
+0/0-type degeneracy only when bond holdings are *exactly* zero.
+**Conclusion: φ=1e-4 is a real, verified improvement over φ=0, not a
+cosmetic relabelling.** Also re-ran at order=3 with pruning (the actual
+thesis target): solves cleanly, no BK error, no NaN in `ghx`/`ghu`.
+Both checks used disposable `Output/`-style Dynare artifacts, deleted
+after; no `.mat`/`.fig` results were regenerated or overwritten by this
+check.
+
+**3. IS2017 comparison — BLOCKED, not fabricated.** No attachment (image
+or file) with IS2017's baseline disaster-risk results, nor the user's own
+obtained results to compare them against, was received in this turn --
+only text. Cross-check not performed. **Please resend the comparison
+material** (both IS2017's published figures/table and your own output)
+so this can actually be done; nothing has been written into the
+`ToDoAugust1st.md` item 2 IS2017-cross-check line because it has not
+happened yet.
+
+**4. Four literature content gaps added.** Per explicit instruction
+(content-gap placement/drafting is mine to do; structural fixes and
+citation accuracy are reserved for the user), inserted four short,
+concise additions directly into the thesis text, matched to existing
+paragraph style/argument structure, each drawing the same
+contrast-then-differentiate move used throughout the existing lit
+review (cite the closest paper, state what it does, state precisely why
+it isn't a structural substitute):
+- **Rebelo, Wang & Yang (2022, JoF)** -- two sentences added to the
+  rare-disaster/sovereign paragraph (line 104), contrasting Rebelo's
+  disaster-driven *default decision* in a real economy with this
+  thesis's continuously-priced default *probability* in a monetary one.
+- **Sosa-Padilla (2018, JME)** -- one sentence appended to the
+  Bocola2016 paragraph (108): closest quantitative precedent for
+  default-triggered banking crises via bank balance sheets; framed as
+  corroboration, not a structural substitute (same logic already used
+  for Bocola2016 itself).
+- **Gennaioli, Martin & Rossi (2014, JF)** -- one sentence appended to
+  the same paragraph (108): the cross-country theoretical counterpart
+  (defaults costlier for output where banks hold more sovereign debt).
+  Previously only in the Appendix A.3.2.4 institutional footnote (line
+  1414, untouched) -- now also in the main lit-review prose as
+  requested.
+- **Rannenberg (2016, JMCB)** -- new paragraph inserted immediately
+  before the Banking-Sector-Frictions section's concluding sentence
+  (123), explicitly citing this session's own verified joint BK solve
+  of BGG + endogenous GK leverage as confirmation that Rannenberg's
+  double-financial-accelerator precedent extends to this setup.
+
+**Not done, and explicitly out of scope for this pass:** creating or
+verifying the underlying `.bib` entries for `Rebelo2022`,
+`SosaPadilla2018`, and `Rannenberg2016` (new keys); `Gennaioli2014`
+already exists elsewhere in the document so is likely fine. None of the
+other lit-review items (three "structural fixes", five "citation
+accuracy" items in `ToDoAugust1st.md` section 3) were touched -- these
+remain reserved for the user as agreed.
+
+## 2026-08-01 (evening) — IS2017 cross-check (screenshot comparison)
+
+User supplied two screenshots: (1) the current `run_thesis_model.m`
+order=3 GIRF panel (12 variables, baseline phi=0.10 vs. counterfactual
+phi=1e-4, +0.01 disaster-risk innovation), and (2) IS2017's own Fig. 3,
+p.109 ("Effect of a 1% increase in the probability of disaster, theta;
+Disaster-risky bonds. Calibration identical to the main scenario, except
+tau=0.3. Third-order approximation.") -- 9 panels: beta(theta), output,
+consumption, investment, labor, wage, inflation, nominal rate, risk
+premium.
+
+**Caveat first:** Fig. 3 is explicitly captioned as a "tau=0.3" variant
+of IS2017's "main scenario," not confirmed to be their own headline
+baseline figure. It is a reasonable comparison target regardless (bonds
+carrying disaster risk is the closest IS2017 analog to this thesis's
+home-bias mechanism), but should not be cited as "IS2017's baseline"
+without checking their own section labelling first.
+
+**Qualitative match: strong.** Sign, timing, and shape match closely for
+every variable present in both panels. beta(theta)'s peak magnitude
+(~1e-3) and decay half-life are nearly identical. Output/labour/
+inflation/nominal rate all show the same dip-then-overshoot-then-decay
+pattern; consumption and investment both show the correct monotonic-
+recovery/peak-then-decay shapes. This is a genuine, substantive
+validation of the inherited IS2017 transmission mechanism.
+
+**Finding 1 -- systematic 2-5x amplitude gap.** Across output,
+consumption, investment, labour, inflation, and the nominal rate, this
+model's GIRF amplitudes are consistently 2-5x larger than IS2017's, for
+a nominally matched 0.01 log-innovation shock. Plausible explanation:
+the added BGG+GK banking block genuinely amplifies the IS2017 mechanism
+-- consistent with, and arguably supportive of, the thesis's own claim.
+NOT yet ruled out: a deep-parameter calibration mismatch (gamma, psi,
+theta-bar, rho_theta) versus IS2017's own table, which would produce a
+similar proportional inflation without any real amplification story.
+Recommend a parameter-by-parameter check against their calibration table
+before writing up the amplification claim as confirmed.
+
+**Finding 2 -- "Sovereign spread" vs. "Risk Premium" panel scale
+mismatch is a plotting artifact, not a modeling result.** IS2017's risk
+premium panel peaks at ~2.3e-6 (raw level units); this model's spread
+panel peaks at ~1.0 ("% dev." of ergodic mean). Root cause identified:
+`run_thesis_model.m:102` computes every GIRF as
+`100*(shocked-baseline)/ergodic_mean`, which is the right normalization
+for level variables (output, consumption, etc.) but is inappropriate for
+`spread = 1/Qb - Rf` (`thesis_model_v3.mod:503`), a rate-wedge variable
+whose own steady state (`spreadss`, line 301) is itself close to zero --
+dividing a small absolute move by a near-zero mean mechanically produces
+a large "%" number with no substantive meaning. **Action before any
+figure is finalized:** re-plot `spread` (and any other rate-differential
+variable, e.g. `Rb`, `Qb` if directly compared) in raw annualized-bps
+level terms, not %-of-ergodic-mean.
+
+**Finding 3 -- counterintuitive impact-period sign, phi=1e-4 vs.
+phi=0.10.** At t=0-1, the near-zero-home-bias counterfactual shows a
+*deeper* initial trough than the phi=0.10 baseline in output,
+consumption, labour, inflation, and the nominal rate -- the opposite of
+the naive "less sovereign exposure implies less amplification"
+intuition. By the investment/entrepreneur-net-worth peak a few periods
+later, the expected ordering (higher phi = more amplification) reasserts
+itself. This is not identified as a bug: it is consistent with Appendix
+A.3.3's own documented caveat that the immediate channel's sign "depends
+on how the shock moves the bank's portfolio margin... not mechanically
+on the direction of theta_t alone." Recommend one explicit sentence
+addressing this in Section~\ref{sec:results} rather than leaving it for
+an examiner to spot unexplained.
+
+**Overall verdict:** qualitative validation passes; quantitative
+comparison surfaced one real plotting bug (Finding 2, must-fix) and two
+open questions worth resolving before the Results chapter is finalized
+(Findings 1 and 3, both write-up items, neither a sign of a broken
+model).
