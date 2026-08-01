@@ -51,7 +51,7 @@
 %  HOW TO RUN (from a MATLAB session with Dynare 6.x on the path):
 %     >> addpath /Applications/Dynare/6.3-x86_64/matlab      % adjust path
 %     >> dynare thesis_model_v3                              % baseline, phi>0
-%     >> dynare thesis_model_v3 -DPHIVAL=0                   % counterfactual
+%     >> dynare thesis_model_v3 -DPHIVAL=1e-4                % counterfactual
 %  or simply run the driver  run_thesis_model.m  which does both plus IRFs.
 %
 %  STATUS (as of this version):
@@ -95,10 +95,10 @@
 % -------------------------------------------------------------------------
 %  0.  MACRO SWITCH for the home-bias parameter (baseline vs counterfactual)
 %      Run  `dynare thesis_model`            -> PHIVAL defaults to 0.10
-%      Run  `dynare thesis_model -DPHIVAL=0` -> counterfactual, no sov. channel
+%      Run  `dynare thesis_model -DPHIVAL=1e-4` -> counterfactual, no sov. channel
 % -------------------------------------------------------------------------
 @#ifndef PHIVAL
-    @#define PHIVAL = 0.20
+    @#define PHIVAL = 0.10
 @#endif
 % Perturbation order (3 = thesis target).  For a first DEBUG pass use
 %   `dynare thesis_model -DORDER=1`  to isolate steady-state / Blanchard-Kahn
@@ -142,7 +142,7 @@ RK          % gross real *realised* return on capital (x=0)     (B.16)
 % --- entrepreneurs (BGG) -- 2026-07-30: REINSTATED alongside the
 %     endogenous GK bank leverage (double accelerator); see CHANGELOG ---
 Ne          % detrended entrepreneur net worth  N^e/z           (B.18)
-QS          % value of loans  Q_t s_t   (=Q_t K_{t+1}-N^e_t)     (B.19)
+QS          % value of loans  Q_t s_t   (=Q_t K_{t+1}-N^e_t)    (B.19)
 % --- banks (Gertler-Karadi + home bias) -------------------------------
 QbB         % value of sovereign bonds on bank books Q^b_t b^b_t (B.22)
 Nb          % detrended bank net worth  N^b/z                   (B.23)
