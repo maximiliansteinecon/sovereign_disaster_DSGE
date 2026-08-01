@@ -49,7 +49,7 @@ MODEL      = 'thesis_model_v3';   % .mod file name (without extension)
 burnin     = 10000;            % periods to reach the ergodic mean
 nIrf       = 20;               % IRF horizon (quarters)
 shockName  = 'etheta';         % shock to study ('etheta' or 'er')
-shockSize  = 0.01;             % innovation size (log units); IS2017 used 0.01
+shockSize  = 1;             % innovation size (log units); IS2017 used 0.01
 korder     = 3;                % MUST equal order= in stoch_simul (=3)
                                 % If you follow the order=1 debug tip above (editing
                                 % the .mod's @#define ORDER = 1, or passing -DORDER=1),

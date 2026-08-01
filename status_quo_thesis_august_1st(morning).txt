@@ -2969,78 +2969,33 @@ bound beyond which bank net worth would grow without limit and the
 leverage constraint would eventually cease to bind.
 
 \paragraph{Value-function coefficients and the diversion parameter.}
-Appendix~\ref{par:A322} leaves $\lambda$ fixed at its steady-state value
-and defers the mapping to the underlying moral-hazard parameter
-$\theta^{b}$; that mapping is completed here.  Write the
-asset-weighted excess return using the portfolio shares,
+Appendix~\ref{par:A322} derives the recursions for $\nu_t,\eta_t,\Omega_t$ but defers the mapping to the underlying moral-hazard parameter $\theta^b$; that mapping is completed here. Write the asset-weighted excess return using the portfolio shares,
 %
 \begin{equation*}
-  \bar R^{\,\mathrm{ex}}_{t+1}
-  =(1-\phi)\bigl(R^{S}_t-R^{d}_t\bigr)
-   +\phi\bigl(R^{b}_{t+1}-R^{d}_t\bigr) 
+  \bar R^{\,\mathrm{ex}}_{t+1} = (1-\phi)\bigl(R^S_t-R^d_t\bigr) + \phi\bigl(R^b_{t+1}-R^d_t\bigr)
 \end{equation*}
 %
-Since $R^{S}_t$ and $R^{d}_t$ are known at $t$ and
-$\mathbb{E}[\bar Q]=1/\bar R^{f}$, the loan term contributes
-$(1-\phi)(\bar R^{S}-\bar R^{f})/\bar R^{f}$.  The bond term contributes
-nothing at all: the equilibrium bond-pricing
-condition~\eqref{eq:A3_bondeuler} states
-$\mathbb{E}_t[Q_{t,t+1}R^{b}_{t+1}]=1$, and $\bar R^{d}=\bar R^{f}$
-implies $\mathbb{E}[\bar Q]\bar R^{d}=1$, so
+Both $\nu_t$ and $\eta_t$ discount using the \emph{realised} (no-default, $x=0$) bond return $R^b_{t+1}=1/Q^b_t$, not the fully theta-weighted conditional expectation of the bond payoff. This is not a further approximation layered on top of the value-function derivation of Appendix~\ref{par:A322}: it is the same convention already used, without comment, by the net-worth accumulation equation~\eqref{eq:A3_Bank_Value} two paragraphs above, and by every other equation in this appendix in which $R^b_t$ appears. The two objects are not interchangeable in general --- $\mathbb{E}_t[R^b_{t+1}]=(1-\theta_t\Delta^b)/Q^b_t$ is strictly below the realised return $1/Q^b_t$, equation~\eqref{eq:A3_ERb} --- and the bond-pricing identity $\mathbb{E}_t[Q_{t,t+1}R^b_{t+1}]=1$, which would set the bond's contribution to $\eta_t$ to exactly zero, holds only for the former. Using it here would price the banker's continuation value against a hypothetical default branch that this appendix's own solution method never actually realises (Appendix~\ref{sec:banking_block}, the note on the absence of a realised $x_t=1$ regime): the value function must be consistent with the \emph{same} net-worth process it is the marginal value of, and that process only ever compounds the realised return. The bond's steady-state excess return over the risk-free rate is therefore not zero but exactly the steady-state sovereign spread, $\bar R^b-\bar R^f=\overline{\mathrm{spread}}$ (equation~\eqref{eq:A3_spread}), and it enters $\eta_t$ on the same footing as the loan spread. Defining
 %
 \begin{equation}
-  \mathbb{E}\bigl[\bar Q\,(\bar R^{b}-\bar R^{d})\bigr]
-  =1-\mathbb{E}[\bar Q]\,\bar R^{d}=0 .
-  \tag{C.33}\label{eq:D_bondnull}
-\end{equation}
-%
- 
-Sovereign bonds are held at a price that leaves the bank exactly
-indifferent at the margin, so they add no franchise value and do not
-relax the leverage constraint at the steady state.  This holds exactly
-under the normalised resilience of~\eqref{eq:A3_LambdaMtilde}; under an
-unnormalised $\Lambda^M$ the bond Euler~\eqref{eq:A3_bondeuler} would
-fail by a term of order $\theta_t\Delta^b(\Lambda^M-1)^2$ and
-$\bar\eta^{b}=\varsigma\bar\nu^{b}$ would hold only approximately. Defining
-%
-\begin{equation}
-  \varsigma\;\equiv\;(1-\phi)\,\frac{\bar R^{S}-\bar R^{f}}{\bar R^{f}} ,
+  \varsigma \;\equiv\; \frac{(1-\phi)(\bar R^S-\bar R^f)+\phi\,\overline{\mathrm{spread}}}{\bar R^f} ,
   \tag{C.34}\label{eq:D_varsigma}
 \end{equation}
 %
-the coefficient recursions of Section~\ref{par:A322} collapse to
-$\bar\nu^{b}=\bar\Omega^{b}$ and $\bar\eta^{b}=\varsigma\,\bar\nu^{b}$,
-with $\bar\Omega^{b}=(1-\sigma^{b})+\sigma^{b}(\bar\nu^{b}+\lambda\bar\eta^{b})$.
-Solving the two together,
+the coefficient recursions of Section~\ref{par:A322} collapse, exactly as before, to $\bar\nu^b=\bar\Omega^b$ and $\bar\eta^b=\varsigma\,\bar\nu^b$, with $\bar\Omega^b=(1-\sigma^b)+\sigma^b(\bar\nu^b+\lambda\bar\eta^b)$. Solving the two together,
 %
 \begin{equation}
-  \bar\nu^{b}=\frac{1-\sigma^{b}}{1-\sigma^{b}\bigl(1+\lambda\varsigma\bigr)},
+  \bar\nu^b=\frac{1-\sigma^b}{1-\sigma^b\bigl(1+\lambda\varsigma\bigr)},
   \qquad
-  \bar\eta^{b}=\varsigma\,\bar\nu^{b},
+  \bar\eta^b=\varsigma\,\bar\nu^b,
   \qquad
-  \theta^{b}
-  =\bar\eta^{b}+\frac{\bar\nu^{b}}{\lambda}
-  =\bar\nu^{b}\Bigl(\varsigma+\frac{1}{\lambda}\Bigr) ,
+  \theta^b=\bar\eta^b+\frac{\bar\nu^b}{\lambda}=\bar\nu^b\Bigl(\varsigma+\frac1\lambda\Bigr) ,
   \tag{C.35}\label{eq:D_nub}
 \end{equation}
 %
-the last equality inverting $\lambda=\bar\nu^{b}/(\theta^{b}-\bar\eta^{b})$.
-Equation~\eqref{eq:D_nub} is what makes the fixed-$\lambda$
-approximation of Section~\ref{par:A322} internally disciplined rather
-than free: given a target leverage $\lambda$ and the steady-state loan
-margin, the implied diversion parameter $\theta^{b}$ is uniquely
-determined and can be compared with the values used in
-\textcite{Gertler2011}.  Two admissibility conditions must be checked:
-$\sigma^{b}(1+\lambda\varsigma)<1$ for $\bar\nu^{b}$ to be positive and
-finite, and $\bar\eta^{b}>0$ --- equivalently $\bar R^{S}>\bar R^{f}$
-and $\phi<1$ --- for the constraint to bind, as required by the argument
-in Section~\ref{par:A322}.
+the last equality inverting $\lambda=\bar\nu^b/(\theta^b-\bar\eta^b)$. Equation~\eqref{eq:D_nub} is what makes the endogenous-$\lambda_t$ derivation of Section~\ref{par:A322} internally disciplined rather than free: given a target steady-state leverage $\lambda$ and the steady-state loan and bond margins, the implied diversion parameter $\theta^b$ is uniquely determined and can be compared with the values used in \textcite{Gertler2011}. The admissibility condition simplifies relative to a loan-only portfolio: $\sigma^b(1+\lambda\varsigma)<1$ is still required for $\bar\nu^b$ to be positive and finite, but $\bar\eta^b>0$ now holds for any $\phi\in[0,1]$ provided $\bar R^S>\bar R^f$ or $\overline{\mathrm{spread}}>0$ --- either wedge alone is enough, since $\varsigma$ is a weighted average of two individually positive terms rather than a single term scaled by $(1-\phi)$.
 
-Note that $\varsigma$ carries the factor $(1-\phi)$: raising home bias
-mechanically dilutes the franchise value per unit of assets, because a
-larger share of the balance sheet earns no excess return in the
-steady state.  A higher $\phi$ therefore requires a higher $\theta^{b}$
-to support the same $\lambda$.
+Home bias no longer dilutes franchise value at this calibration: since the promised-yield sovereign spread exceeds the bank loan spread ($\overline{\mathrm{spread}}\approx0.70\%$ against $\bar R^S-\bar R^f\approx0.20\%$ quarterly at the baseline calibration), $\varsigma$ is \emph{increasing} in $\phi$ --- a larger sovereign bond share raises, rather than dilutes, the bank's steady-state franchise value. A higher $\phi$ still requires a higher $\theta^b$ to hold leverage at the same target $\lambda$, but for the reverse reason to before: it is precisely because a more valuable franchise is more tempting to divert that a stronger deterrent is needed to keep the constraint binding at an unchanged leverage limit.
 
 % ------------------------------------------------------------
 \subsection{Public Authority}\label{sec:D9}

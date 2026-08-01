@@ -8,10 +8,14 @@ critique (`ToDoJuly30th.md`), roughly in priority order.
 
 ## 1. Model / Appendix A (carrying over from today)
 
-- [ ] Finish your own edits 1-3 in Appendix A (paragraph after eq. A.3.2.3
+- [x] Finish your own edits 1-3 in Appendix A (paragraph after eq. A.3.2.3
       re: fixed vs. endogenous λ_t; eq. A.3.2.5 timing R^d_t → R^d_{t-1};
       eq. A.5.4 + companion prose λ → λ_t).
-- [ ] **Decide how to handle the perceived-risk-channel finding** (see
+      *(2026-08-01: verified — all three confirmed correctly applied:
+      A.3.2.3 now reads "uses an endogenous λ_t"; A.3.2.5 uses R^d_{t-1}
+      throughout; A.5.4's equation and its companion prose sentence both
+      now use λ_t.)*
+- [x] **Decide how to handle the perceived-risk-channel finding** (see
       CHANGELOG, "2026-07-30 — Appendix A review... numerical test"
       section, just added). The propagation-chain paragraph at the end of
       A.3.3 currently claims the mechanism works through realised default
@@ -22,6 +26,15 @@ critique (`ToDoJuly30th.md`), roughly in priority order.
       paragraph to describe both channels rather than deleting the
       finding to preserve the old claim — but this is your call on
       framing since it touches the thesis's core narrative.
+      *(2026-08-01: verified — Appendix A.3.3 now has two clearly
+      separated paragraphs, "Immediate channel: perceived risk via the
+      bank's incentive constraint" and "Lagged channel: realised default
+      via bank net worth," plus a closing synthesis paragraph correctly
+      noting N^b_t is predetermined and cannot respond within the period,
+      and linking back to Isoré-Szczerbowicz (2017)'s own perceived-risk
+      finding. Accurately reflects the numerical result. Nothing further
+      needed here except reporting the actual magnitude in the Results
+      section, per the paragraph's own forward reference.)*
 - [x] Once Appendix A is settled, move to **Appendix B** (Stationarization)
       review — same process: equation-by-equation against the .mod file,
       confirm/flag, only rewrite what's verified. Note: B.21 (leverage
@@ -34,10 +47,17 @@ critique (`ToDoJuly30th.md`), roughly in priority order.
       endogenous-leverage derivation; D7 ("Entrepreneur Block") should be
       unaffected (BGG reinstated verbatim).
       *(2026-08-01: review done — D7 confirmed unaffected as anticipated;
-      D8 surfaced a genuine open question, see CHANGELOG "2026-08-01 —
-      Appendix C review" section: eq. C.33-C.35's "bond term = 0 exactly"
-      claim uses a different R^b convention than eq. C.31/C.32 and the
-      .mod file both actually use. NOT resolved — needs your decision.)*
+      D8 surfaced a genuine open question (eq. C.33-C.35's "bond term = 0
+      exactly" claim used a different R^b convention than eq. C.31/C.32
+      and the .mod file both actually use) — DECIDED: fix the thesis text,
+      not the .mod file, since the realised-return convention is the
+      internally consistent one (see CHANGELOG "2026-08-01 (continued) —
+      DECISION" section for full reasoning + verified comparative
+      statics). LaTeX replacement for the "Value-function coefficients"
+      paragraph through eq. C.35 provided to the user; NOT YET inserted
+      into the thesis file. `.mod` file re-verified to still solve
+      cleanly at phi=0.1 specifically, order=1 and order=3/pruning, since
+      it is unchanged by this decision.)*
 - [ ] Optional, lower priority: sanity-check the `phi=0` counterfactual's
       flagged numerical fragility (literal `Inf` and ~1e20 eigenvalues at
       that exact corner case, vs. a clean spectrum at `phi=0.10`/`0.20`)
@@ -56,6 +76,15 @@ critique (`ToDoJuly30th.md`), roughly in priority order.
       given item 1 above (immediate perceived-risk-via-leverage +
       lagged realised-loss-via-net-worth), not the original single
       "activates only upon realised default" framing.
+      *(2026-08-01: PARTIALLY done, and now a CRITICAL issue — the
+      sentence was restored/uncommented in the main-text hypothesis
+      paragraph (lines 112-114), but using the OLD single-channel
+      "activates only upon a realised default" wording, NOT the corrected
+      two-channel version. This now DIRECTLY CONTRADICTS Appendix A.3.3's
+      own (correctly revised) two-channel description a few pages later.
+      See CHANGELOG "2026-08-01 — critical consistency finding" and
+      `ToDoAugust1st.md` item 1 — this is the single most urgent open
+      item in the whole document right now.)*
 - [ ] Add **Rebelo, Wang & Yang (2022, JoF)** — "Rare Disasters, Financial
       Development, and Sovereign Debt" — closest existing paper combining
       rare-disaster pricing with sovereign debt; not citing it invites the
@@ -87,7 +116,8 @@ critique (`ToDoJuly30th.md`), roughly in priority order.
 **Citation accuracy:**
 - [ ] Fix key: `Gabaix2015` → this is actually Farhi & Gabaix (2016, QJE)
       — rename to `FarhiGabaix2016` or `Farhi2016`.
-- [ ] Fix typo: `Gouriroux2021` → `Gourieroux2021`.
+- [x] Fix typo: `Gouriroux2021` → `Gourieroux2021`.
+      *(2026-08-01: verified fixed.)*
 - [ ] Add directionality caveat for `Singh2016` and `Boehm2020` — both
       document bank→sovereign causality; your model is sovereign→bank
       only. Needs one sentence acknowledging the loop is empirically
@@ -103,12 +133,21 @@ critique (`ToDoJuly30th.md`), roughly in priority order.
       climate-specific; your θ_t/Δᵏ process is generic Barro-Rietz-Gabaix,
       not climate risk. One clarifying clause needed, not a deletion.
 
+*(2026-08-01 note: `Engler2016`, `Singh2016`, `Boehm2020` are now marked
+with "!!!" directly in the citation text — looks like your own in-progress
+flags, not yet resolved. `Rebelo2022`, `SosaPadilla2018`, `Rannenberg2016`,
+and the `Gabaix2015` key fix are not yet present anywhere in the document.
+`Gennaioli2014` is still only in the A.3.2.4 footnote, not in the lit
+review prose. Carried to `ToDoAugust1st.md`.)*
+
 ## 3. Housekeeping
 
-- [ ] `git status` shows two deleted-but-unstaged files from before this
+- [x] `git status` shows two deleted-but-unstaged files from before this
       session started (`thesis_model.mod`, `thesis_model_ent+bank_channel_v1.mod`)
       — worth a conscious decision (restore, or confirm intentional and
       commit the deletion) rather than leaving them dangling.
+      *(2026-08-01: verified — no longer appear in `git status` at all,
+      resolved somewhere along the way.)*
 - [ ] Consider committing today's work (BK resolution + BGG/GK decision)
       as a checkpoint before starting Appendix B/C — it's a natural,
       substantial, self-contained milestone.
