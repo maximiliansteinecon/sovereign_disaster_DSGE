@@ -1390,3 +1390,69 @@ appendix, including the dynamic eq. B.23) actually implements throughout.
 
 **Not resolved. Presented to the user for a decision before any further
 change to either the .mod file or the thesis text on this point.**
+
+---
+
+## 2026-08-01 (continued) — DECISION: fix the thesis text (Appendix C),
+### not the .mod file
+
+**Decision: Option 1** — revise eq. (C.33)-(C.35) to match the realised-
+return convention already used consistently throughout the rest of the
+appendix and the .mod file. The .mod file is NOT changed.
+
+**Reasoning, not just risk-avoidance:** the realised-return convention is
+not merely lower-risk under time pressure, it is the internally
+consistent one. The banker's value-function coefficients (nu_t, eta_t)
+are the marginal value of the SAME net-worth process N^b_t whose law of
+motion (eq. A.3.2.5/B.23/eq27, unchanged, pre-existing) has ALWAYS used
+the realised (x=0) bond return, never the fully theta-weighted
+expectation -- because no default is ever realised along this model's
+own perturbation-based solution path (already disclosed in the .mod
+header and now also stated explicitly in the revised Appendix A.3.3).
+Pricing the value function against a theta-weighted expectation that
+INCLUDES a default branch the net-worth process itself never
+experiences would make eta_t/nu_t inconsistent with the very N^b_t they
+are supposed to be the marginal value of. The E[Q(R^b-R^d)]=0 identity
+in the old eq. (C.33) is mathematically correct, but only for the TRUE
+stochastic R^b_{t+1} -- not the realised-only object the model actually
+uses everywhere, including in this same appendix's own eq. (C.31)/(C.32)
+two paragraphs earlier.
+
+**Verified before finalizing:** `thesis_model_v3.mod` re-confirmed to
+solve cleanly at phi=0.1 (not just phi=0.10-as-default, phi=0, or
+phi=0.20) -- `resid;` exact zero, `check;` 9=9 rank condition verified at
+order=1 (max finite eigenvalue ~3e18, no `Inf`), `stoch_simul(order=3,
+pruning)` completes. Since Option 1 makes no .mod changes, this simply
+reconfirms nothing has drifted since 2026-07-30.
+
+**Numerically verified comparative statics for the corrected closed
+form** (needed since the corrected `varsigma` now includes a bond term
+that could in principle reverse the sign of how phi affects theta^b):
+using the model's actual steady-state values (R^S-R^f=0.00202,
+spread=R^b-R^f=0.00696 -- note the bond spread EXCEEDS the loan spread in
+this calibration), computed nu^b, eta^b, theta^b at phi=0, 0.10, 0.20:
+
+```
+phi     varsigma    nu^b      eta^b     theta^b
+0.00    0.001999    1.14322   0.002285  0.288090
+0.10    0.002488    1.18468   0.002948  0.299118
+0.20    0.002976    1.22926   0.003659  0.310974
+```
+
+theta^b is still increasing in phi (confirming the qualitative claim
+"higher phi requires higher theta^b" survives the fix) -- but the
+REASON flips: previously "higher phi dilutes franchise value, requiring
+a compensating higher theta^b"; now, since the bond spread exceeds the
+loan spread at this calibration, higher phi INCREASES franchise value,
+and it's precisely because a MORE valuable franchise is more tempting to
+divert that a STRONGER deterrent (higher theta^b) is needed to hold
+leverage at the same target.
+
+**LaTeX replacement provided to the user** for the "Value-function
+coefficients and the diversion parameter" paragraph through the
+concluding comparative-statics paragraph (eq. C.33 removed entirely --
+its label `eq:D_bondnull` confirmed unreferenced elsewhere so no dangling
+cross-references; C.34/C.35 kept, `varsigma`'s definition corrected to
+include the bond term via the already-defined steady-state `spread`
+object from eq. A.3.3.6). Not yet inserted into the thesis file --
+awaiting the user's own insertion, as with the Appendix B addition.
