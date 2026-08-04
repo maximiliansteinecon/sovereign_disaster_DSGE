@@ -19,7 +19,7 @@ assumption — sequencing below updated accordingly).
 
 ## 1. Calibration — new findings today, highest priority (blocks the Calibration subsection)
 
-- [ ] **`psi` vs `psitilde` — genuine, unresolved notation gap between
+- [x] **`psi` vs `psitilde` — genuine, unresolved notation gap between
       the `.mod` file and the thesis text.** Your EIS cross-check is
       correct as far as it goes (`psitilde=2` is indeed the calibration
       target matched to IS2017's EIS=0.5), but the thesis's own eq. 208
@@ -35,6 +35,12 @@ assumption — sequencing below updated accordingly).
       (b) the calibration table lists BOTH `psitilde=2` (target) and
       `psi~1.3003` (the object in the Bellman equation), with one line
       connecting them. Full detail in CHANGELOG "2026-08-02".
+      *(2026-08-04 night: RECOMMENDATION DELIVERED — keep calibration
+      as-is, fix the thesis text only (add psitilde + transformation to
+      the Appendix, cited to Gourio 2012; list both values in the
+      calibration table). See CHANGELOG "2026-08-04 (night)" item 1 for
+      full reasoning. Not yet inserted into the thesis text — your call,
+      per the citation-accuracy/structural-fixes boundary.)*
 - [ ] **`phipi`=1.5, `phiy`=0.5 (changed from 1.6/0.4) — not
       independently verified against IS2017's own table.** These read
       like textbook Taylor (1993) values rather than a specific paper's
@@ -113,13 +119,112 @@ version, carried forward as still open:
       (new keys I added 2026-08-01) — not created or checked by me,
       reserved for you; will break compilation if missing.
 
+## 2a. Literature review — new findings from the Aug 4th draft (2026-08-04 night)
+
+You said the §1/§2 redundancy was resolved — it was, but the merge
+introduced three new issues, plus one pre-existing critical error I
+hadn't seen before in the new historical-context paragraph. Full detail
+and proposed rewrite in CHANGELOG "2026-08-04 (night)" item 2. Priority
+order:
+
+- [x] **CRITICAL: line 91 says the thesis extends \textcite{Isore2013}
+      — should be \textcite{Isore2017}.** Directly contradicts the
+      `.mod` file's own header and the very next paragraph's own account
+      of Isore2013 as an inferior precursor. Fix before anything else in
+      the lit review.
+      *(2026-08-04, later update: CONFIRMED fixed — line 91 now reads
+      "\textcite{Isore2017}".)*
+- [x] Paragraphs 91 and 93 now largely restate each other (the euro-crisis
+      sentence is duplicated verbatim) — delete paragraph 93.
+      *(2026-08-04, later update: CONFIRMED — the old duplicate paragraph
+      93 is gone; the euro-crisis sentence now appears exactly once,
+      inside paragraph 91.)*
+- [x] "Four related subbranches" (103) no longer matches the ordinal
+      markers after the redundancy merge deleted the word "Secondly" —
+      restore it at the start of paragraph 105.
+      *(2026-08-04, later update: CONFIRMED, via the opposite fix — the
+      count was changed to "three related subbranches" instead, which now
+      correctly matches the three explicit ordinals present
+      (Primarily/secondly/Thirdly). The unlabelled "two layers" paragraph
+      reads fine as an elaboration of branch 1 rather than a claimed 4th
+      branch. Resolved.)*
+- [x] Merged paragraph 103 now presents extensions (Tsai/Farhi/Chen/
+      Rebelo2022) before the foundational lineage (Rietz→Barro→Gabaix→
+      Gourio→Isore2017) they build on — reorder foundation-first.
+      *(2026-08-04, later update: CONFIRMED — foundation (Rietz→Isore2017)
+      now comes first, extensions (Tsai/Farhi/Chen/Rebelo2022) after, as
+      recommended. One residual issue: the transition sentence joining
+      them is a grammatical fragment — "This gap...is what this thesis
+      aims to close. As more empirical arguments arised that small-
+      probability, high-loss states can explain..." has no main clause
+      after "As...". Needs a rewrite of that one sentence, but the
+      structural reordering itself is done.)*
+- [ ] New paragraph 91's historical claims (1980s Latin American debt
+      crisis, 1994/95 Mexican peso crisis) are uncited; one grammatical
+      fragment; four typos (longreaching/oberserved/occurence/soverrign);
+      the rhetorical question is stylistically informal for a thesis.
+      *(2026-08-04, later update: PARTIALLY done — the Latin-American-
+      crisis sentence now has a citation (`\parencite{Ams2018}`), good.
+      Still open: the Mexican peso crisis sentence remains uncited AND
+      still lacks a main verb ("Further, the Mexican peso crisis...which
+      resulted in...due to...which was...followed by..." never resolves
+      into a complete sentence); "longreaching", "soverrign",
+      "subsequentily", "occurence", "oberserved" are all still misspelled;
+      "such crisis" should be "such crises"; the rhetorical question is
+      unchanged; "sovereign tail risk is priced by banks" is still
+      imprecise (it's priced by bondholders generally, banks only hold a
+      fraction via home bias). Not ticked.)*
+- [ ] Two literature branches worth adding given what the model actually
+      does: Epstein-Zin/recursive-preferences literature (Epstein-Zin
+      1989, Weil 1990) — never engaged despite being central to the
+      transmission mechanism; safe-haven/flight-to-quality literature
+      (e.g. Beber-Brandt-Kavajecz 2009) — needed to motivate the
+      safe-haven finding before the Results chapter reports it.
+      *(2026-08-04, later update: still not present anywhere in the
+      document — not started.)*
+- [x] Recency check: `Hur2026` and `AnayaLongaric2025` are unusually
+      recent for an Aug 2026 thesis — confirm both are actually
+      published/accessible before the defense.
+      *(2026-08-05: CONFIRMED by user — both publicly available.)*
+      *(2026-08-04, later update: can't verify this one from the text
+      itself — still yours to check externally.)*
+
 ## 3. Model/results carryover from `ToDoAugust1st.md`
 
-- [ ] Targeted Euler-residual accuracy check of the current order-3
+- [x] Targeted Euler-residual accuracy check of the current order-3
       solution (Fernandez-Villaverde & Levintal 2018 Table 4/5 style) —
       still not done. Folds into the methodology defense in section 6.2
       (Limitations).
-- [ ] **`run_thesis_model.m`'s `spread` GIRF plotting bug — still not
+      *(2026-08-04 night: ATTEMPTED, result is a documented non-result,
+      not a number to cite. A genuine quadrature-based check was built
+      and run; it surfaced that `simult_` restarts don't compose
+      correctly across repeated calls, which — compounded through the
+      SDF's steep chi~-8.3 exponents — produces a spurious 20-200%
+      apparent residual. NOT evidence of a model error: fully traced to
+      the diagnostic's own construction. Full reasoning in CHANGELOG
+      "2026-08-04 (night)" item 3 — read it before writing 6.2.)*
+      *(2026-08-04, later same night: CORRECTED — the "1-2.5% restart
+      discrepancy in headline variables" conclusion directly above was
+      ITSELF based on a mismatched test and overstated the problem.
+      Redone properly (true continuous GIRF vs. the actual restart-based
+      GIRF, at the real shockSize=0.01, columns correctly aligned):
+      absolute differences of 0.0000-0.0045 percentage points — negligible.
+      Separately, this exercise found and fixed a REAL bug: `simult_`
+      prepends `M.maximum_lag` unchanged-initial-condition columns before
+      the simulated periods, so column 1 of every existing GIRF was the
+      trivially-zero pre-shock state, not the impact period (verified:
+      `lev`/`Nb`/`y` all exactly 0 at column 1 in the pre-fix
+      `thesis_model_results.mat`). Fixed in `run_thesis_model.m` — column
+      1 is now genuinely the impact period. The "two-channel" finding's
+      qualitative result is unaffected (lev moves, Nb doesn't, now
+      correctly at column 1); its specific cited magnitude ("0.0148")
+      should be refreshed against the current calibration when writing
+      Section 5.2.2 (now reads 0.00769 — likely just the Deltab/Taylor-
+      rule recalibration since 07-30, not a new problem). Bottom line: no
+      evidence of an Euler-equation error anywhere in this investigation.
+      Full corrected account in CHANGELOG "2026-08-04 (later same
+      night)".)*
+- [x] **`run_thesis_model.m`'s `spread` GIRF plotting bug — still not
       fixed.** Line 102 computes every GIRF as
       `100*(shocked-baseline)/ergodic_mean`, appropriate for level
       variables but wrong for `spread` (a rate-wedge with a near-zero
@@ -127,9 +232,28 @@ version, carried forward as still open:
       against IS2017's own risk-premium panel. Fix before any figure goes
       in the thesis — plot `spread` (and `Rb`/`Qb` if compared directly)
       in raw annualized-bps level terms instead.
+      *(2026-08-04 night: DONE — `spread`, `Rb`, `Qb` now plotted in raw
+      annualized bps, all other variables unchanged. Verified: full
+      driver re-run completes end-to-end, no error. See CHANGELOG
+      "2026-08-04 (night)" item 4.)*
 - [ ] Confirm whether IS2017's Fig. 3 ("Disaster-risky bonds, tau=0.3")
       is their headline/baseline figure or a secondary robustness variant
       — matters for how you cite the comparison in the thesis.
+- [x] **NEW, found tonight: `run_thesis_model.m` GIRF off-by-one column
+      bug — FIXED.** `simult_` prepends `M.maximum_lag` (=1) columns of
+      unchanged initial condition before the simulated periods; every
+      existing GIRF's column 1 was this trivial always-zero pre-shock
+      state, not the impact period. Fixed by dropping that prefix before
+      computing `R(s).girf`. Re-verified end-to-end. See CHANGELOG
+      "2026-08-04 (later same night)" for the full finding.
+- [ ] **Re-verify the "two-channel" finding's cited magnitude before
+      writing Section 5.2.2.** The qualitative result (lev moves at
+      impact, Nb doesn't) is intact and now correctly at column 1, but
+      the specific number from 2026-07-30 ("lev moves 0.0148") doesn't
+      match a fresh run today (0.00769) — recalibration since then
+      (Deltab, Taylor rule) is the likely reason, not a bug, but confirm
+      with one more run at the FINAL calibration before citing a number
+      in the thesis.
 
 ## 4. Housekeeping
 
@@ -204,6 +328,40 @@ in new computation:
    resolve the phi=0 numerical-fragility to-do item (now itself
    resolved, see `ToDoAugust1st.md` item 2 — the sweep is now purely a
    robustness/figure exercise, not also a debugging one).
+   *(2026-08-05: DONE — built as standalone `phi_sweep.m` first, then
+   FOLDED into `run_thesis_model.m` per instruction (project keeps
+   exactly one `.mod` and one `.m` file). `run_thesis_model.m` now solves
+   phi in {1e-4, 0.10, 0.20, 0.50, 0.80} ONCE each and produces THREE
+   clearly separated figures from the shared results: Fig1_Headline_GIRF
+   (0.10 vs 1e-4, the original headline comparison, unchanged), 
+   Fig2_Core_Phi_Sweep (1e-4/0.10/0.20, the calibration-plausible range),
+   and Fig3_Beyond_Calibration (0.10 vs 0.50/0.80, explicitly titled
+   "BEYOND-CALIBRATION ILLUSTRATION" in the figure itself, not just in
+   this to-do). Standalone `phi_sweep.m` and its old outputs deleted —
+   `run_thesis_model.m` is now the single sustainable source for all
+   three. Re-ran end-to-end after the merge: completes cleanly, all
+   three .fig/.png pairs regenerated, `thesis_model_results.mat` now
+   carries all 5 phi scenarios. Consumption/investment/spread/leverage
+   are robustly monotonic in phi across the whole grid — core
+   amplification claim confirmed. Output and Nb are NOT monotonic, for
+   two distinct, explainable reasons (immediate-channel sign ambiguity,
+   already documented in A.3.3; and the model's own self-disclosed
+   no-realised-default convention making higher phi actually IMPROVE Nb
+   at high phi, since bond yields mechanically rise when no haircut ever
+   materializes) — this is exactly why Fig3 is kept visually and titularly
+   separate from Fig2. Full account in CHANGELOG "2026-08-05". Action
+   item below.)*
+   - [ ] **New, from the phi sweep:** add one explicit sentence to
+     Section 5.2.2 (or 6.2 Limitations) stating that the headline GIRF's
+     "no realised default" convention means higher phi can IMPROVE bank
+     net worth in this specific experiment (bond yields rise when no
+     haircut occurs) — the lagged-erosion story only applies along a
+     path with an actual default, which the headline GIRF doesn't have.
+     Pre-empts an obvious examiner question. Recommend keeping phi in
+     {1e-4, 0.10, 0.20} for the main amplification figure and presenting
+     0.50/0.80 separately as an explicit beyond-calibration illustration,
+     not further confirmation of the same monotonic story (neither value
+     is empirically documented for euro-area bank home bias).
 6. **Risk aversion `gamma` sensitivity** — mirrors IS2017's own Appendix
    B robustness figure directly; citeable as "replicating IS2017's own
    sensitivity analysis, extended to phi."

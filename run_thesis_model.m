@@ -1,29 +1,57 @@
 %% =======================================================================
 %  run_thesis_model.m
-%  Driver for the master-thesis benchmark model  thesis_model.mod
+%  Driver for the master-thesis benchmark model  thesis_model_v3.mod
 %  ------------------------------------------------------------------------
 %  Maximilian Stein - Sovereign Disaster Risk, Banking Frictions and Macro
 %  Tail Outcomes in a NK-DSGE for the Euro Area.
 %
-%  WHAT THIS SCRIPT DOES
+%  WHAT THIS SCRIPT DOES (single, consolidated driver -- 2026-08-05: folded
+%  in the former standalone phi_sweep.m so the project keeps exactly one
+%  .mod and one .m file, per instruction)
 %   1. Solves the model with Dynare at THIRD ORDER (order=3, pruning) for
-%          (a) the BASELINE          phi = 0.10  (banks hold sovereign bonds)
-%          (b) the COUNTERFACTUAL    phi = 1e-4     (sovereign-bank channel off)
+%      EVERY phi in PHI_GRID below, ONCE each, sharing the solved results
+%      across all three figures produced (no redundant solves).
 %   2. Computes the ERGODIC MEAN in the absence of shocks (the correct
 %      centring point for nonlinear/3rd-order IRFs), exactly as in the
 %      Isore-Szczerbowicz (2017) replication code (uses Dynare's simult_).
 %   3. Builds GENERALISED IRFs to a disaster-risk shock (etheta): the
-%      difference between the shocked path and the no-shock path, in percent
-%      of the ergodic mean, and overlays baseline vs counterfactual.
-%   4. Plots the key macro-financial variables and saves everything to .mat.
+%      difference between the shocked path and the no-shock path, in
+%      percent of the ergodic mean (raw annualized bps for spread/Rb/Qb).
+%   4. Produces THREE separate figures, because they answer different
+%      questions and must not be read as one continuous story (see
+%      CHANGELOG "2026-08-05"):
+%        Figure 1 - HEADLINE: baseline (phi=0.10) vs counterfactual
+%                   (phi=1e-4). This is the thesis's main comparison.
+%        Figure 2 - CORE PHI SWEEP: phi in {1e-4, 0.10, 0.20}, the
+%                   empirically plausible calibration range (matches
+%                   the euro-area home-bias literature, e.g.
+%                   Battistini-Pagano-Simonelli 2014). Consumption,
+%                   investment, spread and leverage are robustly
+%                   monotonic in phi here -- this is the figure that
+%                   supports the amplification claim.
+%        Figure 3 - BEYOND-CALIBRATION ILLUSTRATION: phi in {0.50, 0.80}
+%                   against the phi=0.10 baseline for reference. NEITHER
+%                   value is empirically documented for euro-area bank
+%                   sovereign exposure. Included only to show the limit
+%                   behaviour of the model's own "no realised default
+%                   along the simulated path" convention (bank net worth
+%                   N^b can flip from a loss to a GAIN at these values,
+%                   because a bond price that falls but never actually
+%                   defaults mechanically raises next period's realised
+%                   yield -- see CHANGELOG 2026-08-05 for the full
+%                   diagnosis). Do NOT present this figure as "more of
+%                   the same" amplification -- it demonstrates a
+%                   different regime, not a stronger version of Figure 2.
+%   5. Plots the key macro-financial variables and saves everything to
+%      .mat (one consolidated file, all phi scenarios).
 %
 %  HOW TO RUN
 %   >> addpath /Applications/Dynare/6.3-x86_64/matlab   % <-- adjust to yours
-%   >> cd  <folder containing this file and thesis_model.mod>
+%   >> cd  <folder containing this file and thesis_model_v3.mod>
 %   >> run_thesis_model
 %
 %  REQUIREMENTS: MATLAB (R2018b+) with Dynare 6.x on the path.
-%  TIP for a first debug pass: open thesis_model.mod and switch
+%  TIP for a first debug pass: open thesis_model_v3.mod and switch
 %  stoch_simul to  order=1  (faster; isolates steady-state / BK problems
 %  from any 3rd-order/pruning issues).  Once order=1 solves, go back to 3.
 %% =======================================================================
@@ -57,10 +85,22 @@ korder     = 3;                % MUST equal order= in stoch_simul (=3)
                                 % reconstruct the pruned state space at the wrong order
                                 % and fail confusingly. These two are not auto-synced.
 
-% Scenarios: {label, extra dynare macro-define, line style}
+% All phi values needed across all three figures, solved ONCE each and
+% shared -- this is the "solve once, plot three ways" design that keeps
+% this a single sustainable script rather than one-off throwaway copies.
+% {label, dynare macro-define, line style, RGB color}
 scen = { ...
-    'Baseline  (\phi=0.10)',      '',              '-'  ; ...
-    'Counterfactual (\phi=1e-4)', '-DPHIVAL=1e-4', '--' };
+    'Counterfactual (\phi=1e-4)',     '-DPHIVAL=1e-4', '--', [0.85 0.33 0.10]; ...
+    'Baseline  (\phi=0.10)',          '',              '-',  [0.00 0.45 0.74]; ...
+    'Core sweep (\phi=0.20)',         '-DPHIVAL=0.20', ':',  [0.47 0.67 0.19]; ...
+    'BEYOND-CALIBRATION (\phi=0.50)', '-DPHIVAL=0.50', '-.', [0.49 0.18 0.56]; ...
+    'BEYOND-CALIBRATION (\phi=0.80)', '-DPHIVAL=0.80', '--', [0.30 0.30 0.30] ...
+};
+IDX_CF20   = 1;   % index of phi=1e-4 in scen/R
+IDX_BASE10 = 2;   % index of phi=0.10 in scen/R
+IDX_20     = 3;   % index of phi=0.20 in scen/R
+IDX_50     = 4;   % index of phi=0.50 in scen/R (beyond-calibration)
+IDX_80     = 5;   % index of phi=0.80 in scen/R (beyond-calibration)
 
 %% ---------------------- solve each scenario ------------------------------
 R = struct();                                   % results container
@@ -71,13 +111,14 @@ for s = 1:size(scen,1)
     if isempty(scen{s,2})
         dynare(MODEL, 'noclearall');            % baseline (PHIVAL default)
     else
-        dynare(MODEL, 'noclearall', scen{s,2}); % counterfactual (-DPHIVAL=0)
+        dynare(MODEL, 'noclearall', scen{s,2}); % non-default phi
     end
 
     % ---- snapshot the Dynare objects for this scenario -------------------
     M  = M_; oo = oo_; op = options_;
     R(s).label   = scen{s,1};
     R(s).style   = scen{s,3};
+    R(s).color   = scen{s,4};
     R(s).M       = M;
     R(s).names   = M.endo_names;
 
@@ -98,12 +139,34 @@ for s = 1:size(scen,1)
     pShock = simult_(M, op, y0, oo.dr, exI,  korder);
     pBase  = simult_(M, op, y0, oo.dr, ex0b, korder);
 
+    % simult_ prepends M.maximum_lag columns of the (unchanged) initial
+    % condition before the nIrf simulated periods, so pShock/pBase have
+    % M.maximum_lag+nIrf columns, not nIrf. Column 1 of the RAW output is
+    % therefore trivially pShock==pBase==ergM (verified 2026-08-04: exactly
+    % zero for every variable) -- NOT the impact period. Drop that prefix so
+    % column 1 of R(s).girf really is the first period after the shock,
+    % matching the x-axis label ("quarters", 0-indexed) below.
+    pShock = pShock(:, M.maximum_lag+1:end);
+    pBase  = pBase(:,  M.maximum_lag+1:end);
+
     % GIRF: (shocked - no-shock) in percent of the ergodic mean
-    R(s).girf = 100 * (pShock - pBase) ./ ergM;   % rows=vars, cols=0..nIrf
+    R(s).girf = 100 * (pShock - pBase) ./ ergM;   % rows=vars, cols=0..nIrf-1
+
+    % Rate-wedge variables (spread, Rb, Qb) have a near-zero ergodic mean,
+    % so "% of ergodic mean" mechanically blows up a small absolute move
+    % into a meaningless percentage (verified 2026-08-01: ~100x too large
+    % against IS2017's own risk-premium panel). Overwrite these rows with
+    % the raw level deviation in annualized basis points instead.
+    bpsVars = {'spread','Rb','Qb'};
+    for bv = 1:numel(bpsVars)
+        jbv = strcmp(M.endo_names, bpsVars{bv});
+        if any(jbv)
+            R(s).girf(jbv,:) = 10000 * (pShock(jbv,:) - pBase(jbv,:));
+        end
+    end
 end
 
-%% ---------------------- plotting -----------------------------------------
-% variables to display (name in the model, and a nice title)
+%% ---------------------- shared plotting setup -----------------------------
 plotVars = { ...
    'betatheta','Discount factor \beta(\theta)'; ...
    'y',        'Output'; ...
@@ -117,22 +180,57 @@ plotVars = { ...
    'Ne',       'Entrepreneur net worth N^e'; ...   % 2026-07-30: BGG reinstated (double accelerator)
    'lev',      'Bank leverage (endogenous)'; ...
    'RS',       'Loan rate R^S'};   % was 'RL' -- no such variable; loan rate is RS
+bpsVars = {'spread','Rb','Qb'};
 
-figure('Name','GIRF to a disaster-risk shock','Position',[80 80 1200 900]);
-for p = 1:size(plotVars,1)
-    subplot(4,3,p); hold on; grid on;
-    for s = 1:numel(R)
-        jv = strcmp(R(s).names, plotVars{p,1});
-        y  = R(s).girf(jv, :);              % includes impact period
-        plot(0:numel(y)-1, y, R(s).style, 'LineWidth', 1.4);
-    end
-    title(plotVars{p,2}, 'Interpreter','tex');
-    xlabel('quarters'); ylabel('% dev.'); xlim([0 nIrf]);
-    if p==1, legend({R.label}, 'Location','best', 'Interpreter','tex'); end
-end
-sgtitle(sprintf('Response to a %+g disaster-risk innovation (order=%d)', ...
-        shockSize, korder));
+plot_panel = @(idxList, figName, titleStr) local_plot_panel(R, idxList, plotVars, bpsVars, nIrf, figName, titleStr, shockSize, korder);
+
+%% ---------------------- Figure 1: HEADLINE (main thesis comparison) -------
+plot_panel([IDX_BASE10, IDX_CF20], 'Fig1_Headline_GIRF', ...
+    'HEADLINE: baseline (\phi=0.10) vs counterfactual (\phi=1e-4)');
+
+%% ---------------------- Figure 2: CORE PHI SWEEP (calibration-plausible) --
+plot_panel([IDX_CF20, IDX_BASE10, IDX_20], 'Fig2_Core_Phi_Sweep', ...
+    'CORE \phi SWEEP: calibration-plausible range (1e-4, 0.10, 0.20)');
+
+%% ---------------------- Figure 3: BEYOND-CALIBRATION illustration ---------
+% Explicitly separate figure, explicitly labeled -- per CHANGELOG
+% 2026-08-05, phi=0.50/0.80 are NOT empirically documented for euro-area
+% bank sovereign exposure and must not be shown as a continuation of
+% Figure 2's monotonic story. They illustrate a different regime (the
+% "no realised default" convention's limit behaviour on N^b).
+plot_panel([IDX_BASE10, IDX_50, IDX_80], 'Fig3_Beyond_Calibration', ...
+    'BEYOND-CALIBRATION ILLUSTRATION (\phi=0.50/0.80, NOT empirically calibrated -- see CHANGELOG 2026-08-05)');
 
 %% ---------------------- save --------------------------------------------
-save('thesis_model_results.mat', 'R', 'plotVars', 'shockName', 'shockSize');
+save('thesis_model_results.mat', 'R', 'plotVars', 'shockName', 'shockSize', 'scen');
 fprintf('\nDone. Results saved to thesis_model_results.mat\n');
+fprintf('Figures saved: Fig1_Headline_GIRF, Fig2_Core_Phi_Sweep, Fig3_Beyond_Calibration (.fig/.png)\n');
+
+%% ---------------------- local plotting function ---------------------------
+function local_plot_panel(R, idxList, plotVars, bpsVars, nIrf, figName, titleStr, shockSize, korder)
+    figure('Name', figName, 'Position',[80 80 1200 900]);
+    for p = 1:size(plotVars,1)
+        subplot(4,3,p); hold on; grid on;
+        for ii = 1:numel(idxList)
+            s = idxList(ii);
+            jv = strcmp(R(s).names, plotVars{p,1});
+            y  = R(s).girf(jv, :);
+            plot(0:numel(y)-1, y, R(s).style, 'Color', R(s).color, 'LineWidth', 1.4);
+        end
+        title(plotVars{p,2}, 'Interpreter','tex');
+        xlabel('quarters');
+        if any(strcmp(plotVars{p,1}, bpsVars))
+            ylabel('bps');
+        else
+            ylabel('% dev.');
+        end
+        xlim([0 nIrf-1]);
+        if p==1
+            legend({R(idxList).label}, 'Location','best', 'Interpreter','tex', 'FontSize',7);
+        end
+    end
+    sgtitle(sprintf('%s\nResponse to a %+g disaster-risk innovation (order=%d)', ...
+            titleStr, shockSize, korder), 'Interpreter','tex');
+    savefig([figName '.fig']);
+    print([figName '.png'], '-dpng', '-r150');
+end
