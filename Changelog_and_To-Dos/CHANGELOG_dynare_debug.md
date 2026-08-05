@@ -2333,3 +2333,102 @@ directory -- left untouched, out of scope for this consolidation.
 
 **Hur2026 / AnayaLongaric2025 recency check -- CLOSED.** User confirmed
 both are publicly available. No further action needed.
+
+## 2026-08-05 (later) -- IS2017 Fig. 1 (their actual "Main scenario")
+## supplied; off-by-one fix CONFIRMED correct, not hallucinated, but its
+## PLOTTING consequence needed a further fix; amplitude-gap claim CORRECTED
+
+User supplied IS2017's actual Fig. 1 ("Main scenario", EIS=0.5, zeta=0.6 --
+**this matches our own calibration exactly** on both parameters, unlike
+Fig. 3 used on 2026-08-01, which was their "disaster-risky bonds, tau=0.3"
+variant. Fig. 1, not Fig. 3, is the correct benchmark going forward --
+closes the open "which IS2017 figure is the real baseline" item.)
+
+**Direct question asked: did the 2026-08-04 off-by-one fix actually find
+a real bug, or did I converge on a false pattern?** Checked properly
+rather than reasserting the earlier conclusion.
+
+**The mechanical finding was, and remains, correct.** Re-examined IS2017's
+own Fig. 1 pixel-by-pixel: ALL NINE panels -- including `beta(theta)`, a
+purely static/contemporaneous function of `theta_t` with no reason to be
+zero if the shock has genuinely hit -- read EXACTLY zero at their
+labelled period 1, with every real response appearing from period 2
+onward. This is not a coincidence across nine structurally different
+variables; it is the identical "leading pre-shock reference column"
+artifact found in our own `simult_`-based construction, independently
+confirming it is a generic property of how Dynare's raw `simult_` output
+is conventionally plotted (their own replication code -- which this
+thesis's driver script explicitly followed "exactly as in" -- evidently
+never trims this leading column either).
+
+**What needed correcting was not the underlying fix, but its PRESENTATION.**
+IS2017 KEEP that leading zero column and label it their "period 1" (their
+true first response is "period 2"). The 2026-08-04 fix DROPPED that
+column from `R(s).girf`, so our own "quarter 0" already IS the true first
+response -- correct and necessary for the two-channel analysis (which
+needs to distinguish `lev` moving from `Nb` not moving, impossible if
+both read zero on the trivial column). But this created a real, if
+purely cosmetic, mismatch: naively lining up our "quarter 0" against
+IS2017's "period 1" compares our true response against their trivial
+zero -- a spurious one-period offset, not an economic disagreement.
+**Fixed:** `run_thesis_model.m`'s plotting function now prepends a
+synthetic zero at quarter 0 for DISPLAY ONLY (`R(s).girf` itself, used
+for every analysis/citation purpose including `results_collection.md`,
+is untouched). Verified directly: `beta(theta)` now peaks at exactly
+0.9663e-3 at quarter 1 in our regenerated `Fig1_Headline_GIRF.png` --
+compare against IS2017's own ~0.97e-3 at their period 2. This is a
+near-exact match and strong, independent confirmation the alignment is
+now right on both sides.
+
+**Now redid the output/labour/consumption/investment/inflation comparison
+properly, aligned quarter-for-quarter, and the honest answer is more
+interesting than "confirmed":**
+
+| var | IS2017 Fig.1 trough (their period 2) | ours (quarter 1, phi=0.10) | ratio |
+|---|---|---|---|
+| beta(theta) | ~0.97e-3 | 0.9663e-3 | ~1.00x (near-exact) |
+| output | ~-0.024 | -0.0204 | ~0.85x (SMALLER, not larger) |
+| labour | ~-0.024 | -0.0098 | ~0.41x (well under half) |
+| consumption | ~-0.014 | -0.0418 | ~3.0x (LARGER) |
+| inflation | ~-0.011 | -0.0254 | ~2.3x (LARGER) |
+| investment | dips to ~-0.065 first, then recovers to +0.033 by period 4-5 | **stays positive throughout, no initial dip at all** (+0.073 at quarter 1, peaking +0.138 at quarter 2) | qualitatively different SHAPE, not just magnitude |
+
+(IS2017 values read off the published figure, approximate; ours are
+exact from `thesis_model_results.mat`.)
+
+**Correction to 2026-08-01: strike the "systematic 2-5x amplitude gap,
+plausibly banking-block amplification" claim.** That comparison used
+Fig. 3 (a different calibration) with BOTH sides still carrying the
+unfixed leading-zero column (so the comparison was, by coincidence,
+correctly aligned at the time on the offset question, but wrong on the
+choice of benchmark figure and imprecise on the actual pattern). The real
+picture, now properly checked against the correct benchmark (Fig. 1) with
+both sides properly aligned: NOT a uniform gap in either direction.
+Output and labour are SMALLER in our model; consumption and inflation are
+LARGER; investment is not a magnitude difference at all but a genuine
+SHAPE difference (IS2017 shows an initial investment CONTRACTION that we
+do not reproduce -- ours is expansionary from quarter 1 onward).
+
+**Most important, not-yet-resolved item this surfaces:** the investment
+shape difference is the one that most needs an explanation, and I do not
+have one verified yet. A plausible, NOT YET CONFIRMED hypothesis: IS2017
+has no banking/entrepreneur block at all, so their investment response is
+a "textbook" Tobin's-Q/adjustment-cost object; ours is additionally
+financed through the entrepreneur's leverage constraint and bank credit
+supply (BGG + endogenous GK), which could mechanically prevent the kind
+of first-period investment contraction IS2017 get from pure precautionary
+saving. This is a real, structurally motivated explanation, but it is a
+hypothesis, not a demonstrated fact -- do not write it into the thesis as
+settled until checked against the actual transmission mechanism (e.g. by
+comparing against a version of the model with the banking block shut off
+more completely than phi=1e-4 does, or by inspecting the impulse
+response of `Qtob`/`QS` directly for the sign of the initial credit
+supply response). The magnitude differences (output/labour smaller,
+consumption/inflation larger) may also be calibration-driven -- the
+gamma/psi(tilde)/tau/alpha-vs-IS2017 check already flagged as open
+(2026-08-01/02) is now more clearly the right next step than a vague
+"banking amplification" narrative.
+
+**`results_collection.md` §4 updated accordingly** (old claim struck
+through, not deleted, per this file's own maintenance rule) -- see that
+file for the reader-facing version of this correction.

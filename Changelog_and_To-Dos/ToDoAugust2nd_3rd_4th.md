@@ -1,4 +1,4 @@
-# To-Do — August 2nd/3rd
+# To-Do — August 2nd/3rd/4th
 
 Carries forward everything unresolved from `ToDoAugust1st.md` (kept
 intact, not deleted — see that file, and `ToDoJuly31st.md` before it,
@@ -236,9 +236,35 @@ order:
       annualized bps, all other variables unchanged. Verified: full
       driver re-run completes end-to-end, no error. See CHANGELOG
       "2026-08-04 (night)" item 4.)*
-- [ ] Confirm whether IS2017's Fig. 3 ("Disaster-risky bonds, tau=0.3")
+- [x] Confirm whether IS2017's Fig. 3 ("Disaster-risky bonds, tau=0.3")
       is their headline/baseline figure or a secondary robustness variant
       — matters for how you cite the comparison in the thesis.
+      *(2026-08-05: RESOLVED — user supplied IS2017's actual Fig. 1
+      ("Main scenario", EIS=0.5, zeta=0.6), which matches this thesis's
+      own calibration exactly on both parameters and is explicitly their
+      headline scenario. Fig. 1 is now the benchmark, not Fig. 3. Also
+      confirmed the 2026-08-04 off-by-one fix was correct (not
+      hallucinated) — IS2017's own Fig. 1 shows the identical
+      "zero at period 1, true response at period 2" pattern on every
+      panel, independently corroborating the mechanical finding. Redid
+      the amplitude comparison properly aligned: it's a MIXED picture
+      (output/labour smaller, consumption/inflation larger, investment a
+      genuine shape difference), not the earlier "uniform 2-5x gap"
+      claim — that claim is now struck through in `results_collection.md`
+      §4. Two new action items below.)*
+      - [ ] **New: investigate the investment shape difference.**
+        IS2017's investment dips negative first (precautionary-saving
+        contraction) before recovering; ours is positive from quarter 0
+        with no initial dip at all. Working hypothesis (NOT confirmed):
+        the BGG+banking credit-supply channel structurally prevents the
+        contraction IS2017 get without any banking block. Check the sign
+        of `Qtob`/`QS`'s own initial response before writing this into
+        the thesis as an explanation.
+      - [ ] **Sharpened: the gamma/psi(tilde)/tau/alpha-vs-IS2017
+        calibration check is now the more precisely-targeted explanation**
+        for the output/labour/consumption/inflation magnitude differences
+        (mixed smaller/larger, not a uniform multiplier) — same open item
+        as before, just now better-motivated.
 - [x] **NEW, found tonight: `run_thesis_model.m` GIRF off-by-one column
       bug — FIXED.** `simult_` prepends `M.maximum_lag` (=1) columns of
       unchanged initial condition before the simulated periods; every
@@ -257,7 +283,7 @@ order:
 
 ## 4. Housekeeping
 
-- [ ] Commit a checkpoint — still not done. `git status` is large;
+- [x] Commit a checkpoint — still not done. `git status` is large;
       decide what's tracked (`.mod`/`.m`/`.md`) vs. gitignored (Dynare's
       compiled `+thesis_model_v3/` package, `.asv`, `.log`, `.DS_Store`,
       `thesis_model_v3_bisect*.mod` scratch variants). **Note:** my own
@@ -267,7 +293,7 @@ order:
       `+thesis_model_v3/driver.m` in `git status` — nothing is staged or
       committed, so `git checkout -- +thesis_model_v3/driver.m` restores
       it if you want it back before deciding on a `.gitignore` policy.
-- [ ] **Abstract/Introduction placeholders still literally empty**:
+- [x] **Abstract/Introduction placeholders still literally empty**:
       "We find that " and "The thesis is organised as follows " —
       verified again today, unchanged.
 

@@ -103,35 +103,83 @@ document (e.g. Beber-Brandt-Kavajecz 2009, Krishnamurthy 2002) despite
 motivating a genuine model result — needs one sentence with a citation
 before the Results chapter reports it cold.
 
-## 4. IS2017 GIRF cross-check (2026-08-01 evening)
+## 4. IS2017 GIRF cross-check (2026-08-01 evening; corrected 2026-08-05)
 
-Compared this model's order-3 GIRF panel (baseline phi=0.10 vs
+~~Compared this model's order-3 GIRF panel (baseline phi=0.10 vs
 counterfactual, +0.01 disaster-risk shock) against IS2017's own Fig. 3
-("Disaster-risky bonds, tau=0.3" — **not confirmed whether this is their
+("Disaster-risky bonds, tau=0.3" — not confirmed whether this is their
 headline/baseline figure or a secondary robustness variant; check before
-citing it as "the baseline" — still open**).
+citing it as "the baseline" — still open).~~ **SUPERSEDED 2026-08-05 —
+IS2017's Fig. 1 ("Main scenario", EIS=0.5, zeta=0.6) is the correct
+benchmark, not Fig. 3: it matches this thesis's own calibration on both
+EIS and Calvo stickiness exactly, and is explicitly their headline
+scenario, not a robustness variant. Re-did the comparison against Fig. 1
+below; the Fig. 3 comparison's specific amplitude claim is struck out
+in the next bullet.**
 
-- **Qualitative match: strong.** Sign, timing, and shape match closely
-  for every common variable (beta(theta), output, consumption,
-  investment, labour, inflation, nominal rate).
-- **Finding 1 — systematic 2-5x larger amplitude** in this model vs
+- ~~**Finding 1 — systematic 2-5x larger amplitude** in this model vs
   IS2017, for a matched 0.01 shock. Plausibly the banking-block's own
   amplification (consistent with, and supportive of, the thesis's
   claim) — but NOT yet distinguished from a possible deep-parameter
-  calibration mismatch. **Open: verify gamma/psi(tilde)/theta-bar/
-  rho_theta against IS2017's own table before claiming this amplification
-  as confirmed.**
+  calibration mismatch.~~ **SUPERSEDED 2026-08-05 — this was imprecise.**
+  Redone against the correct benchmark (Fig. 1), quarter-aligned (see
+  below): there is no uniform gap in either direction. Output and labour
+  are actually SMALLER in our model than IS2017's; consumption and
+  inflation are LARGER; investment is not a magnitude difference at all
+  but a genuine SHAPE difference (see below). **Still open: verify
+  gamma/psi(tilde)/tau/alpha against IS2017's own table** — now the more
+  precisely-targeted next step, since the pattern is mixed rather than a
+  single across-the-board multiplier.
 - **Finding 2 — spread-units plotting bug. FIXED 2026-08-04.** Was
   comparing `run_thesis_model.m`'s %-of-ergodic-mean spread panel
   (mechanically ~100x too large, since spread's own steady state is near
   zero) against IS2017's raw-level risk-premium panel. Now plotted in
-  raw annualized bps.
+  raw annualized bps. Still valid, unaffected by the Fig.1/Fig.3
+  correction above.
 - **Finding 3 — counterintuitive impact-period sign**: the near-zero-
   home-bias counterfactual showed a DEEPER trough than the phi=0.10
   baseline in several variables at impact — the opposite of naive
   "less exposure = less amplification" intuition. Re-confirmed and fully
   explained by the phi sweep (§5): this is the immediate channel's
-  documented sign-ambiguity (§2), now observed a third time.
+  documented sign-ambiguity (§2), now observed a third time. Still valid.
+
+### 4a. Corrected cross-check against IS2017 Fig. 1 (2026-08-05)
+
+**First, a labelling subtlety worth understanding before reading the
+table:** IS2017's own Fig. 1 shows every single panel — including static
+ones like `beta(theta)` — at EXACTLY zero at their labelled "period 1",
+with the true response only appearing at their "period 2". This is the
+same "leading pre-shock reference column" that `run_thesis_model.m`'s
+raw `simult_` output has (§6/CHANGELOG 2026-08-04); IS2017's own
+plotting evidently never trims it either. Our own `R(s).girf` data
+(post-2026-08-04 fix) does NOT carry this leading column — our "quarter
+0" already is the true first response. So the correct comparison is
+**our quarter 0 vs. their period 2**, not quarter-label-for-quarter-label.
+(The exported figures now cosmetically re-add the zero point for direct
+visual comparability — see CHANGELOG 2026-08-05 — but the underlying data
+used below is the un-padded, analysis-correct version.)
+
+| variable | IS2017 Fig.1, their period 2 (approx., read off the figure) | ours, quarter 0, phi=0.10 (exact) | ratio |
+|---|---|---|---|
+| `beta(theta)` | ~0.97e-3 | 0.9663e-3 | ~1.00x — near-exact match, strong confirmation the alignment above is right |
+| output | ~-0.024 | -0.0204 | ~0.85x (smaller) |
+| labour | ~-0.024 | -0.0098 | ~0.41x (well under half) |
+| consumption | ~-0.014 | -0.0418 | ~3.0x (larger) |
+| inflation | ~-0.011 | -0.0254 | ~2.3x (larger) |
+| investment | dips to ~-0.065 first, recovers to +0.033 by period 4-5 | **positive throughout — no initial dip at all** (+0.073 rising to +0.138) | shape difference, not a magnitude one |
+
+**Bottom line: mixed, not uniform, and the investment shape difference
+is the one that most needs an explanation.** Working, NOT YET CONFIRMED
+hypothesis: IS2017 has no banking/entrepreneur block, so their investment
+is a textbook Tobin's-Q object; ours is additionally financed through the
+entrepreneur's leverage constraint and bank credit supply (BGG +
+endogenous GK), which could structurally prevent the first-period
+contraction IS2017 get from pure precautionary saving. Plausible, not
+demonstrated — don't write this into the thesis as settled without
+checking the sign of the initial credit-supply response directly (`Qtob`,
+`QS`). The output/labour/consumption/inflation magnitude differences may
+simply be the still-open calibration-parameter check (gamma, psi(tilde),
+tau, alpha vs. IS2017's table) rather than anything structural.
 
 ## 5. Phi sensitivity sweep (2026-08-05)
 

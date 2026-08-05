@@ -208,13 +208,26 @@ fprintf('Figures saved: Fig1_Headline_GIRF, Fig2_Core_Phi_Sweep, Fig3_Beyond_Cal
 
 %% ---------------------- local plotting function ---------------------------
 function local_plot_panel(R, idxList, plotVars, bpsVars, nIrf, figName, titleStr, shockSize, korder)
+    % Cosmetic-only leading zero point (2026-08-05): R(s).girf itself is
+    % NOT touched -- column 1 remains the true impact period for every
+    % analysis/citation purpose (results_collection.md, the two-channel
+    % decomposition, etc.). For PLOTTING ONLY, prepend a synthetic
+    % quarter-0 zero so the figure visually matches IS2017's own
+    % published convention (their Fig. 1 "Main scenario" plots a trivial
+    % pre-shock zero at their labelled period 1, with the true response
+    % only appearing at their period 2 -- confirmed against every one of
+    % their 9 panels, including static ones like beta(theta)). Without
+    % this, a reader lining up our figure against theirs quarter-by-
+    % quarter would be comparing our TRUE impact response against their
+    % PRE-shock reference point -- a spurious one-period mismatch, not a
+    % real economic difference. See CHANGELOG 2026-08-05 (later).
     figure('Name', figName, 'Position',[80 80 1200 900]);
     for p = 1:size(plotVars,1)
         subplot(4,3,p); hold on; grid on;
         for ii = 1:numel(idxList)
             s = idxList(ii);
             jv = strcmp(R(s).names, plotVars{p,1});
-            y  = R(s).girf(jv, :);
+            y  = [0, R(s).girf(jv, :)];   % prepend cosmetic zero, IS2017-style
             plot(0:numel(y)-1, y, R(s).style, 'Color', R(s).color, 'LineWidth', 1.4);
         end
         title(plotVars{p,2}, 'Interpreter','tex');
@@ -224,12 +237,12 @@ function local_plot_panel(R, idxList, plotVars, bpsVars, nIrf, figName, titleStr
         else
             ylabel('% dev.');
         end
-        xlim([0 nIrf-1]);
+        xlim([0 nIrf]);
         if p==1
             legend({R(idxList).label}, 'Location','best', 'Interpreter','tex', 'FontSize',7);
         end
     end
-    sgtitle(sprintf('%s\nResponse to a %+g disaster-risk innovation (order=%d)', ...
+    sgtitle(sprintf('%s\nResponse to a %+g disaster-risk innovation (order=%d) -- quarter 0 = pre-shock reference (IS2017 convention)', ...
             titleStr, shockSize, korder), 'Interpreter','tex');
     savefig([figName '.fig']);
     print([figName '.png'], '-dpng', '-r150');
