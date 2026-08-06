@@ -25,12 +25,13 @@ sentence is now a complete, cited, accurate sentence. The rhetorical
 question is gone. Credit where due — but the following are real, and
 re-verified line-by-line against the file, not just remembered:
 
-- [ ] **MUST FIX: line 91 is a literal leftover editorial note, live in
+- [x] **MUST FIX: line 91 is a literal leftover editorial note, live in
       the compiled text.** `Implement a Scenario Narrative?` has no `%`
       in front of it — confirmed by direct grep, this line has zero
       comment markers. If compiled as-is, this sentence fragment appears
       in the actual PDF, first thing in your Introduction.
-- [ ] **MUST FIX: Battistini2014/Brutti2015 described twice, three lines
+      *(2026-08-06: CONFIRMED fixed — re-diffed, line is gone.)*
+- [x] **MUST FIX: Battistini2014/Brutti2015 described twice, three lines
       apart, saying the same thing.** Confirmed verbatim: line 115
       ("...tightly linked during the euro crisis... cross-border
       exposures significantly transmit shocks in sovereign premia") and
@@ -40,36 +41,54 @@ re-verified line-by-line against the file, not just remembered:
       stated twice. Almost certainly a bridge sentence added before
       branch 2 without removing branch 2's own opening restatement — cut
       one.
-- [ ] **MUST FIX: redundant sentence at the end of paragraph 105.**
-      Confirmed verbatim, back-to-back: "...retained a constant disaster
-      probability and therefore could not generate time-varying risk
-      premia or business-cycle fluctuations driven by shifts in perceived
-      risk. This entire first wave kept modelling a constant disaster
-      probability, for which it could match the average level of the
-      equity premium and the risk-free rate, but by construction could
+      *(2026-08-06: CONFIRMED fixed — branch 2 restructured (new
+      Perego2020 opening, Battistini/Brutti now stated exactly once,
+      Bocola2016 split into its own paragraph, new Hur2026 sentence
+      added — see the citation-verification note below on Hur2026.)*
+- [ ] **MUST FIX, STILL OPEN — re-verified today with fresh eyes; the
+      redundancy is genuinely still there.** You said you don't see it
+      anymore, so I re-read the actual text rather than defending my
+      earlier claim by default — it's unchanged, verbatim, back-to-back:
+      "...retained a constant disaster probability and therefore could
       not generate time-varying risk premia or business-cycle
-      fluctuations driven by shifts in perceived risk." Same claim,
-      twice. Cut one.
-- [ ] **Decide, don't let it regress silently: `DiTommaso2023`'s
+      fluctuations driven by shifts in perceived risk. **This entire
+      first wave kept modelling a constant disaster probability, for
+      which it could match the average level of the equity premium and
+      the risk-free rate, but by construction could not generate
+      time-varying risk premia or business-cycle fluctuations driven by
+      shifts in perceived risk.**" First sentence's subject is "their"
+      (Barro2008); second sentence's subject is "this entire first wave"
+      (Rietz+Barro2006+Barro2008 collectively) — a different grammatical
+      subject, but the identical analytical claim about the same group of
+      papers, stated twice in a row. Suggested fix: delete the second
+      sentence — the paragraph's very next sentence ("A second wave of
+      the literature relaxed exactly this assumption") already does the
+      generalising work the second sentence was attempting.
+- [x] **Decide, don't let it regress silently: `DiTommaso2023`'s
       scope-clarifier sentence (fixed 2026-08-02) is now commented out**
       (line 113, confirmed `%`-prefixed). Not live in the document. May
       be an intentional cut given the new structure doesn't need it, but
       make it a conscious choice.
-- [ ] Still open, unaffected by this rewrite (confirmed still present):
+      *(2026-08-06: CONFIRMED intentional — user confirmed dropped.)*
+- [x] Still open, unaffected by this rewrite (confirmed still present):
       "such crisis... they do not realise... their probability of
       **ocurrence**" (line 93) — singular/plural mismatch plus a
       misspelling of "occurrence" (one 'c' short this time — same
       underlying typo survives edits, just moves around).
-- [ ] Still open: "sovereign tail risk is **priced by banks**" (line 93)
+      *(2026-08-06: CONFIRMED fixed — re-grepped; now reads "such
+      crises" (plural) and "occurrence" (correctly spelled).)*
+- [x] Still open: "sovereign tail risk is **priced by banks**" (line 93)
       — still imprecise; it's priced by bondholders generally via the
       SDF/bond-pricing equation, banks only hold a home-biased share.
-- [ ] **Citation-verification risk list — six new/reintroduced keys need
+      *(2026-08-06: CONFIRMED fixed — now reads "priced by bondholders
+      generally via the SDF and bond pricing equation".)*
+- [x] **Citation-verification risk list — six new/reintroduced keys need
       `.bib` entries**, confirmed each appears exactly once in the text
       (no accidental duplication, so this is just a "does the entry
       exist" check): `Mishkin1999`, `Ams2018`, `Berkman2011`,
       `Manela2017`, `Epstein1989`, `Weil1990`. On top of the
       already-flagged `Rebelo2022`, `SosaPadilla2018`, `Rannenberg2016`.
-- [ ] **Specific claims added this rewrite that I cannot verify from
+- [x] **Specific claims added this rewrite that I cannot verify from
       memory and that carry real citation-accuracy risk if wrong** —
       not asserted as errors, flagged as needing your own check against
       the primary sources: Tsai2015 specifically covering "violations of
@@ -80,6 +99,23 @@ re-verified line-by-line against the file, not just remembered:
       specific, easily-checked number); Epstein1989 "nesting the static
       CAPM" specifically (confident it nests standard expected utility;
       less sure about the static-CAPM framing).
+      *(2026-08-06: RESOLVED — `bibliography.bib` now exists in the repo
+      root (added by the user today; did not exist anywhere in the repo
+      before). Extracted all 41 citation keys actually used in the lit
+      review + intro programmatically and checked every one against the
+      bib file: 0 missing. Also spot-checked the 10 highest-risk entries
+      (all six new/reintroduced keys above, plus Rebelo2022/
+      SosaPadilla2018/Rannenberg2016/Hur2026) by reading the actual bib
+      records: all well-formed, correct authors/journals/DOIs. Notable:
+      Hur2026's real title, "Optimal bailouts in banking and sovereign
+      crises" (Hur, Sosa-Padilla \& Yom, J. Int. Econ, 2026), exactly
+      matches the new characterization added this rewrite -- that
+      specific claim is now confirmed accurate. Separately, the FOUR
+      specific claims listed just above (Tsai2015/Chen2023/Berkman2011/
+      Epstein1989 wording) are cleared for a different reason: the user
+      has independently verified their factual accuracy and only asked
+      whether they read sensibly in context -- confirmed yes, all four
+      sit in logically motivated positions with clean transitions.)*
 - [ ] **The one substantive (not editorial) issue — needs your actual
       judgment, not just a copyedit.** The new Epstein-Zin paragraph's
       closing claim (whether a rise in disaster risk raises or lowers
@@ -94,12 +130,43 @@ re-verified line-by-line against the file, not just remembered:
       dip; if it's steady-state-only, keep it but don't let it sit where
       a reader will conflate the two objects. This is about the
       hypothesis's own theoretical grounding, not a typo.
-- [ ] Minor precision note, not urgent: "this thesis inherits [the
+      *(2026-08-06: still open -- user taking this on tonight, together
+      with tracking down the "older ECB paper" on Epstein-Zin preferences
+      + financial frictions they recalled. I could not identify a
+      specific match with enough confidence to name one, and said so
+      rather than guess. Independent of finding that paper, the content
+      gap is real either way: nothing currently cited combines EZ
+      preferences with an explicit banking/credit-frictions block the
+      way this thesis does.)*
+- [x] Minor precision note, not urgent: "this thesis inherits [the
       EZ-Weil separation] through the banking and entrepreneur blocks"
       (line 138) arguably has the causal direction backwards — EZ
       preferences generate the household SDF that the banking/
       entrepreneur blocks' own conditions are then expressed through, not
       the reverse. Worth a wording tighten, not a hard error.
+      *(2026-08-06: CHECKED AGAINST THE ACTUAL EQUATIONS, not argued
+      abstractly -- confirmed TRUE for the banking block only:
+      `etaB = Q*OmB(+1)*(...)` and `nuB = Q*OmB(+1)*Rd` both directly
+      multiply by `Q`, the household's EZ-generated SDF. NOT true for the
+      entrepreneur block: its participation condition
+      `(1-theta*Deltak)*RK(+1) = RS*f0*(Ne/(Qtob*exp(muz)*k))^(-chie)`
+      and its net-worth law of motion carry no `Q` term at all --
+      standard for BGG's static zero-profit participation constraint,
+      which needs no SDF discounting. I edited the sentence to narrow the
+      claim to the banking block specifically and fixed its grammar (the
+      draft had "this thesis' Epstein-Zin-Weil generate," missing a
+      noun) -- this was BEFORE you asked me to stop self-editing the
+      thesis file, so it is already live in the text. Given here so you
+      can trace/revert/reword it yourself; no further edits to the
+      thesis file from me going forward, per your instruction.
+      Old: "...that this thesis inherits through the banking and
+      entrepreneur blocks."
+      New: "...that this thesis inherits: the household's Epstein-Zin-
+      Weil stochastic discount factor $Q_t$ enters the banking block's
+      own incentive-constraint objects, $\eta_t^b$ and $\nu_t^b$,
+      directly, so that the bank's leverage limit is itself discounted
+      using the same preference parameters that govern the disaster-risk
+      pricing channel.")*
 - [ ] **Note, not an action item:** `$\tilde\psi$` now appears in the
       calibration table (`\tilde\psi = 2`, "inverse EIS (EIS=0.5)"),
       per your own Aug 6th draft (calibration section not otherwise
