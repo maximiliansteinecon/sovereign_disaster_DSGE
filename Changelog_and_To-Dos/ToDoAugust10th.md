@@ -125,6 +125,70 @@ consistent.
       2009) — still not found anywhere in the current draft.
 - [ ] `\subsection{Main Results}` — outline exists now, no content.
 
+## 3a. Euro-area sourcing for the banking/entrepreneur block -- researched today (2026-08-10, later)
+
+Real web research (WebSearch + direct PDF extraction, not memory) into
+whether a euro-area-calibrated double-financial-accelerator paper
+already exists.
+
+- [x] **Found a genuine, strong match for the BANK/GK side:**
+      Coenen, Karadi, Schmidt & Warne (2018), "The New Area-Wide Model
+      II: An Extended Version of the ECB's Micro-Founded Model for
+      Forecasting and Policy Analysis with a Financial Sector," ECB
+      Working Paper No. 2200. Co-authored by Peter Karadi himself.
+      Verified directly from the PDF (Table 3, p.87): steady-state bank
+      leverage ratio $\Phi=6$; wholesale-banker survival rate
+      $\theta=0.950$; retail lending rate spread over the deposit rate =
+      **2.17 percentage points annualised**. These are real, ECB-published,
+      euro-area-estimated targets directly comparable to `sigma_b` and
+      `R^S/R^d` in your Table 2. **Action: cite this instead of the
+      generic "Gertler2011-style leverage literature" dagger, and
+      reconsider the loan-spread target** -- your current calibration
+      (`R^S/R^d`=1.0020, ~80bp annual) is well below NAWM II's own
+      euro-area estimate of ~217bp; this is a real empirical gap worth a
+      conscious decision, not just a re-citation. `sigma_b`=0.94 vs.
+      NAWM II's 0.950 is close enough not to worry about.
+      **New `.bib` entry needed:** `CoenenKaradiSchmidtWarne2018` (or
+      similar key).
+- [ ] **NOT found: a euro-area paper combining BOTH BGG entrepreneurs
+      AND a GK bank block together.** NAWM II has the bank side only
+      (confirmed: zero occurrences of "entrepreneur" or "external
+      finance premium" in the full text) -- no BGG-style firm friction
+      at all. No other paper found in this session's search combines
+      both frictions with euro-area calibration the way this thesis and
+      Rannenberg (2016) do with US data. `Gerali2010` (already cited and
+      already rejected in your lit review on structural grounds -- a
+      capital-ratio penalty, not a microfounded leverage constraint) is
+      euro-area-estimated and could still supply MOMENT targets (credit
+      spread levels, leverage ratios) even though its structure doesn't
+      map cleanly onto `chi^e`/`sigma^e` -- worth a look if you want a
+      second opinion on the entrepreneur side, but not a clean citation
+      match.
+- [ ] **Entrepreneur-side (`chi^e`, `E[R^K]/R^S`, `QK/N^e`, `sigma^e`)
+      still needs the European-data-equivalent route (Branch 2), not a
+      ready-made paper.** Mapped Rannenberg's own US sources to euro-area
+      equivalents, honestly flagged by confidence level:
+      - Net worth / leverage of non-financial corporations (Rannenberg's
+        FFA series) -> **ECB/Eurostat Quarterly Sector Accounts (QSA)**,
+        non-financial corporations (S.11) balance sheet -- a real,
+        standard, well-known euro-area data product. Confident this
+        exists and is the right product; have NOT looked up exact series
+        codes.
+      - Loans to non-financial businesses (Rannenberg's FFA credit
+        instruments series) -> **ECB Statistical Data Warehouse (SDW),
+        MFI Balance Sheet Items (BSI) statistics**, loans to NFCs --
+        same confidence level: real, standard product, exact series code
+        not verified.
+      - Cost of external finance (Rannenberg's Moody's Baa spread) ->
+        **ECB's own published Composite Cost of Borrowing Indicator for
+        NFCs** -- this is the closest direct euro-area analogue and is
+        specifically designed for exactly this purpose; reasonably
+        confident this is the right series, still worth confirming
+        against the ECB's own SDW documentation before citing a number.
+      This route is viable but requires you to actually pull the data
+      (or find a paper that already reports the resulting moments) --
+      not a one-citation fix the way the bank side turned out to be.
+
 ## 4. Resequenced plan, 9 days (2026-08-10 -> 2026-08-19)
 
 - **Today/tomorrow (Aug 10-11):** fix §1's must-fix items, insert the
