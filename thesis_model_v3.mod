@@ -197,7 +197,7 @@ rhotheta = 0.9;       % disaster-probability persistence
 sigtheta = 0.6;       % std of disaster-risk shock
 
 % Utility Function
-beta0    = 0.99;      % subjective discount factor
+beta0    = 0.9985;      % subjective discount factor
 psitilde = 2;         % inverse EIS
 gamma    = 3.8;       % relative risk aversion coefficient
 varpi    = 2.33;      % leisure preference (Gourio 2012)
