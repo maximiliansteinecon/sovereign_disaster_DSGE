@@ -2432,3 +2432,70 @@ gamma/psi(tilde)/tau/alpha-vs-IS2017 check already flagged as open
 **`results_collection.md` §4 updated accordingly** (old claim struck
 through, not deleted, per this file's own maintenance rule) -- see that
 file for the reader-facing version of this correction.
+
+## 2026-08-10 -- return from a 3-day writing break; calibration section
+## drafted, several real errors found and fixed; EIS guidance delivered
+
+**Deadline recomputed:** hand-in 2026-08-26, defense 2026-09-02.
+"Everything substantive done" deadline is still 2026-08-19 -- now **9
+days** away (down from 13 on Aug 6).
+
+**Reviewed the diff since Aug 6 (261 insertions/93 deletions), not a
+re-read from scratch.** Genuine progress: the Abstract is written (was
+empty since 2026-08-01) and its claim ("amplification monotonic in
+home-bias exposure for consumption, investment, and spreads") is
+accurate, matching the verified 2026-08-05 phi-sweep finding exactly.
+The Limitations section is drafted and correctly incorporates the
+2026-08-05 long-duration-bond feasibility discussion nearly verbatim --
+this closes the "no realised default" caveat to-do item from
+`ToDoAugust6th.md`. A Results-chapter outline now exists, matching the
+Tier 1/2/2b/3 roadmap structure. A second calibration table
+(`tab:calibration_frictions`, Full/BGG/GK model comparison) was added --
+a genuinely useful, new piece of content.
+
+**But the new calibration-section prose has two direct internal
+contradictions, found and flagged before more text gets built on top of
+them:**
+1. `beta_0` is given as both 0.9958 (prose, cited to Bernanke1999 &
+   Gertler2011) and 0.99 (table, cited to Isore2017) in the same
+   subsection.
+2. `Delta^b`: the prose says Cruces2013's documented ~37% haircuts
+   "support" a calibration of 0.3 -- internally contradictory in the
+   same sentence, and reverts the exact 0.30->0.37 fix made 2026-08-02
+   to match this same citation.
+
+Also found: an orphaned sentence fragment (a broken paste of the
+2026-08-02 citation-style template, starting mid-sentence with an
+em-dash); a sentence duplicated near-verbatim; a garbled paraphrase of
+IS2017's own risk-aversion discussion (confidence interval described as
+"statistical significance," a stray "%" on a risk-aversion coefficient);
+several typos including two broken LaTeX commands (`\noident`, `\Deltaᵇ`)
+that will not compile as written. Full list in `ToDoAugust10th.md` §0-1.
+
+**Resolved one long-open item while checking:** `phipi=1.5`/`phiy=0.5`
+verified directly against `calibration_reference.md` -- IS2017's own
+Table 1 lists these exact values. Item closed.
+
+**EIS guidance delivered** (full LaTeX given to the user in chat, tracked
+here for the reasoning): the thesis already has `psitilde=2`
+(EIS=0.5), matching IS2017's own choice, not Gourio (2012)'s EIS=2.
+Recommended keeping it, on two grounds -- (1) EIS>1 is specifically an
+asset-pricing-calibration convention (matching equity-premium moments),
+which does not apply here since this thesis has no equity-premium
+target; (2) the broader macro-consumption literature, most authoritatively
+Havranek et al. (2015)'s meta-analysis of 2,735 estimates across 169
+studies, finds a mean EIS close to 0.5. IS2017 themselves note the two
+calibrations give qualitatively identical, sign-mirrored dynamics, so
+this is a robustness-neutral, well-grounded default rather than a
+close call. **New citation needed:** `Havranek2015` is not yet in
+`bibliography.bib`.
+
+**Paraphrasing/plagiarism guidance given** (chat only, not repeated here):
+let the calibration table's Source column carry mechanical attribution
+for every parameter; reserve prose only for parameters involving a real
+judgment call or deviation (like the EIS choice), and synthesize those
+from multiple sources rather than following one source paper's own
+explanatory paragraph structure sentence-by-sentence.
+
+`ToDoAugust10th.md` created, carrying forward everything still open from
+`ToDoAugust6th.md`, with a resequenced 9-day plan.

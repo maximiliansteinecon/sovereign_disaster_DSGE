@@ -11,6 +11,18 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{tabu}
+\usepackage{array}
+\usepackage{caption}
+
+\captionsetup[table]{
+  labelsep   = newline,
+  font       = sc,          % small caps for both "Table N" and the title
+  justification = raggedright,
+  singlelinecheck = false
+}
+% To get a literal double rule under the title (as in your screenshots),
+% change \toprule below to \toprule\toprule -- booktabs allows stacking.
+Table code
 
 \usepackage{longtable}
 \usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
@@ -74,72 +86,71 @@ Defended on September 2nd, 2026}
 %----------------------------------%
 
 \begin{abstract}
-This document derives the full structural model following the three-step procedure of \textcite{Isore2017}: (1)~optimality conditions per agent in level form; (2)~stationarization via the \textcite{Gourio2012} trick; (3)~the stationarized equilibrium system.
-A fourth step adds the novel bank block, combining \textcite{Gertler2011} with home-bias sovereign bond holdings and the \textcite{Bernanke1999} external finance premium.
+\noident We develope an extension of the New Keynesian DSGE model by \textcite{Isore2017} and include capital-good producers, entrepreneurs facing an external finance premium, a bond holding banking block and an applied bond disaster risk term.  In this set-up, we find that sovereign disaster risk, priced continuously through bank balance sheets rather than only through the household's Euler equation, produces an amplification that is monotonic in home-bias exposure for consumption, investment, and spreads.
 \end{abstract}
 
 \newpage
-\tableofcontents
+% \tableofcontents
 \newpage
 
 %--- Introduction Page Starts Here ---%
 \pagestyle{plain}       % Turns page numbering back on [1]
 \pagenumbering{arabic}  % Resets the page counter back to 1 [1]
 
+
 \section{Introduction}
 
-Sovereign defaults have a close historical association with emerging economies, arising from a notable spiraling of crises related to debt across Latin American states in the 1980's and a combination of a high global level of interest rates and amounts of borrowing resulted in long-reaching defaults \parencite{Ams2018}. Further, the Mexican peso crisis of 1994/95, in which heavy reliance on short-term, dollar-indexed sovereign debt (tesobonos) left the government unable to roll over its obligations as investor confidence collapsed, forcing a sharp devaluation of the peso that was followed by a spike in inflation and a deep recession, with a formal default averted only by an emergency US Treasury–IMF financing package \parencite{Mishkin1999}. However, this does not only apply to emerging economies as the euro-area sovereign debt crisis of 2010–2012 revealed a fundamental vulnerability in the architecture of monetary unions when member states were facing increased borrowing costs and their solvency has been questioned. When perceived default risk on Greek, Italian, or Spanish sovereign bonds rose sharply, banks holding large domestic bond portfolios suffered mark-to-market losses, tightened credit supply, and amplified the contraction in real activity \parencite{Bocola2016, Perego2020}. This thesis wants to investigate the implications on the business cycle of such crises, even if they do not realise, but only their probability of occurrence increased and perceived by agents. However, standard New Keynesian (NK) DSGE models, were not designed to capture this effect on their transmission channels. Even frameworks augmented with financial frictions \parencite{Bernanke1999, Gertler2010, Christiano2014} treat sovereign debt as effectively risk-free and model sovereign shocks as normally distributed or at most mildly fat-tailed. The aforementioned periods show that default risk interacts with borrowing and interest rate increases which could have been observed in economies with heterogeneity in size and wealth level. This thesis develops a framework in which sovereign tail risk is priced by bondholders generally via the SDF and bond pricing equation, absorbed by bank balance sheets, and amplified into macro tail outcomes through financial frictions and policy feedbacks. Therefore, we extend a NK DSGE model by \textcite{Isore2017} with a banking block à la \textcite{Gertler2011} integrating the external finance premium developed by \textcite{Bernanke1999}.
+Sovereign defaults have a close historical association with emerging economies, arising from a notable spiraling of crises related to debt across Latin American states in the 1980's and a combination of a high global level of interest rates and amounts of borrowing resulted in long-reaching defaults \parencite{Ams2018}. Further, the Mexican peso crisis of 1994/95, in which heavy reliance on short-term, dollar-indexed sovereign debt (tesobonos) left the government unable to roll over its obligations as investor confidence collapsed, forcing a sharp devaluation of the peso that was followed by a spike in inflation and a deep recession, with a formal default averted only by an emergency US Treasury–IMF financing package \parencite{Mishkin1999}. However, this does not only apply to emerging economies as the euro-area sovereign debt crisis of 2010–2012 revealed a fundamental vulnerability in the architecture of monetary unions when member states were facing increased borrowing costs and their solvency has been questioned. When perceived default risk on Greek, Italian, or Spanish sovereign bonds rose sharply, banks holding large domestic bond portfolios suffered mark-to-market losses, tightened credit supply, and amplified the contraction in real activity \parencite{Bocola2016, Perego2020}. This paper wants to investigate the implications on the business cycle of such crises, even if they do not realise, but only their probability of occurrence increased and perceived by agents. However, standard New Keynesian (NK) DSGE models, were not designed to capture this effect on their transmission channels. Even frameworks augmented with financial frictions \parencite{Bernanke1999, Gertler2010, Christiano2014} treat sovereign debt as effectively risk-free and model sovereign shocks as normally distributed or at most mildly fat-tailed. The aforementioned periods show that default risk interacts with borrowing and interest rate increases which could have been observed in economies with heterogeneity in size and wealth level. We therefore raise the question, whether routed tail risk through a bank balance sheet change the amplification of disaster-risk shocks compared to the household Euler in a monetary economy? Therefore, this paper develops a framework in which sovereign tail risk is priced by bondholders generally via the SDF and bond pricing equation, absorbed by bank balance sheets, and amplified into macro tail outcomes through financial frictions and policy feedbacks. Therefore, we extend a NK DSGE model by \textcite{Isore2017} with a banking block à la \textcite{Gertler2011} integrating the external finance premium developed by \textcite{Bernanke1999}.
 
-%This thesis addresses that gap by embedding the small but time-varying probability of a severe sovereign partial default, which we define in the following as rare sovereign disaster risk into a New Keynesian DSGE model with BGG-type financial frictions and an explicit banking sector, and by studying its consequences for the left tail of macro-financial outcomes in a euro-area-like environment and the right tail of sovereign spreads in a euro-area-calibrated environment.
 
 We find that 
 
-The thesis is organised as follows 
+The paper is organized as follows: Section 1 develops the model, Section 2 discusses the calibration. Section 3 presents the obtained results from the model and discusses them further. Section 4 presents the results from conducted robustness checks. Section 5 concludes. 
 
 % Even frameworks augmented with financial frictions \parencite{Bernanke1999, Christiano2014}, were not designed to capture this kind of tail event: they model financial risk as normally distributed or at most mildly fat-tailed, and treat sovereign debt as effectively risk-free.
 
-\paragraph*{Literature Review} The master thesis is related to the macro-financial literature and builds on four related subbranches. Primarily, it is part of a developed theoretical and empirical literature of macroeconomic models that include economic 'rare disasters' and asset pricing.  A central methodological difference in this literature is whether the probability of disaster is modeled as a fixed, constant parameter, or as a stochastic, time-varying process. This divide organises both the theoretical and the empirical strands reviewed below.
+\paragraph*{Literature Review} The paper is related to the macro-financial literature and builds on four related subbranches. Primarily, it is part of a developed theoretical and empirical literature of macroeconomic models that include economic 'rare disasters' and asset pricing.  A central methodological difference in this literature is whether the probability of disaster is modeled as a fixed, constant parameter, or as a stochastic, time-varying process. This divide organises both the theoretical and the empirical strands reviewed below.
 
-Theoretically, it builds on the developments \textcite{Rietz1988, Barro2006, Gabaix2012, Gourio2012, Isore2017} and intermediate contributions through \textcite{Isore2013} and \textcite{Brede2013}. It originated by \textcite{Rietz1988}, proposing that the equity risk premium puzzle of \textcite{Mehra1985} could be resolved if agents assigned a small probability to a catastrophic consumption collapse. Although this insight was correct in principle, Rietz assumed a fixed disaster probability and provided no macroeconomic production structure, which has left the hypothesis empirically ungrounded. \textcite{Barro2006} supplied the empirical foundation by collecting cross-country macroeconomic data from 35 countries over the twentieth century and documented an annual disaster probability of approximately 1.7\%, with a median peak-to-trough consumption contraction of around 29\%. \textcite{Barro2008} extended the panel to 40 countries and could reinforce the disaster probability value through separating stock market crashes from macroeconomic disasters. However, their calibration was sufficient to match observed equity premia and the low risk-free rate, but retained a constant disaster probability and therefore could not generate time-varying risk premia or business-cycle fluctuations driven by shifts in perceived risk. This entire first wave kept modelling a constant disaster probability, for which it could match the average level of the equity premium and the risk-free rate, but by construction could not generate time-varying risk premia or business-cycle fluctuations driven by shifts in perceived risk. 
+Theoretically, it builds on the developments \textcite{Rietz1988, Barro2006, Gabaix2012, Gourio2012, Isore2017} and intermediate contributions through \textcite{Isore2013} and \textcite{Brede2013}. It originated by \textcite{Rietz1988}, proposing that the equity risk premium puzzle of \textcite{Mehra1985} could be resolved if agents assigned a small probability to a catastrophic consumption collapse. Although this insight was correct in principle, Rietz assumed a fixed disaster probability and provided no macroeconomic production structure, which has left the hypothesis empirically ungrounded. \textcite{Barro2006} supplied the empirical foundation by collecting cross-country macroeconomic data from 35 countries over the twentieth century and documented an annual disaster probability of approximately 1.7\%, with a median peak-to-trough consumption contraction of around 29\%. \textcite{Barro2008} extended the panel to 40 countries and could reinforce the disaster probability value through separating stock market crashes from macroeconomic disasters. However, their calibration was sufficient to match observed equity premia and the low risk-free rate, but retained a constant disaster probability and therefore could not generate time-varying risk premia or business-cycle fluctuations driven by shifts in perceived risk. 
 
-A second wave of the literature relaxed exactly this assumption. \textcite{Gabaix2012} solution was an introdcution of a  time-varying disaster probability and severity through linearity-generating processes, yielding exact closed-form asset prices. His framework introduced an asset-specific resilience term $H_{i,t}$, capturing the expected payoff of asset $i$ conditional on a disaster occurring. Crucially, this framework extends to government bonds: if sovereign bonds partially default in a disaster state, their resilience falls below that of a pure risk-free bond, generating a sovereign risk premium even in the absence of any realised default. \textcite{Gabaix2011} further showed that a standard DSGE can be "disasterized" to inherit rich asset-pricing properties without destroying its macro dynamics, though this clean separation breaks down once financial intermediaries are introduced. \textcite{Gourio2012} was the first to embed a \textcite{Gabaix2011}-style time-varying disaster probability into a DSGE production economy, showing that fluctuations in perceived disaster risk alone can drive business cycles through precautionary saving and endogenous risk premia, without the need for a disaster to even occur. Without New Keynesian elements, this framework abstracted from nominal rigidities and monetary policy. An earlier attempt by \textcite{Isore2013} incorporated a small time-varying disaster probability into a New Keynesian model but restricted its effect to capital depreciation only. Using a simple New Keynesian model, \textcite{Brede2013} incorporates a time-variant and small disaster probability potentially affecting the future economy and shows that even a small increase in disaster probability results in an economy with a recessive state, rooted in limited savings opportunities of the agents. The set-up, however, is constrained by two factors. First, assuming disaster as an absorbing state from the Barro-Rietz model makes it unsuitable for studying time-varying disaster probability, as the economy's disaster state is definite once it enters. Second, the disaster probability captures productivity destruction rather than financial disruption in the set-up, and although nominal rigidities are incorporated, financial frictions are not taken into account. \textcite{Isore2017} added therefore a Calvo pricing \& Taylor rule, and asset-specific sovereign bond recovery into a New Keynesian production economy, showing that rising perceived disaster risk alone, without a realised default, can generate recessions, deflation, and spread widening, making them the first to study time-varying disaster risk transmission in a model with monetary policy and price stickiness. While \textcite{Isore2017} model the sovereign bond pricing channel, they abstract from any explicit banking sector, which e.g. \textcite{Rannenberg2016} did, however, absent of any disaster component. \textbf{This thesis introduces the bank balance-sheet transmission as a second, distinct amplification mechanism which has not been done to our knowledge in an existing framework before. This gap within the reviewed literature is what this thesis aims to close.}
+A second wave of the literature relaxed exactly this assumption. \textcite{Gabaix2012} solution was an introdcution of a  time-varying disaster probability and severity through linearity-generating processes, yielding exact closed-form asset prices. His framework introduced an asset-specific resilience term $H_{i,t}$, capturing the expected payoff of asset $i$ conditional on a disaster occurring. Crucially, this framework extends to government bonds: if sovereign bonds partially default in a disaster state, their resilience falls below that of a pure risk-free bond, generating a sovereign risk premium even in the absence of any realised default. \textcite{Gabaix2011} further showed that a standard DSGE can be "disasterized" to inherit rich asset-pricing properties without destroying its macro dynamics, though this clean separation breaks down once financial intermediaries are introduced. \textcite{Gourio2012} was the first to embed a \textcite{Gabaix2011}-style time-varying disaster probability into a DSGE production economy, showing that fluctuations in perceived disaster risk alone can drive business cycles through precautionary saving and endogenous risk premia, without the need for a disaster to even occur. Without New Keynesian elements, this framework abstracted from nominal rigidities and monetary policy. An earlier attempt by \textcite{Isore2013} incorporated a small time-varying disaster probability into a New Keynesian model but restricted its effect to capital depreciation only. Using a simple New Keynesian model, \textcite{Brede2013} incorporates a time-variant and small disaster probability potentially affecting the future economy and shows that even a small increase in disaster probability results in an economy with a recessive state, rooted in limited savings opportunities of the agents. The set-up, however, is constrained by two factors. First, assuming disaster as an absorbing state from the Barro-Rietz model makes it unsuitable for studying time-varying disaster probability, as the economy's disaster state is definite once it enters. Second, the disaster probability captures productivity destruction rather than financial disruption in the set-up, and although nominal rigidities are incorporated, financial frictions are not taken into account. \textcite{Isore2017} added therefore a Calvo pricing \& Taylor rule, and asset-specific sovereign bond recovery into a New Keynesian production economy, showing that rising perceived disaster risk alone, without a realised default, can generate recessions, deflation, and spread widening, making them the first to study time-varying disaster risk transmission in a model with monetary policy and price stickiness. While \textcite{Isore2017} model the sovereign bond pricing channel, they abstract from any explicit banking sector, which e.g. \textcite{Rannenberg2016} did, however, absent of any disaster component. \textbf{This paper introduces the bank balance-sheet transmission as a second, distinct amplification mechanism which has not been done to our knowledge in an existing framework before. This gap within the reviewed literature is what this paper aims to close.}
 
-The empirical evidence for this divide points in the same direction. Under the constant-probability assumption, the size and frequency of disasters can be calibrated but not their variation over time; the time-varying view, by contrast, has direct empirical support. \textcite{Tsai2015} survey both strands and show that state-dependent, time-varying disaster risk is the dynamic that explains not only the equity premium but also violations of the expectations hypothesis in bond pricing and the implied volatility skew in option markets. \textcite{Farhi2016} extend the time-varying framework to an open-economy setting, showing that a single time-varying disaster probability jointly explains exchange-rate excess volatility, the forward-premium puzzle, and carry-trade returns. \textcite{Chen2023} construct a news-based, time-varying global disaster risk index and show it is a significant international predictor of stock and other asset returns, operating primarily through the discount-rate channel. Directly testing the time-varying hypothesis against market data, \textcite{Berkman2011} construct a crisis-severity index from 447 international political crises between 1918 and 2006 and show that its fluctuations move both the mean and the volatility of world stock returns, while \textcite{Manela2017} build a text-based disaster-concern index from over a century of front-page news coverage and find the same pattern. Together, this empirical literature supports time-varying disaster risk as the better-supported specification, which is the choice this thesis inherits from \textcite{Isore2017}. In the sovereign literature, this logic extends naturally to default risk. There, sovereign debt becomes the disaster-exposed asset when investors price the possibility of severe losses or partial repayment in adverse states. \textcite{Rebelo2022} combine this directly with sovereign debt, showing in a real business-cycle model with time-varying rare disasters that a country's financial development determines whether its government can credibly commit to repaying through a disaster, since deeper domestic financial markets lower the cost of state-contingent risk-sharing and reduce the incentive to default precisely in the states where default would otherwise be most tempting. Their focus, however, is the sovereign's default decision in a real, closed-economy model without nominal rigidities or a banking sector; this thesis instead takes the probability of default as an object continuously priced by bondholders and \textbf{asks how that pricing, rather than the default decision itself, propagates through a monetary economy with financial intermediaries}.
+The empirical evidence for this divide points in the same direction. Under the constant-probability assumption, the size and frequency of disasters can be calibrated but not their variation over time; the time-varying view, by contrast, has direct empirical support. \textcite{Tsai2015} survey both strands and show that state-dependent, time-varying disaster risk is the dynamic that explains not only the equity premium but also violations of the expectations hypothesis in bond pricing and the implied volatility skew in option markets. \textcite{Farhi2016} extend the time-varying framework to an open-economy setting, showing that a single time-varying disaster probability jointly explains exchange-rate excess volatility, the forward-premium puzzle, and carry-trade returns. \textcite{Chen2023} construct a news-based, time-varying global disaster risk index and show it is a significant international predictor of stock and other asset returns, operating primarily through the discount-rate channel. Directly testing the time-varying hypothesis against market data, \textcite{Berkman2011} construct a crisis-severity index from 447 international political crises between 1918 and 2006 and show that its fluctuations move both the mean and the volatility of world stock returns, while \textcite{Manela2017} build a text-based disaster-concern index from over a century of front-page news coverage and find the same pattern. Together, this empirical literature supports time-varying disaster risk as the better-supported specification, which is the choice this paper inherits from \textcite{Isore2017}. In the sovereign literature, this logic extends naturally to default risk. There, sovereign debt becomes the disaster-exposed asset when investors price the possibility of severe losses or partial repayment in adverse states. \textcite{Rebelo2022} combine this directly with sovereign debt, showing in a real business-cycle model with time-varying rare disasters that a country's financial development determines whether its government can credibly commit to repaying through a disaster, since deeper domestic financial markets lower the cost of state-contingent risk-sharing and reduce the incentive to default precisely in the states where default would otherwise be most tempting. Their focus, however, is the sovereign's default decision in a real, closed-economy model without nominal rigidities or a banking sector; this paper instead takes the probability of default as an object continuously priced by bondholders and \textbf{asks how that pricing, rather than the default decision itself, propagates through a monetary economy with financial intermediaries}.
 
 Beyond how the probability process itself is modelled, the literature also separates where disaster risk transmits into the economy. The asset-pricing layer captures how disaster risk raises the sovereign spread even before default occurs, because investors demand compensation for tail losses. \textcite{Gourieroux2021} show that financial instruments whose payoffs are exposed to credit events carry substantial risk premiums, and \textcite{Paluszynski2023} model sovereign default with rare disasters and show that bond spreads co-move with output as markets update their expectations, without explicitly isolating pre-default compensation for tail losses. The second, economic layer, where realised or expected sovereign stress worsens bank balance sheets and amplifies recessions through a financial accelerator channel, is the specific object of the sovereign risk transmission subbranch below.
 
 % One illustrative real-world source of such tail-loss compensation is natural disaster risk: \textcite{DiTommaso2023} document that natural disasters raise sovereign credit spreads and generate cross-country contagion, though this is a narrower, climate-specific instance of the generic disaster process modelled here rather than a direct empirical test of it. 
 
-Secondly, it builds on the sovereign risk transmission and the banking-sovereign nexus. When banks hold sovereign bonds, sovereign risk transmission need not operate solely through higher government borrowing costs: \textcite{Perego2020} show it can instead be modelled through portfolio losses and leverage constraints on the holding institutions themselves, which is the specific mechanism this thesis embeds. The euro-area empirical literature consistently documents that sovereign and bank risk move together, especially in crisis periods. \textcite{AnayaLongaric2025} recently studied euro disaster risk and its impact on sovereign bonds, showing that a distinctly procyclical behaviour of investment funds is exhibited when financial-market beliefs about the probability of an institutional rare disaster increase. \textcite{Battistini2014} and \textcite{Brutti2015} document that sovereign yields, bank exposures and systemic risk are tightly linked during the euro crisis: the former show that banks' domestic sovereign exposures respond to both systemic and country-specific components of the yield differential, while the latter use data on cross-country bank exposures to sovereign debt and find that cross-border exposures significantly transmit shocks in sovereign premia. \textcite{Gibson2017} add an important feedback perspective, showing that sovereign spreads, sovereign ratings, and bank ratings can reinforce one another during stress episodes.
+Secondly, it builds on the sovereign risk transmission and the banking-sovereign nexus. When banks hold sovereign bonds, sovereign risk transmission need not operate solely through higher government borrowing costs: \textcite{Perego2020} show it can instead be modelled through portfolio losses and leverage constraints on the holding institutions themselves, which is the specific mechanism this paper embeds. The euro-area empirical literature consistently documents that sovereign and bank risk move together, especially in crisis periods. \textcite{AnayaLongaric2025} recently studied euro disaster risk and its impact on sovereign bonds, showing that a distinctly procyclical behaviour of investment funds is exhibited when financial-market beliefs about the probability of an institutional rare disaster increase. \textcite{Battistini2014} and \textcite{Brutti2015} document that sovereign yields, bank exposures and systemic risk are tightly linked during the euro crisis: the former show that banks' domestic sovereign exposures respond to both systemic and country-specific components of the yield differential, while the latter use data on cross-country bank exposures to sovereign debt and find that cross-border exposures significantly transmit shocks in sovereign premia. \textcite{Gibson2017} add an important feedback perspective, showing that sovereign spreads, sovereign ratings, and bank ratings can reinforce one another during stress episodes.
 
-A key contribution of the more recent literature in this branch is that it moves from describing correlation to isolating causal mechanisms and, in the most recent contributions, quantifying them structurally. \textcite{Bocola2016} provides the most direct empirical predecessor to the mechanism studied in this thesis. Using Italian data from 2007 to 2012, he documents and quantifies two channels through which sovereign risk passes through to real economic outcomes: a funding cost channel, in which heightened sovereign risk raises banks' refinancing costs, and a liquidity channel, in which banks facing balance-sheet stress cut back lending to avoid future capital shortfalls. His structural estimation finds that the funding cost channel accounts for roughly two-thirds of the sovereign risk pass-through to lending spreads, with the liquidity channel accounting for the remainder. \textcite{Bocola2016} is foundational as empirical motivation for the sovereign-bank transmission channel modelled in this thesis, but cannot serve as the banking block directly for the following reasons. His model is a heterogeneous-bank partial equilibrium framework calibrated specifically to Italian balance-sheet microdata, without a New Keynesian production structure, monetary policy, or nominal rigidities. It does not incorporate a disaster risk process for the sovereign probability; instead, sovereign risk enters through observed Italian spread dynamics treated as an exogenous driving process.  \textcite{Bocola2016} therefore plays the role of empirical motivation and calibration reference for the sovereign-bank channel parameters, rather than a structural building block.
+A key contribution of the more recent literature in this branch is that it moves from describing correlation to isolating causal mechanisms and, in the most recent contributions, quantifying them structurally. \textcite{Bocola2016} provides the most direct empirical predecessor to the mechanism studied in this paper. Using Italian data from 2007 to 2012, he documents and quantifies two channels through which sovereign risk passes through to real economic outcomes: a funding cost channel, in which heightened sovereign risk raises banks' refinancing costs, and a liquidity channel, in which banks facing balance-sheet stress cut back lending to avoid future capital shortfalls. His structural estimation finds that the funding cost channel accounts for roughly two-thirds of the sovereign risk pass-through to lending spreads, with the liquidity channel accounting for the remainder. \textcite{Bocola2016} is foundational as empirical motivation for the sovereign-bank transmission channel modelled in this paper, but cannot serve as the banking block directly for the following reasons. His model is a heterogeneous-bank partial equilibrium framework calibrated specifically to Italian balance-sheet microdata, without a New Keynesian production structure, monetary policy, or nominal rigidities. It does not incorporate a disaster risk process for the sovereign probability; instead, sovereign risk enters through observed Italian spread dynamics treated as an exogenous driving process.  \textcite{Bocola2016} therefore plays the role of empirical motivation and calibration reference for the sovereign-bank channel parameters, rather than a structural building block.
 
 %Embedding the \textcite{Bocola2016} bank model into the IS2017 New Keynesian backbone would require replacing the partial-equilibrium bank heterogeneity with a representative-bank approximation, re-deriving the funding cost and liquidity channels under recursive Epstein-Zin preferences, and specifying an endogenous sovereign spread process driven by $\theta_t$ rather than by exogenous Italian data. Each step represents a non-trivial theoretical extension without a guiding precedent in the literature, and the resulting model would depart substantially from the \textcite{Bocola2016} framework.
 
-\textcite{SosaPadilla2018} provides a complementary quantitative precedent, embedding defaultable sovereign debt in a small open economy where domestic banks hold government bonds and a default triggers a banking crisis through the same balance-sheet erosion mechanism modelled here, generating credit contractions of a magnitude consistent with observed sovereign default episodes; his model, however, is a real small open economy calibrated to an actual default event rather than a continuously-priced, possibly-never-realised disaster probability embedded in a nominal DSGE with monetary policy, so it corroborates the empirical relevance of the channel rather than supplying its structure. \textcite{Hur2026} extend this quantitative sovereign-banking literature to the policy dimension, jointly modelling the government's bailout decision and the sovereign's default risk and showing that anticipated bailouts of distressed banks feed back into sovereign credit risk; this thesis does not model the bailout decision itself and treats the government's response to a realised default as passive, so \textcite{Hur2026} is relevant chiefly as a demonstration that the banking-sovereign link studied here has first-order consequences for optimal policy, a question left for future extensions of this framework. \textcite{Gennaioli2014} provide the cross-country theoretical counterpart, showing that sovereign defaults are more costly for output precisely where domestic banks hold more government debt, and rationalising this in a model where default destroys bank net worth and collateral value; their cross-sectional evidence that bank sovereign exposure, not the default event alone, drives the output cost of default is part of the empirical motivation for the transmission variable modelled in this thesis.
+\textcite{SosaPadilla2018} provides a complementary quantitative precedent, embedding defaultable sovereign debt in a small open economy where domestic banks hold government bonds and a default triggers a banking crisis through the same balance-sheet erosion mechanism modelled here, generating credit contractions of a magnitude consistent with observed sovereign default episodes; his model, however, is a real small open economy calibrated to an actual default event rather than a continuously-priced, possibly-never-realised disaster probability embedded in a nominal DSGE with monetary policy, so it corroborates the empirical relevance of the channel rather than supplying its structure. \textcite{Hur2026} extend this quantitative sovereign-banking literature to the policy dimension, jointly modelling the government's bailout decision and the sovereign's default risk and showing that anticipated bailouts of distressed banks feed back into sovereign credit risk; this paper does not model the bailout decision itself and treats the government's response to a realised default as passive, so \textcite{Hur2026} is relevant chiefly as a demonstration that the banking-sovereign link studied here has first-order consequences for optimal policy, a question left for future extensions of this framework. \textcite{Gennaioli2014} provide the cross-country theoretical counterpart, showing that sovereign defaults are more costly for output precisely where domestic banks hold more government debt, and rationalising this in a model where default destroys bank net worth and collateral value; their cross-sectional evidence that bank sovereign exposure, not the default event alone, drives the output cost of default is part of the empirical motivation for the transmission variable modelled in this paper.
 
 
-% It therefore, secondly, builds on the sovereign risk transmission and the banking-sovereign nexus. The euro-area sovereign-risk literature consistently shows that sovereign and bank risk move together, especially in crisis periods. \textcite{AnayaLongaric2025} recently studied euro disaster risk and their impact on sovereign bonds, showing that a distinctly procyclical behavior of investment funds is exhibited when financial-market beliefs about the probability of institutional rare disaster increases. \textcite{Battistini2014} and \textcite{Brutti2015} document that sovereign yields, bank exposures and systemic risk are tightly linked during the euro crisis, as they drive bank's domestic sovereign exposures.  \textcite{Brutti2015} use data on cross-country bank exposures to sovereign debt and find that cross-border bank exposures to sovereign debt significantly transmit shocks in sovereign premia.\textcite{Gibson2017} add an important feedback perspective showing that sovereign spreads, sovereign ratings, and bank ratings can reinforce one another during stress episodes. A key contribution of the more recent litertature in this branch is that it moves from describing correlation to isolating causal directions. \textcite{Bocola2016} provides the most direct empirical predecessor to the mechanism studied in this thesis. Using Italian data from 2007 to 2012, he documents and quantifies two channels through which sovereign risk passes through to real economic outcomes: a \emph{funding cost channel}, in which heightened sovereign risk raises banks' refinancing costs, and a \emph{liquidity channel}, in which banks facing balance-sheet stress cut back lending to avoid future capital shortfalls. His structural estimation finds that the funding cost channel accounts for roughly two-thirds of the sovereign risk pass-through to lending spreads, with the liquidity channel accounting for the remainder. \textcite{Bocola2016} is foundational as empirical motivation for the sovereign-bank transmission channel modelled in this thesis, but cannot serve as the banking block directly for the following reasons. His model is a heterogeneous-bank partial equilibrium framework calibrated specifically to Italian balance-sheet microdata, without a New Keynesian production structure, monetary policy, or nominal rigidities. It does not incorporate a disaster risk process for the sovereign probability. Instead, sovereign risk enters through observed Italian spread dynamics treated as an exogenous driving process. Embedding the \textcite{Bocola2016} bank model into the IS2017 New Keynesian backbone would require replacing the partial-equilibrium bank heterogeneity with a representative-bank approximation, re-deriving the funding cost and liquidity channels under recursive Epstein-Zin preferences, and specifying an endogenous sovereign spread process driven by $\theta_t$ rather than by exogenous Italian data. Each step represents a non-trivial theoretical extension without a guiding precedent in the literature, and the resulting model would depart substantially from the \textcite{Bocola2016} framework. Thus, \textcite{Bocola2016} therefore plays the role of empirical motivation and calibration reference for the sovereign-bank channel parameters rather than a structural building block. \textcite{SosaPadilla2018} provides a complementary quantitative precedent, embedding defaultable sovereign debt in a small open economy where domestic banks hold government bonds and a default triggers a banking crisis through the same balance-sheet erosion mechanism modelled here, generating credit contractions of a magnitude consistent with observed sovereign default episodes; his model, however, is a real small open economy calibrated to an actual default event rather than a continuously-priced, possibly-never-realised disaster probability embedded in a nominal DSGE with monetary policy, so it corroborates the empirical relevance of the channel rather than supplying its structure. \textcite{Gennaioli2014} provide the cross-country theoretical counterpart, showing that sovereign defaults are more costly for output precisely where domestic banks hold more government debt, and rationalising this in a model where default destroys bank net worth and collateral value; their cross-sectional evidence that bank sovereign exposure, not the default event alone, drives the output cost of default is part of the empirical motivation for the transmission variable modelled in this thesis.
+% It therefore, secondly, builds on the sovereign risk transmission and the banking-sovereign nexus. The euro-area sovereign-risk literature consistently shows that sovereign and bank risk move together, especially in crisis periods. \textcite{AnayaLongaric2025} recently studied euro disaster risk and their impact on sovereign bonds, showing that a distinctly procyclical behavior of investment funds is exhibited when financial-market beliefs about the probability of institutional rare disaster increases. \textcite{Battistini2014} and \textcite{Brutti2015} document that sovereign yields, bank exposures and systemic risk are tightly linked during the euro crisis, as they drive bank's domestic sovereign exposures.  \textcite{Brutti2015} use data on cross-country bank exposures to sovereign debt and find that cross-border bank exposures to sovereign debt significantly transmit shocks in sovereign premia.\textcite{Gibson2017} add an important feedback perspective showing that sovereign spreads, sovereign ratings, and bank ratings can reinforce one another during stress episodes. A key contribution of the more recent litertature in this branch is that it moves from describing correlation to isolating causal directions. \textcite{Bocola2016} provides the most direct empirical predecessor to the mechanism studied in this paper. Using Italian data from 2007 to 2012, he documents and quantifies two channels through which sovereign risk passes through to real economic outcomes: a \emph{funding cost channel}, in which heightened sovereign risk raises banks' refinancing costs, and a \emph{liquidity channel}, in which banks facing balance-sheet stress cut back lending to avoid future capital shortfalls. His structural estimation finds that the funding cost channel accounts for roughly two-thirds of the sovereign risk pass-through to lending spreads, with the liquidity channel accounting for the remainder. \textcite{Bocola2016} is foundational as empirical motivation for the sovereign-bank transmission channel modelled in this paper, but cannot serve as the banking block directly for the following reasons. His model is a heterogeneous-bank partial equilibrium framework calibrated specifically to Italian balance-sheet microdata, without a New Keynesian production structure, monetary policy, or nominal rigidities. It does not incorporate a disaster risk process for the sovereign probability. Instead, sovereign risk enters through observed Italian spread dynamics treated as an exogenous driving process. Embedding the \textcite{Bocola2016} bank model into the IS2017 New Keynesian backbone would require replacing the partial-equilibrium bank heterogeneity with a representative-bank approximation, re-deriving the funding cost and liquidity channels under recursive Epstein-Zin preferences, and specifying an endogenous sovereign spread process driven by $\theta_t$ rather than by exogenous Italian data. Each step represents a non-trivial theoretical extension without a guiding precedent in the literature, and the resulting model would depart substantially from the \textcite{Bocola2016} framework. Thus, \textcite{Bocola2016} therefore plays the role of empirical motivation and calibration reference for the sovereign-bank channel parameters rather than a structural building block. \textcite{SosaPadilla2018} provides a complementary quantitative precedent, embedding defaultable sovereign debt in a small open economy where domestic banks hold government bonds and a default triggers a banking crisis through the same balance-sheet erosion mechanism modelled here, generating credit contractions of a magnitude consistent with observed sovereign default episodes; his model, however, is a real small open economy calibrated to an actual default event rather than a continuously-priced, possibly-never-realised disaster probability embedded in a nominal DSGE with monetary policy, so it corroborates the empirical relevance of the channel rather than supplying its structure. \textcite{Gennaioli2014} provide the cross-country theoretical counterpart, showing that sovereign defaults are more costly for output precisely where domestic banks hold more government debt, and rationalising this in a model where default destroys bank net worth and collateral value; their cross-sectional evidence that bank sovereign exposure, not the default event alone, drives the output cost of default is part of the empirical motivation for the transmission variable modelled in this paper.
 
 %%%%%%%%%%%%%%%%%%%%%% NEW DOWNWARDS
 
-Thirdly, it builds on the DSGE literature with banking frictions and a sub-branch with home bias sovereign bond holdings. The baseline euro-area tradition is represented by \textcite{Smets2003}, which supplies the New Keynesian environment into which financial frictions can be inserted.
-
-The hypothesis organising this thesis is that time-varying sovereign disaster risk, and not only realised sovereign default, depresses output and tightens credit conditions through two distinct channels. An immediate channel operates continuously through perceived risk: a rise in the perceived probability $\theta_t$ of sovereign default raises the sovereign risk premium demanded by bondholders and compresses bond prices \parencite{Gabaix2012, Isore2017}, independent of whether a default ultimately occurs. The lagged financial accelerator channel activates only upon a realised default: losses on sovereign holdings erode bank net worth, raising the external finance premium on loans to entrepreneurs and firms, tightening credit supply, and amplifying the output contraction through the standard \textcite{Bernanke1999}-style feedback loop, here activated through bank sovereign bond holdings. A realised sovereign haircut is therefore necessary for the second channel, though the elevated perceived probability that precedes it is what the sovereign spread continuously prices.
+Thirdly, it builds on the DSGE literature with banking frictions and a sub-branch with home bias sovereign bond holdings. The baseline euro-area tradition is represented by \textcite{Smets2003}, which supplies the New Keynesian environment into which financial frictions can be inserted. The hypothesis organising this paper is that time-varying sovereign disaster risk, and not only realised sovereign default, depresses output and tightens credit conditions through two distinct channels. An immediate channel operates continuously through perceived risk: a rise in the perceived probability $\theta_t$ of sovereign default raises the sovereign risk premium demanded by bondholders and compresses bond prices \parencite{Gabaix2012, Isore2017}, independent of whether a default ultimately occurs. A second, lagged financial accelerator channel is a structural feature of the same banking block: were a default realised, losses on sovereign holdings would erode bank net worth, raising the external finance premium on loans to entrepreneurs and firms and amplifying the output contraction through the standard \textcite{Bernanke1999}-style feedback loop. Consistent with the perturbation-based solution method used throughout, and with \textcite{Isore2017}'s own approach, no simulated path in this paper realises a default, so this second channel is discussed as a structural property of the model (Appendix~\ref{sec:banking_block}) rather than quantified among the headline results.
 
 The banking-sector friction literature offers several candidate frameworks for embedding financial frictions into a New Keynesian DSGE with Epstein-Zin preferences and a sovereign bond asset class on bank balance sheets. Two structural requirements guide the comparison below. First, for a sovereign bond to enter the constrained object directly, the friction must generate a microfounded leverage constraint on the asset side of the bank balance sheet. Second, the risk driving the friction must be a plausible candidate for replacement by the time-varying sovereign disaster probability $\theta_t$.
 
 \textcite{Christiano2014} is the most natural first candidate: a large-scale, Bayesian-estimated DSGE combining a \textcite{Bernanke1999}-style external finance premium with a bank capital requirement, in which idiosyncratic uncertainty shocks are found to drive the majority of US business-cycle volatility. However, it fails both requirements.  The bank capital friction is a quadratic adjustment cost on the liability side of the balance sheet, around an exogenous target ratio, rather than a microfounded constraint on asset composition. This means that there is no object in the model that a sovereign bond holding could tighten. Its risk shock, moreover, is a shock to the cross-sectional dispersion of entrepreneur productivity, a fundamentally different source of distress from the sovereign disaster probability $\theta_t$; embedding $\theta_t$ into this framework would require rederiving the full contracting problem under Epstein-Zin preferences with a binary tail event, which would be a separate research contribution in its own right. By contrast, the leverage constraint in \textcite{Gertler2011} emerges directly from the banker's incentive-compatibility condition and applies to total asset value -- exactly the object through which the sovereign bond channel operates here.
 
-\textcite{Gertler2010} and \textcite{Gertler2011} share the same banker-diversion friction and leverage constraint, differing only in that the former adds an interbank market through which banks can also borrow from one another. This interbank layer is structurally irrelevant here: the sovereign-bank channel in this thesis operates through realised-default losses eroding an individual bank's own net worth, which is a mechanism operating within the bank, not an across-bank mechanism. More concretely, one of the counterfactual experiments related to the home-bias parameter $\phi=0$ would shut down any interbank amplification equally, making the two mechanisms observationally indistinguishable in the impulse responses. The \textcite{Gertler2011} single-tier specification therefore isolates the balance-sheet channel of interest without introducing a second friction whose identification would require calibration targets not available at the euro-area frequency studied here.
+\textcite{Gertler2010} and \textcite{Gertler2011} share the same banker-diversion friction and leverage constraint, differing only in that the former adds an interbank market through which banks can also borrow from one another. This interbank layer is structurally irrelevant here: the sovereign-bank channel in this paper operates through realised-default losses eroding an individual bank's own net worth, which is a mechanism operating within the bank, not an across-bank mechanism. More concretely, one of the counterfactual experiments related to the home-bias parameter $\phi=0$ would shut down any interbank amplification equally, making the two mechanisms observationally indistinguishable in the impulse responses. The \textcite{Gertler2011} single-tier specification therefore isolates the balance-sheet channel of interest without introducing a second friction whose identification would require calibration targets not available at the euro-area frequency studied here.
 
-\textcite{Gerali2010} construct an estimated euro-area NK-DSGE with monopolistically competitive banks that set retail rates as markups over a wholesale rate, subject to a quadratic penalty for deviating from a capital-to-asset target. The same objection that rules out \textcite{Christiano2014} applies here: the capital-ratio penalty is not a microfounded asset-side constraint, so no object exists through which a sovereign bond holding could tighten it. \textcite{Gerali2010} also differs in \emph{how} shocks propagate -- primarily through adjustment of retail lending markups rather than through the quantity of credit supplied -- whereas the sovereign bond price $Q^b_t$ in this thesis affects credit supply through a binding quantity constraint on total asset value, a mechanism \textcite{Gerali2010}'s pricing-frictions specification does not separate out cleanly enough to attach a sovereign bond asset class to.
+\textcite{Gerali2010} construct an estimated euro-area NK-DSGE with monopolistically competitive banks that set retail rates as markups over a wholesale rate, subject to a quadratic penalty for deviating from a capital-to-asset target. The same objection that rules out \textcite{Christiano2014} applies here: the capital-ratio penalty is not a microfounded asset-side constraint, so no object exists through which a sovereign bond holding could tighten it. \textcite{Gerali2010} also differs in \emph{how} shocks propagate -- primarily through adjustment of retail lending markups rather than through the quantity of credit supplied -- whereas the sovereign bond price $Q^b_t$ in this paper affects credit supply through a binding quantity constraint on total asset value, a mechanism \textcite{Gerali2010}'s pricing-frictions specification does not separate out cleanly enough to attach a sovereign bond asset class to.
 
 \textcite{Rannenberg2016} offers the closest structural precedent for combining two financial frictions in one New Keynesian model, integrating the \textcite{Bernanke1999} entrepreneur accelerator with the \textcite{Gertler2011} bank leverage constraint into a single ``double financial accelerator'' DSGE and showing that the interaction between the two frictions materially amplifies shock transmission relative to either block alone.
 
 Having evaluated the available frameworks against these requirements, we integrate the entrepreneur block of \textcite{Bernanke1999} and the banking block of \textcite{Gertler2011}. \textcite{Bernanke1999} is a canonical, minimally parameterised model of the external finance premium: it adds three equations and two parameters, $\chi^e$ and $\sigma^e$, with well-established calibration targets in the literature, has a closed-form steady state, and has been integrated with other NK models at third-order perturbation \parencite{FernandezVillaverde2018}. The \textcite{Gertler2011} bank block gives the leverage constraint a theoretical foundation through the banker's own optimisation problem, so that bank net worth affected by a disaster is grounded in incentive-compatible behaviour rather than assumed as a reduced form. The decisive argument for combining both, following \textcite{Rannenberg2016}, is the separation of bank net worth $N_t^b$ and entrepreneur net worth $N_t^e$: it allows the sovereign-bank channel through $N_t^b$ and the standard financial accelerator through $N_t^e$ to operate simultaneously. The full derivation of both blocks is provided in Appendix \ref{sec:banking_block}.
 
-Lastly, the thesis relies throughout on Epstein-Zin-Weil recursive preferences, which separate risk aversion from the elasticity of intertemporal substitution - a distinction that is not a modelling convenience but the mechanism through which disaster risk affects behaviour at all. Under standard time-additive expected utility, risk aversion and intertemporal substitution are governed by the same parameter, so a disaster-risk shock that raises the conditional variance of future consumption cannot be disentangled from a shock to its expected growth rate. \textcite{Epstein1989} develop the axiomatic foundation for this class of recursive, non-expected-utility preferences and show that they nest nests the predictions of both the consumption CAPM and the static CAPM as special cases while allowing risk aversion and substitution to be set independently. \textcite{Weil1990} apply this framework specifically to a macroeconomic, infinite-horizon consumption problem, introducing the generalised isoelastic form -- combining a risk-aversion parameter $\gamma$ with a separate elasticity of intertemporal substitution $1/\tilde\psi$ -- that \textcite{Gourio2012} and \textcite{Isore2017} adopt directly, and that this thesis' Epstein-Zin-Weil generate the household SDF that the banking / entrepreneur block's own conditions are then expressed through. Without this separation, the sign of the model's central mechanism would be undetermined: as \textcite{Isore2017} show, whether a rise in disaster risk raises or lowers current consumption and investment depends on whether the EIS is above or below unity, a distinction that has no content under time-additive utility.
+
+%%%% ADD facts from ECB paper or survey more from EZW literature
+Lastly, the paper relies throughout on Epstein-Zin-Weil recursive preferences, which separate risk aversion from the elasticity of intertemporal substitution - a distinction that is not a modelling convenience but the mechanism through which disaster risk affects behaviour at all. Under standard time-additive expected utility, risk aversion and intertemporal substitution are governed by the same parameter, so a disaster-risk shock that raises the conditional variance of future consumption cannot be disentangled from a shock to its expected growth rate. \textcite{Epstein1989} develop the axiomatic foundation for this class of recursive, non-expected-utility preferences and show that they nest nests the predictions of both the consumption CAPM and the static CAPM as special cases while allowing risk aversion and substitution to be set independently. \textcite{Weil1990} apply this framework specifically to a macroeconomic, infinite-horizon consumption problem, introducing the generalised isoelastic form -- combining a risk-aversion parameter $\gamma$ with a separate elasticity of intertemporal substitution $1/\tilde\psi$ -- that \textcite{Gourio2012} and \textcite{Isore2017} adopt directly, and that this paper inherits: the household's Epstein-Zin-Weil stochastic discount factor $Q_t$ enters the banking block's own incentive-constraint objects, $\eta_t^b$ and $\nu_t^b$, directly, so that the bank's leverage limit is itself discounted using the same preference parameters that govern the disaster-risk pricing channel." Without this separation, the sign of the model's central mechanism would be undetermined: as \textcite{Isore2017} show, whether a rise in disaster risk raises or lowers current consumption and investment depends on whether the EIS is above or below unity, a distinction that has no content under time-additive utility.
 
 
 
@@ -164,7 +175,7 @@ Lastly, the thesis relies throughout on Epstein-Zin-Weil recursive preferences, 
 
 % Related work on rare disasters on local-currency debt and sovererign default risk suggests that debt denomination and recovery structure
 
-% The first thesis contribution builds upon the historical development of macro-disaster models from \textcite{Rietz1988, Barro2006, Gabaix2012, Gourio2012, Isore2017} and intermediate contributions through \textcite{Isore2013} and \textcite{Brede2013}. 
+% The first paper contribution builds upon the historical development of macro-disaster models from \textcite{Rietz1988, Barro2006, Gabaix2012, Gourio2012, Isore2017} and intermediate contributions through \textcite{Isore2013} and \textcite{Brede2013}. 
 %
 % \paragraph{Sovereign Risk Transmission and Bank-Sovereigns}
 % \paragraph{DSGE and Banking Sector Frictions} 
@@ -176,7 +187,7 @@ Lastly, the thesis relies throughout on Epstein-Zin-Weil recursive preferences, 
 
 % \textcolor{red}{\subsubsection{Banking-Sector Frictions with home Bias}\label{sec:lit_banking_frictions}}
 
-% The hypothesis organising this thesis is that \textit{time-varying sovereign disaster risk} and not only realised sovereign default depresses output and tightens credit conditions through two distinct channels. The \textit{asset pricing channel} operates as follows: a rise in the perceived probability $p_t$ of a sovereign partial default increases the sovereign risk premium demanded by bondholders, compresses bond prices, and reduces the market value of banks' sovereign bond portfolios \parencite{Gabaix2012, Isore2017}. The \textit{financial accelerator channel} follows with mark-to-market losses on sovereign holdings erode bank net worth, raising the external finance premium on loans to entrepreneurs and firms, tightening credit supply, and amplifying the output contraction through the standard \textcite{Bernanke1999}-style feedback loop activated here through bank sovereign bond holdings following \textcite{Guerrieri2013} and \textcite{Perego2020}. Even without a realised haircut, an increase in $p_t$ is therefore sufficient to generate a left-tail contraction in output and a right-tail spike in sovereign spreads.
+% The hypothesis organising this paper is that \textit{time-varying sovereign disaster risk} and not only realised sovereign default depresses output and tightens credit conditions through two distinct channels. The \textit{asset pricing channel} operates as follows: a rise in the perceived probability $p_t$ of a sovereign partial default increases the sovereign risk premium demanded by bondholders, compresses bond prices, and reduces the market value of banks' sovereign bond portfolios \parencite{Gabaix2012, Isore2017}. The \textit{financial accelerator channel} follows with mark-to-market losses on sovereign holdings erode bank net worth, raising the external finance premium on loans to entrepreneurs and firms, tightening credit supply, and amplifying the output contraction through the standard \textcite{Bernanke1999}-style feedback loop activated here through bank sovereign bond holdings following \textcite{Guerrieri2013} and \textcite{Perego2020}. Even without a realised haircut, an increase in $p_t$ is therefore sufficient to generate a left-tail contraction in output and a right-tail spike in sovereign spreads.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -189,11 +200,9 @@ As reasoned before, the theoretical model in this section builds on \textcite{Is
 
 % Accordingly, we first present a discrete version of the analysis, assuming discrete time $t \in \{0,1,2,\dots\}$ and a finite state space $S=\{s_1,\dots,s_n\}$. To make the analysis tractable, however, we will discretize this set, thereby simplifying reality while still providing a workable framework, in which our economy can enter two states of nature ($n = 2$), namely a disaster and "business-as-usual" (BAU) state. In the latter, the economy operates in conditions where no capital, bonds nor consumption or output are destroyed. However, there exists a small time-varying probability to enter a disaster state in which it experiences e.g. a doom loop where one economic condition creats another, resulting in another economic negative condition which then reinforces the first or second, resulting in a negatively spiraling chain reaction.
 
-Each period, the economy faces a small but time-varying probability of a sovereign partial default. Following \textcite{Isore2017} and \textcite{Gourio2012}, disaster destroys both physical capital and productivity by the factor $(1-\Delta^k)$ when $x_{t+1}=1$. This nests \textcite{Isore2017} exactly at $\phi=0$, providing a non-trivial benchmark against which the sovereign-bank transmission channel is identified. The thesis's novel mechanism operates through the bond-pricing channel: disaster additionally imposes a haircut $\Delta^b$ on sovereign bonds ($\Delta^b > 0$), transmitting through bank balance sheets rather than through capital destruction alone.
+Each period, the economy faces a small but time-varying probability of a sovereign partial default. Following \textcite{Isore2017} and \textcite{Gourio2012}, disaster destroys both physical capital and productivity by the factor $(1-\Delta^k)$ when $x_{t+1}=1$. This nests \textcite{Isore2017} exactly at $\phi=0$, providing a non-trivial benchmark against which the sovereign-bank transmission channel is identified. The paper's novel mechanism operates through the bond-pricing channel: disaster additionally imposes a haircut $\Delta^b$ on sovereign bonds ($\Delta^b > 0$), transmitting through bank balance sheets rather than through capital destruction alone.
 
-A binary disaster $x_{t+1}\in\{0,1\}$ is drawn in period $t$. In the BAU state $x_{t+1} = 0$, sovereign bonds are repaid in full. In the disaster state $x_{t+1} = 1$, bondholders receive only a fraction $(1-\Delta^b)$ of the face value.The disaster will affect the sovereign bond haircut channel and destroy physical capital with the hypothesis that the disaster transmission runs through bond pricing, bank balance sheets, and through capital destruction as in \textcite{Gourio2012, Isore2017}. The consequences of this haircut for bank net worth and credit supply are discussed in Appendix \ref{sec:banking_block}. \textcite{Cruces2013} document average haircuts of roughly $37\%$ across 180 restructuring periods from 1970 to 2010, supporting the calibration of $\Delta^b = 0.3$.
-%
-The disaster probability $\theta_t$ follows an exogenous log-AR(1) process specification as in \textcite{Isore2017}
+A binary disaster $x_{t+1}\in\{0,1\}$ is drawn in period $t$. In the BAU state $x_{t+1} = 0$, sovereign bonds are repaid in full. In the disaster state $x_{t+1} = 1$, bondholders receive only a fraction $(1-\Delta^b)$ of the face value.The disaster will affect the sovereign bond haircut channel and destroy physical capital with the hypothesis that the disaster transmission runs through bond pricing, bank balance sheets, and through capital destruction as in \textcite{Gourio2012, Isore2017}. The consequences of this haircut for bank net worth and credit supply are discussed in Appendix \ref{sec:banking_block}. The disaster probability $\theta_t$ follows an exogenous log-AR(1) process specification as in \textcite{Isore2017}
 
 \begin{equation}\label{eq:disaster_AR}
     \ln\theta_t = (1-\rho_\theta) \ln\bar\theta + \rho_\theta\ln\theta_{t-1} + \sigma_\theta\varepsilon_{\theta,t}, \qquad \varepsilon_{\theta,t} \overset{\text{i.i.d.}}{\sim}
@@ -568,7 +577,11 @@ Whether consumers actually have a sound undertanding and incorporate both princi
 % \noindent\textit{Stationarization flag:} The Taylor rule is stated in terms of the nominal rate $r_t$ and inflation $\pi_t$ (both stationary) and detrended output $Y_t/z_t$ (stationary by construction). No further detrending required. $\to$ Appendix~B.
  
 
-\subsection{Market Closing}\label{secmain:marketclosing}
+\subsection{Market Clearing}\label{secmain:marketclosing}
+
+Market clearing conditions impose the requirement that all markets clear simultaneously in equilibrium. Together with the optimality conditions from A.1--A.4, that is the case if the goods and labour market is cleared. Subsequently, we will derive the good market and reinstate the labour, capital services as well as sovereign bond market clearing conditions.  
+
+
 
 
  
@@ -577,72 +590,191 @@ Whether consumers actually have a sound undertanding and incorporate both princi
 
 \subsection{Calibration}
 
+In this paper, we decide to calibrate targeted moments following \textcite{Isore2017} and fit parameters related to the banking sector to financial market data. Except for the entrepreneur and banking block (Appendix~\ref{sec:banking_block}), all parameters are calibrated identically to \textcite{Isore2017}. Several of their targets are themselves drawn from the broader macro-finance literature. Therefore, \ref{tab:calibration_one} shows the calibration values with their sourcing from \textcite{Isore2013}. In detail, they draw their baseline values for capital and productivity destruction from \textcite{Barro2008}, while persistence of log-disaster risk comes from \textcite{Gourio2012}. The standardtandard derivation of disaster-risk innovation has been derived by themselves to match empirical evidence. Further, utility parameters have been solely relied on \textcite{Gourio2012} as the valuation of leisre goes along with the Epstein-Zin preferences utility function form. For also following his degree of risk aversion, they argue that the literature finds values with statistical significance between 2-4\%; nonetheless, the degree size would not matter for the response outcome's sign, being in line with theorectical results. In regrads to the discount factor $\beta_0$, I follow the exact specification ($\beta_0 = 0.9958$) by \textcite{Bernanke1999} and \textcite{Gertler2011}.
+
+For the elasticity of intertemporal substitution, we follow \textcite{Isore2017} in setting $1/\tilde\psi = 0.5$ rather than the value of 2 used by \textcite{Gourio2012}. The two calibrations belong to different traditions: models targeting asset-pricing moments -- matching the level, volatility, and cyclicality of the equity premium --
+typically require an EIS above unity, often exactly 2 \parencite{Barro2008,Gourio2012}; the broader macro-consumption literature instead finds values below unity, with \textcite{Havranek2015}'s meta-analysis of 2{,}735 estimates across 169 studies reporting a mean close to 0.5. Since this paper targets macroeconomic and credit-market outcomes rather than asset-pricing moments -- no equity-premium target enters the calibration -- the rationale for the higher value does not apply, and we
+adopt $\mathrm{EIS}=0.5$ accordingly, exactly as \textcite{Isore2017} do for the same reason. \textcite{Isore2017} themselves show the two calibrations produce qualitatively identical, sign-mirrored dynamics, so the choice is not first-order for the model's qualitative predictions, but it is the natural default given this paper's focus.
+
+
+Therefore, \ref{tab:calibration_one} shows the calibration values with their sourcing from \textcite{Isore2013}, Table \ref{tab:calibration_two} lists the non-policy parameters from \textcite{Bernanke1999} and \textcite{Gertler2011} againts the decision for our model. 
+
+For $\beta$ However, \textcite{Isore2017} argue that this parameter plays no severe role in the results and we can confirm so for our set-up.
+
+
+— most notably the disaster probability and severity from \textcite{Barro2006,Barro2008} -which we note where relevant, while following \textcite{Isore2017}'s exact numerical values throughout. Therefore, \ref{tab:calibration_one} shows the calibration values with their sourcing from \textcite{Isore2013}, while table \ref{tab:calibration_two} lists the non-policy parameters from \textcite{Bernanke1999} and \textcite{Gertler2011} againts the decision foru our model. 
+
+ \textcite{Cruces2013} document average haircuts of roughly $37\%$ across 180 restructuring periods from 1970 to 2010, supporting the calibration of $\Delta^b = 0.3$.
+
 
 \begingroup
 \footnotesize
-\begin{longtable}{p{0.09\textwidth} p{0.13\textwidth} p{0.36\textwidth} p{0.33\textwidth}}
+\begin{longtable}{
+  @{}p{0.09\textwidth}
+  >{\raggedleft\arraybackslash}p{0.10\textwidth}
+  p{0.38\textwidth}
+  p{0.33\textwidth}@{}
+}
 \caption{Baseline calibration (quarterly)}
-\label{tab:calibration} \\
-\hline\hline
-Variable & Value & Description & Source \\
-\hline
+\label{tab:calibration_one} \\
+\toprule
+\textit{Variable} & \textit{Value} & \textit{Description} & \textit{Source} \\
+\midrule
 \endfirsthead
-\multicolumn{4}{l}{\textit{(Table \thetable\ continued)}} \\
-\hline\hline
-Variable & Value & Description & Source \\
-\hline
+
+\multicolumn{4}{@{}l}{\textit{Table \thetable\ (continued)}} \\
+\toprule
+\textit{Variable} & \textit{Value} & \textit{Description} & \textit{Source} \\
+\midrule
 \endhead
-\hline
-\multicolumn{4}{r}{\textit{(continued on next page)}} \\
+
+\midrule
+\multicolumn{4}{r@{}}{\textit{continued on next page}} \\
 \endfoot
-\hline\hline
+
+\bottomrule
 \endlastfoot
 
-\multicolumn{4}{@{}l}{\textbf{Disaster risk}} \\
-$\bar\theta$        & 0.9\%  & steady-state disaster probability                         & \textcite{Barro2008} \\
-$\Delta^k$           & 22\%   & capital \& productivity destroyed in a disaster            & \textcite{Barro2008} \\
-$\rho_\theta$        & 0.90   & persistence of (log) disaster risk                          & \textcite{Gourio2012} \\
-$\sigma_\theta$      & 0.60   & std.\ dev.\ of (log) disaster-risk innovations              & \textcite{Isore2017} % matched to output volatility \\
+\multicolumn{4}{@{}l}{\textsc{Disaster risk}} \\
+\addlinespace[2pt]
+$\bar\theta$          & 0.9\%  & Steady-state disaster probability                    & \textcite{Barro2008} \\
+$\Delta^k$             & 22\%   & Capital \& productivity destroyed in a disaster       & \textcite{Barro2008} \\
+$\rho_\theta$          & 0.90   & Persistence of (log) disaster risk                    & \textcite{Gourio2012} \\
+$\sigma_\theta$        & 0.60   & Std.\ dev.\ of (log) disaster-risk innovations        & \textcite{Isore2017} \\
+\addlinespace[6pt]
 
-\multicolumn{4}{@{}l}{\textbf{Utility function}} \\
-$\beta_0$            & 0.99   & subjective discount factor                                  & \textcite{Isore2017} \\
-$\tilde\psi$         & 2      & inverse EIS (EIS $=0.5$)                                    & \textcite{Isore2017}, own choice (vs.\ EIS$=2$ in \textcite{Gourio2012}) \\
-$\gamma$             & 3.8    & relative risk-aversion coefficient                          & \textcite{Gourio2012} \\
-$\varpi$             & 2.33   & leisure preference                                          & \textcite{Gourio2012} \\
+\multicolumn{4}{@{}l}{\textsc{Utility function}} \\
+\addlinespace[2pt]
+$\beta_0$              & 0.99   & Subjective discount factor                            & \textcite{Isore2017} \\
+$\tilde\psi$           & 2      & Inverse EIS (EIS $=0.5$)                              & \textcite{Isore2017}, own choice (vs.\ EIS $=2$ in \textcite{Gourio2012}) \\
+$\gamma$               & 3.8    & Relative risk-aversion coefficient                    & \textcite{Gourio2012} \\
+$\varpi$               & 2.33   & Leisure preference                                    & \textcite{Gourio2012} \\
+\addlinespace[6pt]
 
-\multicolumn{4}{@{}l}{\textbf{Investment}} \\
-$\delta_0$           & 2\%    & capital depreciation rate                                   & standard NK/RBC convention \\
-$\tau$               & 2      & capital adjustment cost                                     & \textcite{Isore2017}, matched to $I/K$--Tobin's $q$ elasticity \\
-$\bar u$             & 1      & steady-state capital utilisation                            & normalisation \\
+\multicolumn{4}{@{}l}{\textsc{Investment}} \\
+\addlinespace[2pt]
+$\delta_0$             & 2\%    & Capital depreciation rate                             & standard NK/RBC convention \\
+$\tau$                 & 2      & Capital adjustment cost                               & \textcite{Isore2017}, matched to $I/K$--Tobin's $q$ elasticity \\
+$\bar u$               & 1      & Steady-state capital utilisation                      & normalisation \\
+\addlinespace[6pt]
 
-\multicolumn{4}{@{}l}{\textbf{Production}} \\
-$\alpha$             & 0.33   & capital share of production                                & standard national-accounts value \\
-$\zeta$              & 0.60   & Calvo price-stickiness probability                          & \textcite{Isore2017}, consistent with US/EA estimates \\
-$\nu$                & 6      & elasticity of substitution among varieties ($\approx$20\% markup) & standard NK convention \\
-$\mu_z$              & 0.5\%  & trend TFP growth                                            & standard convention \\
+\multicolumn{4}{@{}l}{\textsc{Production}} \\
+\addlinespace[2pt]
+$\alpha$               & 0.33   & Capital share of production                          & standard national-accounts value \\
+$\zeta$                & 0.60   & Calvo price-stickiness probability                    & \textcite{Isore2017}, consistent with US/EA estimates \\
+$\nu$                  & 6      & Elasticity of substitution among varieties ($\approx$20\% markup) & standard NK convention \\
+$\mu_z$                & 0.5\%  & Trend TFP growth                                      & standard convention \\
+\addlinespace[6pt]
 
-\multicolumn{4}{@{}l}{\textbf{Public authority}} \\
-$\bar\pi$            & 1.005  & gross inflation target ($\approx$2\% annual)                & standard convention \\
-$\lambda_\pi$        & 1.50   & Taylor-rule inflation weight                                & standard Taylor-type rule \\
-$\lambda_y$          & 0.50   & Taylor-rule output weight                                   & standard Taylor-type rule \\
-$\rho_r$             & 0.85   & interest-rate smoothing                                     & standard convention \\
+\multicolumn{4}{@{}l}{\textsc{Public authority}} \\
+\addlinespace[2pt]
+$\bar\pi$              & 1.005  & Gross inflation target ($\approx$2\% annual)          & standard convention \\
+$\lambda_\pi$          & 1.50   & Taylor-rule inflation weight                          & standard Taylor-type rule \\
+$\lambda_y$            & 0.50   & Taylor-rule output weight                             & standard Taylor-type rule \\
+$\rho_r$               & 0.85   & Interest-rate smoothing                               & standard convention \\
+\addlinespace[6pt]
 
-\multicolumn{4}{@{}l}{\textbf{Banking, entrepreneur \& sovereign block (novel to this thesis)}} \\
-$\Delta^b$           & 37\%   & sovereign haircut in a disaster                             & \textcite{Cruces2013} \\
-$\chi^e$             & 0.05   & elasticity of EFP w.r.t.\ entrepreneur leverage             & \textcite{Bernanke1999}; functional form \textcite{Christiano2014}$^\dagger$ \\
-$\mathbb{E}[R^K]/R^S$ & 1.0030 & target entrepreneur premium ($\approx$120bp p.a.)          & \textcite{Bernanke1999}-style target$^\dagger$ \\
-$QK/N^e$             & 2.0    & target entrepreneur leverage                                & \textcite{Bernanke1999}$^\dagger$ \\
-$\sigma^e$           & 0.975  & entrepreneur survival rate                                  & \textcite{Bernanke1999} convention$^\dagger$ \\
-$R^S/R^d$            & 1.0020 & bank loan spread ($\approx$80bp p.a., distinct margin from EFP) & \textcite{Rannenberg2016}, ``double accelerator''$^\dagger$ \\
-$\phi$               & 0.10 (baseline); 0 (counterfactual) & home-bias: sovereign-bond share of bank assets & this thesis; order-of-magnitude consistent with \textcite{Altavilla2017}$^\dagger$ \\
-$\sigma^b$           & 0.94   & banker survival rate                                        & \textcite{Gertler2011}-style leverage literature$^\dagger$ \\
+\multicolumn{4}{@{}l}{\textsc{Banking, entrepreneur \& sovereign block (novel to this paper)}} \\
+\addlinespace[2pt]
+$\Delta^b$             & 37\%   & Sovereign haircut in a disaster                       & \textcite{Cruces2013} \\
+$\chi^e$               & 0.05   & Elasticity of EFP w.r.t.\ entrepreneur leverage       & \textcite{Bernanke1999}; functional form \textcite{Christiano2014}$^\dagger$ \\
+$\mathbb{E}[R^K]/R^S$  & 1.0030 & Target entrepreneur premium ($\approx$120bp p.a.)     & \textcite{Bernanke1999}-style target$^\dagger$ \\
+$QK/N^e$               & 2.0    & Target entrepreneur leverage                          & \textcite{Bernanke1999}$^\dagger$ \\
+$\sigma^e$             & 0.975  & Entrepreneur survival rate                            & \textcite{Bernanke1999} convention$^\dagger$ \\
+$R^S/R^d$              & 1.0020 & Bank loan spread ($\approx$80bp p.a., distinct margin from EFP) & \textcite{Rannenberg2016}, ``double accelerator''$^\dagger$ \\
+$\phi$                 & 0.10 / 0 & Home-bias: sovereign-bond share of bank assets (baseline / counterfactual) & this paper; order-of-magnitude consistent with \textcite{Altavilla2017}$^\dagger$ \\
+$\sigma^b$             & 0.94   & Banker survival rate                                  & \textcite{Gertler2011}-style leverage literature$^\dagger$ \\
 
 \end{longtable}
+
+\vspace{2pt}
 \footnotesize
-Unless noted otherwise, the calibration values in the Disaster Risk, Utility Function, Investment, Production, and Public Authority blocks are taken from the baseline calibration of \textcite{Isore2017} (their Table 1); the Source column reports the original reference to which \textcite{Isore2017} themselves attribute each value, not \textcite{Isore2017} directly. The Banking, Entrepreneur \& Sovereign block is added in this thesis. $^\dagger$Values so marked are currently generic US/BGG-literature targets rather than euro-area-specific estimates; replacing these with euro-area data-derived target moments is ongoing work (see main text).
+\noindent Unless noted otherwise, the calibration values in the Disaster Risk, Utility Function, Investment, Production, and Public Authority blocks are taken from the baseline calibration of \textcite{Isore2017} (their Table 1); the Source column reports the original reference to which \textcite{Isore2017} themselves attribute each value, not \textcite{Isore2017} directly. The Banking, Entrepreneur \& Sovereign block is added in this paper. $^\dagger$Values so marked are currently generic US/BGG-literature targets rather than euro-area-specific estimates; replacing these with euro-area data-derived target moments is ongoing work (see main text).
+\endgroup
+
+\begingroup
+\footnotesize
+\begin{longtable}{
+  @{}p{0.08\textwidth}
+  p{0.30\textwidth}
+  >{\raggedleft\arraybackslash}p{0.13\textwidth}
+  >{\raggedleft\arraybackslash}p{0.13\textwidth}
+  >{\raggedleft\arraybackslash}p{0.13\textwidth}@{}
+}
+\caption{Calibration of the banking, entrepreneur \& sovereign block}
+\label{tab:calibration_frictions} \\
+\toprule
+\textit{Parameter} & \textit{Description} & \textit{Full model} & \textit{BGG model} & \textit{GK model} \\
+\midrule
+\endfirsthead
+
+\multicolumn{5}{@{}l}{\textit{Table \thetable\ (continued)}} \\
+\toprule
+\textit{Parameter} & \textit{Description} & \textit{Full model} & \textit{BGG model} & \textit{GK model} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{5}{r@{}}{\textit{continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+$\Delta^b$              & Sovereign haircut in a disaster                        & 37\%   & --     & 37\%   \\
+$\phi$                  & Home-bias: sovereign-bond share of bank assets         & 0.10   & --     & 0.10   \\
+$\chi^e$                & Elasticity of EFP w.r.t.\ entrepreneur leverage        & 0.05   & 0.05   & --     \\
+$\mathbb{E}[R^K]/R^S$   & Target entrepreneur premium ($\approx$120bp p.a.)      & 1.0030 & 1.0030 & --     \\
+$QK/N^e$                & Target entrepreneur leverage                           & 2.0    & 2.0    & --     \\
+$\sigma^e$              & Entrepreneur survival rate                             & 0.975  & 0.975  & --     \\
+$R^S/R^d$               & Bank loan spread ($\approx$80bp p.a.)                  & 1.0020 & --     & 1.0020 \\
+$\sigma^b$              & Banker survival rate                                   & 0.94   & --     & 0.94   \\
+
+\end{longtable}
+
+\vspace{2pt}
+\footnotesize
+\noindent \textit{Notes:} The Full model combines the \textcite{Bernanke1999} entrepreneur block with the \textcite{Gertler2011} bank leverage block, following \textcite{Rannenberg2016}. The BGG model retains the entrepreneur friction only, with an unconstrained (perfectly elastic) banking sector; the GK model retains the bank leverage friction only, with entrepreneurs facing no external finance premium. Sources: $\Delta^b$ from \textcite{Cruces2013}; $\chi^e$, $\mathbb{E}[R^K]/R^S$, $QK/N^e$, $\sigma^e$ follow \textcite{Bernanke1999}-style targets$^\dagger$; $R^S/R^d$ follows \textcite{Rannenberg2016}'s ``double accelerator''$^\dagger$; $\phi$ is this paper's own home-bias calibration, order-of-magnitude consistent with \textcite{Altavilla2017}$^\dagger$; $\sigma^b$ follows the \textcite{Gertler2011}-style leverage literature$^\dagger$. $^\dagger$Currently generic US/BGG-literature targets rather than euro-area-specific estimates.
 \endgroup
 
 \subsection{Main Results}\label{sec:results}
+
+
+        \subsection{Model Parametrisation}
+            \subsubsection{Standard NK and BGG, Risk and Banking Parameters and Calibration Targets} (debt ratios, average spreads, volatilities)
+        \subsection{Baseline Results}
+            \subsubsection{Steady State and Standard Impulse Responses}
+            \subsubsection{Effect of Sovereign Disaster Risk Shock on Means}
+        \subsection{Tail-Risk Analysis}
+            \subsubsection{Simulated Distributions of Output and Spreads}
+            \subsubsection{Sovereign Spread-at-Risk and Output-at-Risk [Scope dependent]}
+            \subsubsection{Comparison: Disaster Risk vs.\ Standard Risk-Premium Shock [Scope dependent]}
+        \subsection{Policy and Institutional Scenarios}
+            \subsubsection{High vs.\ Low Bank Sovereign Exposure} 
+            \subsubsection{ Stylised Sovereign Backstop [OPTIONAL]}
+
+\section{Robustness and Limitations}
+        \subsubsection{Sensitivity to Key Parameters}
+        \subsubsection{Discussion of Modelling Simplifications}
+        \subsubsection{Limitations and Future Outlook}
+
+While the model has been proven to show the firing of the disaster risk anticipation chanel, we where not yet able to implement such a version that the disaster actually realises. Further contributions should look into the developments of New Keynesian Models with financial frictions that incorporate Epstein-Zin preferences with disaster risk and a scenario in which the disaster actually materializes. 
+
+Additionally, the existing model could be extended through implementing a long-term bond structure. We modelled a basic component of such along the development of this paper, however, this bond structure could not have been succesfully included until the submission of this work for the following reasons: first, the equation incorporates a disaster term $x_{t+1}$ explicitly, following
+
+\begin{equation}
+R^b_{t+1} = \frac{(1-x_{t+1}\Deltaᵇ)(1+\rho_\beta Q^b_{t+1})}{Q^b_t}   
+\end{equation}
+
+Under standard perturbation, the disaster term still has to be zero everywhere in any AR(1)-probability-shock GIRF, for the identical reason as the one-period bond, to actually make the lagged channel work. In addition to this long-term bond, one needs a deterministic MIT-shock experiment which forces the default at a chosen date. This would require a second, different solution method layered on top of the extension itself. Next to solving for $x_t$ exogenously, the long-duration bond's new state variable must be rederived for every equation touching $\frac{Q_bB}{Q_b}$, including Appendix C's closed-form steady state, which is currently derived for the one-period bond specifically.
+
+Thus, we only present the component to be included in our future work in Appendix \ref{sec:LongTermBond}.
+
+
+
+    \item \textbf{Conclusion}
+
+
 
 
 % Following \textcite{Isore2017}, we assume that with Epstein-Zin preferences in Eq. \ref{eq:EZW}, the discount factor $\beta$ can be calculated as 
@@ -703,7 +835,7 @@ and with introduction of $V = \tilde{V}_t^{1-\psi}$ and $\chi = 1- \frac{1-\gamm
 %
 where the original Epstein-Zin objective is \eqref{eq:EZW}.
 %
-In \textcite{Isore2017}, households hold sovereign bonds directly and the bond return is haircut by $e^{x_{t+1}\ln(1-\Delta^b)}$ in a disaster. Households there also choose utilisation and investment, holding physical capital directly. In this thesis, households do not hold sovereign bonds directly as they deposit with banks, who hold bonds on their balance sheets (home bias $\phi$). They likewise do not hold physical capital directly as capital is purchased and held by entrepreneurs, financed by entrepreneur net worth and bank loans (Appendix~\ref{sec:banking_block}). Instead, households own a competitive capital-goods-producer sector and receive its profit $\Pi_t^{cp}$ as a dividend, alongside dividends $\Pi_t^f$ from monopolistically competitive firms.
+In \textcite{Isore2017}, households hold sovereign bonds directly and the bond return is haircut by $e^{x_{t+1}\ln(1-\Delta^b)}$ in a disaster. Households there also choose utilisation and investment, holding physical capital directly. In this paper, households do not hold sovereign bonds directly as they deposit with banks, who hold bonds on their balance sheets (home bias $\phi$). They likewise do not hold physical capital directly as capital is purchased and held by entrepreneurs, financed by entrepreneur net worth and bank loans (Appendix~\ref{sec:banking_block}). Instead, households own a competitive capital-goods-producer sector and receive its profit $\Pi_t^{cp}$ as a dividend, alongside dividends $\Pi_t^f$ from monopolistically competitive firms.
 %
 \begin{equation*}
  C_t + T_t + D_t
@@ -828,7 +960,7 @@ Because households save exclusively through bank deposits and banks never defaul
 whenever $\Delta^b>0$; the object their bond Euler prices is therefore not the same object as~\eqref{eq:riskfree_rate}.  The consequence is that $\mathbb{E}_t[Q_{t,t+1}]$ must be evaluated explicitly rather than replaced by its no-disaster realisation, which is done in equation~\eqref{eq:B_EQ} below.
 
 \paragraph{Capital Pricing: Moving from Household Euler to Entrepreneur Indifference.}
-\textcite{Isore2017} impose a capital Euler $\mathbb{E}_t[Q_{t,t+1}R^K_{t+1}]=1$ as a household optimality condition, pricing capital at the household's own risk-free discount rate; their $R^K_{t+1}$ combines the utilisation and investment-adjustment-cost margins into a single object, since their household chooses both jointly. In this thesis, households hold no capital, so no such condition arises from the household's problem at all. Capital is instead priced by the entrepreneur's indifference condition $\mathbb{E}_t[R^K_{t+1}]=R^S_t$ (equation~\eqref{eq:A3_indiff}), which prices capital at the loan rate and added premium, reflecting the external finance premium entrepreneurs face. The technological definition of $R^K_{t+1}$ itself (equation~\eqref{eq:A3_RK}) decomposes cleanly into the utilisation margin (entrepreneur, Appendix~A.3.1) and the investment margin (capital-goods producer, equation~\eqref{eq:CP_TobinsQ} above) which were jointly determined by the household's combined FOC in \textcite{Isore2017}.
+\textcite{Isore2017} impose a capital Euler $\mathbb{E}_t[Q_{t,t+1}R^K_{t+1}]=1$ as a household optimality condition, pricing capital at the household's own risk-free discount rate; their $R^K_{t+1}$ combines the utilisation and investment-adjustment-cost margins into a single object, since their household chooses both jointly. In this paper, households hold no capital, so no such condition arises from the household's problem at all. Capital is instead priced by the entrepreneur's indifference condition $\mathbb{E}_t[R^K_{t+1}]=R^S_t$ (equation~\eqref{eq:A3_indiff}), which prices capital at the loan rate and added premium, reflecting the external finance premium entrepreneurs face. The technological definition of $R^K_{t+1}$ itself (equation~\eqref{eq:A3_RK}) decomposes cleanly into the utilisation margin (entrepreneur, Appendix~A.3.1) and the investment margin (capital-goods producer, equation~\eqref{eq:CP_TobinsQ} above) which were jointly determined by the household's combined FOC in \textcite{Isore2017}.
 %
 % The disaster does, however, propagate to the return on capital through the productivity channel.  The productivity process (Appendix~A.2, equation~\eqref{eq:prod_process_app}) retains the factor $e^{x_{t+1}\ln(1-\epsilon)}$ as a Stationarization device: in the detrended equilibrium system (Appendix~B), the rental rate $p^{k,\mathrm{real}}_{t+1}$ inherits a disaster loading because $P^{k,\mathrm{real}}_{t+1} \propto z_{t+1}^{1-\alpha}$ and $z_{t+1}$ is reduced by $(1-\epsilon)$ in a disaster.  Entrepreneurs therefore face a lower expected return on capital after a disaster even without physical destruction; the full derivation is in Appendix~A.2, equation~\eqref{eq:entr_ind}.
 
@@ -1130,7 +1262,7 @@ with $\Omega$ as price distortion measure due to relative dispersion in relative
 
 \subsection{Banking Block}\label{sec:banking_block}
 
-This section derives the novel contribution of the thesis. It combines the \textcite{Gertler2011} banking framework with \textcite{Bernanke1999} entrepreneur net-worth dynamics and a home-bias sovereign bond channel.  
+This section derives the novel contribution of the paper. It combines the \textcite{Gertler2011} banking framework with \textcite{Bernanke1999} entrepreneur net-worth dynamics and a home-bias sovereign bond channel.  
 
 % --- banker value function, incentive constraint, and leverage limit --- 
 % Each equation is derived from first principles in level form following the three-step procedure of \textcite{Isore2017}.
@@ -1498,7 +1630,7 @@ and in aggregated terms, since it binds for every $j$ and is linear, integrating
 \end{equation*}
  
 \noindent with time-varying multiplier $\lambda_t=\nu_t/(\theta^b-\eta_t)$.
-In the full \textcite{Gertler2011} model, $\lambda_t$ must be solved each period from the recursions for $\nu_t$ and $\eta_t$. The baseline implementation of this thesis uses an endogenous $\lambda_t$. This is the convention established in \textcite{Gertler2011}, who verify that the constraint always binds in a local neighbourhood of the steady state under empirically reasonable parameter values, and subsequently adopted as the baseline in the literature on unconventional monetary policy with
+In the full \textcite{Gertler2011} model, $\lambda_t$ must be solved each period from the recursions for $\nu_t$ and $\eta_t$. The baseline implementation of this paper uses an endogenous $\lambda_t$. This is the convention established in \textcite{Gertler2011}, who verify that the constraint always binds in a local neighbourhood of the steady state under empirically reasonable parameter values, and subsequently adopted as the baseline in the literature on unconventional monetary policy with
 financial intermediaries \parencite{Gertler2013, Carlstrom2017, Sims2021}. The steady-state derivation of $\lambda$ from $\bar{\nu}$ and $\bar{\eta}$ is presented in Appendix~C.
 % ------------------------------------------------------------
 \paragraph{Home-Bias Portfolio Identity}
@@ -1559,7 +1691,7 @@ Surviving bankers earn at first the excess return on loans $(R^S_{t-1} - R^d_t)$
 \subsubsection{Disaster Transmission Mechanism}
 \label{sec:Disaster_Transition}
 
-This subsection derives how $\theta_t$ propagates through the banking block. It establishes the bank's sovereign bond pricing condition from first principles before applying the \textcite{Gabaix2012} linearity-generating process to obtain a closed-form bond price. This thesis sets $\Delta^k>0$ following \textcite{Isore2017}, so capital (and productivity) are destroyed proportionally in the disaster state and $\beta(\theta_t)$ is time-varying per equation~\eqref{eq:betatheta}. Since portfolio composition is fixed by the structural parameter $\phi$ the bank's single optimisation marginal is total asset scale $A_{j,t}$ which is set at $\lambda N^b_{j,t}$ by the binding leverage constraint \eqref{eq:A323}. The sovereign bond price $Q^b_t$ therefore clears the bond market at the fixed composition ratio rather than being determined by a separate portfolio first-order condition. The structural condition that defines the sovereign-bank channel is $\phi>0$ ($\Delta^b>0$ always): banks hold domestic bonds and absorb disaster losses through their balance sheets. The counterfactual $\phi=0$ removes the sovereign-bank channel while preserving the \textcite{Isore2017} capital channel, allowing a clean decomposition of the two transmission mechanisms. All disaster transmission through bonds operates via equation~\eqref{eq:A3_bondprice}.
+This subsection derives how $\theta_t$ propagates through the banking block. It establishes the bank's sovereign bond pricing condition from first principles before applying the \textcite{Gabaix2012} linearity-generating process to obtain a closed-form bond price. This paper sets $\Delta^k>0$ following \textcite{Isore2017}, so capital (and productivity) are destroyed proportionally in the disaster state and $\beta(\theta_t)$ is time-varying per equation~\eqref{eq:betatheta}. Since portfolio composition is fixed by the structural parameter $\phi$ the bank's single optimisation marginal is total asset scale $A_{j,t}$ which is set at $\lambda N^b_{j,t}$ by the binding leverage constraint \eqref{eq:A323}. The sovereign bond price $Q^b_t$ therefore clears the bond market at the fixed composition ratio rather than being determined by a separate portfolio first-order condition. The structural condition that defines the sovereign-bank channel is $\phi>0$ ($\Delta^b>0$ always): banks hold domestic bonds and absorb disaster losses through their balance sheets. The counterfactual $\phi=0$ removes the sovereign-bank channel while preserving the \textcite{Isore2017} capital channel, allowing a clean decomposition of the two transmission mechanisms. All disaster transmission through bonds operates via equation~\eqref{eq:A3_bondprice}.
 
 % ------------------------------------------------------------
 \paragraph{Equilibrium Bond Pricing Condition}
@@ -1788,7 +1920,7 @@ where $p_t$ is the aggregate price level and $T_t$ are real lump-sum taxes and t
  
 The budget is balanced every period: tax revenues plus new bond issuance exactly cover the cost of outstanding debt service net of any disaster haircut. This eliminates public savings as a state variable and implies that taxes are entirely endogenous, adjusting to satisfy~\eqref{eq:A4_govBC} each period.
  
-\textcite{Isore2017} write the government budget constraint without an explicit haircut term (their Appendix A.3 does not model partial default; the bond disaster term enters only through the household's bond Euler). In this thesis, $e^{x_t \ln(1-\Delta^b)}$ appears explicitly in equation~\eqref{eq:A4_govBC} to record the fiscal cost of sovereign partial default to the government. With $\Delta^k > 0$, the capital stock is affected by disaster through the Gourio factor $(1-\Delta^k)^{x_t}$ in the accumulation equation and the government budget constraint records the loss on debt service through $e^{x_t\ln(1-\Delta^b)}$.
+\textcite{Isore2017} write the government budget constraint without an explicit haircut term (their Appendix A.3 does not model partial default; the bond disaster term enters only through the household's bond Euler). In this paper, $e^{x_t \ln(1-\Delta^b)}$ appears explicitly in equation~\eqref{eq:A4_govBC} to record the fiscal cost of sovereign partial default to the government. With $\Delta^k > 0$, the capital stock is affected by disaster through the Gourio factor $(1-\Delta^k)^{x_t}$ in the accumulation equation and the government budget constraint records the loss on debt service through $e^{x_t\ln(1-\Delta^b)}$.
  
 We are then left with determining the Fisher Equation and Taylor Rule. 
 
@@ -1836,12 +1968,14 @@ where $\rho_r \in (0,1)$ is the interest rate smoothing parameter, $\phi_\pi > 1
 % \noindent\textit{Stationarization flag:} The Taylor rule is stated in terms of the nominal rate $r_t$ and inflation $\pi_t$ (both stationary) and detrended output $Y_t/z_t$ (stationary by construction). No further detrending required. $\to$ Appendix~B.
  
 % ============================================================
-\subsection{Market Clearing Conditions}
+\subsection{Model Closing Conditions}
 \label{sec:A5}
 
 % they close the model. Four markets require explicit clearing conditions: the labour market, the goods market, the deposit (bank liability) market and the public authority.
  
 Market clearing conditions impose the requirement that all markets clear simultaneously in equilibrium. Together with the optimality conditions from A.1--A.4, that is the case if the goods and labour market is cleared. Subsequently, we will derive the good market and reinstate the labour, capital services as well as sovereign bond market clearing conditions.  
+
+\subsubsection{Good Market Clearing}
 % 
 Every financial claim in this model (loans, deposits, sovereign bonds, entrepreneur and bank net worth) is held by one agent and owed by another. This means that trading or accumulating these claims reallocates resources already counted once and neither creates nor destroys them. The aggregate resource constraint follows from going back only the flows that connect the financial layer to real production and consumption.
 %
@@ -2484,7 +2618,7 @@ Loan clearing (A.5.4)                 & --- & $=$ A.3.1.5 $+$ A.3.2.3 $+$ A.3.2.
 % ============================================================
 %  APPENDIX C — NON-STOCHASTIC STEADY STATE
 %  Derived from the stationarised system of Appendix B
-%  (Master_Thesis_Status_Quo — July 25th, evening v.3).
+%  (Master_paper_Status_Quo — July 25th, evening v.3).
 %
 %  Conventions used below:
 %    - overbars denote steady-state values of the DETRENDED variables
@@ -3044,7 +3178,7 @@ $\bar R^{b}=1/\bar Q^{b}$ of~\eqref{eq:D_Rb},
   \tag{C.31}\label{eq:D_nbLOM}
 \end{equation}
 %
-whence
+hence
 %
 \begin{equation}
   \iota=\bar n^{b}
@@ -3184,12 +3318,51 @@ The calibration must satisfy
 \paragraph{Nesting.}
 Two limits are worth recording explicitly.  At $\phi=0$ the sovereign bond disappears from the bank balance sheet: $\bar Q^{b}\bar b^{b}=0$, $\varsigma=(\bar R^{S}-\bar R^{f})/\bar R^{f}$, and~\eqref{eq:D_nbLOM} loses its bond term, so that the counterfactual steady state differs from the baseline only through the bank's portfolio composition and the implied $\theta^{b}$ --- not through any of the real aggregates, since $\bar R^{b}$ enters no other equation.  At $\bar\theta=0$ or $\Delta^k=0$ we have $\mathcal{D}=\mathcal{E}=\mathcal{K}=1$, $\Lambda^M=1$, $\bar R^{f}=e^{\psi\mu}/\beta_0$, $\overline{\mathrm{spread}} =\bar R^{f}\,\bar\theta\Delta^b/(1-\bar\theta\Delta^b)$, since $\tilde\Lambda^M\to1$ together with $\mathcal{E}\to1$, and the whole disaster apparatus collapses; the residual banking block is then a standard \textcite{Gertler2011}--\textcite{Bernanke1999} steady state.
 
+\section{Long-term bond structure}\label{sec:LongTermBond}
+
+% ============================================================
+% Long-duration bond derivation, complete
+% ============================================================
+
+The following long-term bond structure was derived against \textcite{Gabaix2012}, \textcite{Woodford2001}-style perpetuity bonds, and \textcite{Bocola2016}'s own use of long-term government debt.
+
+\textcite{Bocola2016} confirmed to use long-term government bonds held by banks, thus the the mark-to-market channel is structurally native to his model. \textcite{Gabaix2012}'s resilience term $H_{i,t}$ is explicitly built to extend to multi-period assets, where the yield
+curve is a headline result of his framework, not a side extension.
+\textcite{Woodford2001} developed a geometrically-decaying-coupon perpetuity device used below. The bond return term including the payoff haircut, result in
+%
+\begin{equation*}
+  R^b_{t+1} = \frac{(1-x_{t+1}\Delta^b)\bigl(1+\rho_b Q^b_{t+1}\bigr)}{Q^b_t}
+\end{equation*}
+%
+where the pricing term is
+\begin{equation*}
+  Q^b_t = \mathbb{E}_t\bigl[Q_{t,t+1}(1-x_{t+1}\Delta^b)(1+\rho_b Q^b_{t+1})\bigr].
+\end{equation*}
+%
+Solving for the steady state, the bond pricing term yields 
+\begin{equation*}
+  \bar Q^b = \frac{\bar H^b}{\bar R^f - \rho_b\bar H^b}
+\end{equation*}
+%
+while the bond return at steady state results in
+%
+\begin{equation*}
+  \bar R^b = \frac{(1-\bar\theta\Delta^b)\bar R^f}{\bar H^b}, \qquad \text{with} \qquad
+  \overline{\text{spread}} = \bar R^f \cdot \frac{\bar\theta\Delta^b(\Lambda^M-1)}{\bar H^b}
+\end{equation*}
+%
+Lastly, this alters the government budget constraint, which in real terms matches the bank's real bond pricing:
+%
+\begin{equation*}
+  T_t + Q^b_t\bigl(B_{t+1}-\rho_b B_t\bigr) = (1-x_t\Delta^b)\,B_t
+\end{equation*}
+
 \newpage
 \section*{Acknowledgements}
 
-I want to thank my supervisor Fabien Tripier for teaching a very interesting course on financial frictions in macroeconomic DSGE models and therefore extending my horizon on the matter. His invaluable input and questions, especially when the idea had to be formulated into economic theory provided necessary foundations for the thesis writing process.  Writing this thesis made me appreciate macroeconomic modelling and encouraged me to continue work in business cycle analysis and to extend my macroeconomic forecasting toolbox during my traineeship at the European Central Bank. I further want to appreciate the interest and questions towards the project from trainees across the Directorate General Economics, especially Paul Farnault for being a grate sparring partner during long writing processes.
+I want to thank my supervisor Fabien Tripier for teaching a very interesting course on financial frictions in macroeconomic DSGE models and therefore extending my horizon on the matter. His invaluable input and questions, especially when the idea had to be formulated into economic theory provided necessary foundations for the paper writing process.  Writing this paper made me appreciate macroeconomic modelling and encouraged me to continue work in business cycle analysis and to extend my macroeconomic forecasting toolbox during my traineeship at the European Central Bank. I further want to appreciate the interest and questions towards the project from trainees across the Directorate General Economics, especially Paul Farnault for being a grate sparring partner during long writing processes.
 
-I want to dedicate this thesis to my parents and best companions Finn and Marvin, on whose opinion and support I could always count when needed. Remaining gratitute is owed to everyone who has joined or left during the stochastic events of life so far. Any remaining errors are my own.
+I want to dedicate this paper to my parents and best companions Finn and Marvin, on whose opinion and support I could always count when needed. Remaining gratitute is owed to everyone who has joined or left during the stochastic events of life so far. Any remaining errors are my own.
 
 \newpage
 
@@ -3200,7 +3373,7 @@ I want to dedicate this thesis to my parents and best companions Finn and Marvin
 
 % ============================================================
 % RESERVE BOX -- Bocola narrative adaptation + archived long-bond
-% derivation. Prepared [date]. Not yet integrated into the thesis body.
+% derivation. Prepared [date]. Not yet integrated into the paper body.
 % Two purposes: (1) ready-to-paste corrections for the locked
 % one-period-bond baseline; (2) complete archive of the long-bond
 % derivation, kept intact in case time allows the extension later.
@@ -3232,12 +3405,12 @@ The sovereign-bank channel here operates through realised-default-triggered loss
 %           in p_t is therefore sufficient to generate a left-tail
 %           contraction..."
 % REPLACE WITH, if/when this paragraph is uncommented and used as the
-% thesis's stated hypothesis:
-The hypothesis organising this thesis is that \textit{realised sovereign default risk} depresses output and tightens credit conditions through two distinct, sequentially activated channels. The \textit{asset pricing channel} operates continuously: a rise in the perceived probability $\theta_t$ of sovereign default raises the sovereign risk premium demanded by bondholders and compresses bond prices \parencite{Gabaix2012, Isore2017}, independent of whether a default ultimately occurs. The \textit{financial accelerator channel} activates only upon a realised default: losses on sovereign holdings erode bank net worth, raising the external finance premium on loans to entrepreneurs and firms, tightening credit supply, and amplifying the output contraction through the standard \textcite{Bernanke1999}-style feedback loop, here activated through bank sovereign bond holdings. A realised sovereign haircut is therefore necessary, though the elevated perceived probability that precedes it is what the sovereign spread continuously prices.
+% paper's stated hypothesis:
+The hypothesis organising this paper is that \textit{realised sovereign default risk} depresses output and tightens credit conditions through two distinct, sequentially activated channels. The \textit{asset pricing channel} operates continuously: a rise in the perceived probability $\theta_t$ of sovereign default raises the sovereign risk premium demanded by bondholders and compresses bond prices \parencite{Gabaix2012, Isore2017}, independent of whether a default ultimately occurs. The \textit{financial accelerator channel} activates only upon a realised default: losses on sovereign holdings erode bank net worth, raising the external finance premium on loans to entrepreneurs and firms, tightening credit supply, and amplifying the output contraction through the standard \textcite{Bernanke1999}-style feedback loop, here activated through bank sovereign bond holdings. A realised sovereign haircut is therefore necessary, though the elevated perceived probability that precedes it is what the sovereign spread continuously prices.
 
 % ============================================================
 % PART 3: ARCHIVED -- Long-duration bond derivation, complete
-% Not currently active in the thesis. Preserved here in full should
+% Not currently active in the paper. Preserved here in full should
 % time allow the extension. Everything below was independently
 % derived and cross-checked against Gabaix (2012), Woodford (2001)-
 % style perpetuity bonds, and Bocola (2016)'s own use of long-term
