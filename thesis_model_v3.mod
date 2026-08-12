@@ -203,21 +203,21 @@ gamma    = 3.8;       % relative risk aversion coefficient
 varpi    = 2.33;      % leisure preference (Gourio 2012)
 
 % Investment
-delta0   = 0.02;      % depreciation
+delta0   = 0.025;      % depreciation
 tau      = 2;         % capital adjustment cost
 uss      = 1;         % utilisation normalisation (target u=1)
 
 % Production
-alpha    = 0.33;      % capital share
+alpha    = 0.36;      % capital share
 zeta     = 0.6;       % Calvo stickiness
-upsilon  = 6;         % elasticity of substitution across varieties (nu)
-muz      = 0.005;     % trend TFP growth (mu)
+upsilon  = 3.85;         % elasticity of substitution across varieties (nu)
+muz      = 0.003;     % trend TFP growth (mu)
 
 % Public Authority
-piss     = 1.005;     % gross inflation target
+piss     = 1.00475;     % gross inflation target
 phipi    = 1.5;       % Taylor: inflation response
 phiy     = 0.5;       % Taylor: output response
-rhor     = 0.85;      % interest-rate smoothing
+rhor     = 0.93;      % interest-rate smoothing
 
 sigr     = 1;         % Taylor-rule scaling coefficient on er (always needed,
                        % regardless of whether the shock is active); the
@@ -241,7 +241,7 @@ sprL     = 1.0020;    % bank loan spread R^S/R^d -- the BANK's own friction,
                        % independent margins, as in Rannenberg 2016's double
                        % accelerator, NOT one friction relabelled as two)
 phi      = @{PHIVAL}; % home-bias: sovereign-bond share of bank assets (0=cf)
-sigma_b  = 0.94;      % banker survival rate
+sigma_b  = 0.95;      % banker survival rate
 % "lam" (fixed leverage) REMOVED -- bank leverage is ENDOGENOUS, derived
 % from the bank's own incentive constraint. "lambdadiv" (the divertable
 % fraction of assets) is calibrated in steady_state_model below so the
