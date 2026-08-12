@@ -2499,3 +2499,111 @@ explanatory paragraph structure sentence-by-sentence.
 
 `ToDoAugust10th.md` created, carrying forward everything still open from
 `ToDoAugust6th.md`, with a resequenced 9-day plan.
+
+## 2026-08-11 — Main-text/appendix structural review; `main_writing.md` created
+
+**Full read of the main-text Theoretical Model section (192-586) against
+the standard of "would this pass as the main text of a publishable
+paper."** Verdict: everything already there earns its place, but one
+subsection is a real problem — `\subsection{Entrepreneurs and Banking
+Sector}` was titled as if it covered banking and didn't: it contained only
+the Entrepreneurs content, while citing four bank equations (leverage
+constraint, bank balance sheet, bank net worth, home-bias identity) by
+number without ever showing them, then stating the thesis's own central
+claim ("this is the channel through which a sovereign loss on bank
+balance sheets raises the cost of credit to entrepreneurs") without the
+mechanics to back it up anywhere in the main text. `\subsection{Market
+Clearing}` was worse: an empty stub, promising equations that never
+followed — the resource constraint $Y_t=C_t+I_t$ wasn't stated anywhere
+in the main text.
+
+**`Changelog_and_To-Dos/main_writing.md` created**: exact start/end line
+pointers for promoting Appendix A content into the main text, split three
+ways per block — promote in full (short, non-derivation identities),
+condense (state the result, cite the appendix for the proof — used for
+the Banker Value Function's Bellman derivation and the bond-price
+$\Lambda^M$ closed-form derivation), or leave appendix-only (pure algebra
+grind). Three blocks: Banking (the big one — bank balance sheet, leverage
+constraint, home-bias identity, bank net worth, and critically the
+two-channel disaster-transmission finding itself), Market Clearing (fills
+the empty stub), Household FOCs (SDF, labour-leisure condition, deposit
+Euler, currently deferred to the appendix without ever being shown).
+Included concrete bridge sentences for the seams and a B→A→C sequencing
+recommendation.
+
+**Re-verified, directly against the live `.mod` file, that the "lagged/
+realised-default channel is structurally silent" finding from earlier in
+the project still holds**: `Rb = 1/Qb(-1)` (line 509) and `RK` (line 141)
+are both hard-coded at their disaster-free branch, explicitly commented
+`(x=0)` in both cases — confirms and sharpens what the thesis's own
+Limitations section and Appendix A.3.3 already say, but locates the cause
+more precisely (structural, not a sampling-path artifact) than the
+existing text does. Proposed replacement caveat text delivered in
+`main_writing.md` Part 3.
+
+`ToDoAugust11th.md` created. Also flagged, not yet fixed as of the
+Aug 10 evening file: `beta_0`'s table-vs-`.mod` mismatch had regressed
+into a *new*, more confusing form (table showing 0.9985 while `.mod`
+still had 0.99, with a self-contradicting "However" sentence in the
+prose); a broken footnote clause in Table 1; unconfirmed removal of the
+banking-block rows from Table 1 (since re-added to Table 2).
+
+## 2026-08-12 — Post-implementation audit; calibration literature research
+
+**You implemented Blocks A/B/C from `main_writing.md`.** Reviewed the
+result by diffing against the committed Aug 10 evening file (retrieved via
+`git show 8df884a:...`, since the working-tree copy was replaced) and by
+grepping every `\label{eq:...}`/`\eqref{eq:...}` pair across the full
+3475-line document. Finding: the promotion used two different strategies
+inconsistently. Household FOCs, the Entrepreneurs subsubsection, Public
+Authority, and the leverage constraint were **duplicated** (defined once
+in main text, once in appendix) — this is safe and matches the
+already-established Public Authority precedent. Most of Banking Block,
+most of Disaster Transmission Mechanism, and three of four Market
+Clearing paragraphs were instead **cut and moved** — removed from the
+appendix rather than duplicated. Net effect: contrary to the "what's now
+doubled" framing the review was requested under, almost nothing is
+actually duplicated (only the leverage constraint, correctly). The real
+problem is the opposite — **seven equations now exist only in the main
+text while the appendix's own Stationarization and Non-Stochastic Steady
+State sections still reference them**, unresolved, in six separate
+locations including the Bank Block (D8) and Public Authority (D9)
+steady-state derivations. Full equation-by-equation table and a five-point
+restoration list (apply the duplication strategy retroactively) written
+into `main_writing.md` Part 4. Also found and flagged: a structural
+nesting problem (two bank paragraphs now sit, unintroduced, under the
+appendix's `Entrepreneurs` subsubsection, since the `Banks with Sovereign
+Bond Holdings` header that used to precede them was deleted), and two
+small typos plus one ungrammatical hand-edited sentence in the promoted
+two-channel paragraph (clean replacement text supplied).
+
+**Calibration: `bibliography.bib` was missing the `Coenen2018` key
+entirely**, despite the newly-updated calibration table citing it nine
+times — would not have compiled cleanly. Fixed directly: added a verified
+`@techreport` entry, checked against the primary-source PDF (ECB WP 2200,
+Nov 2018), not guessed.
+
+**Literature research for the five flagged entrepreneur/bank parameters**
+(`chi^e`, `E[R^K]/R^S`, `QK/N^e`, `sigma^e`, `R^S/R^d`), done via direct
+PDF download + text extraction, not search-engine summaries — one search
+summary was checked against the primary source and found to be flatly
+wrong (claimed NAWM II calibrates to a leverage ratio of 8 and a 70bp
+spread; the actual paper text says leverage 6 and 217bp, confirmed twice
+in the source). Findings: `R^S/R^d` already has a real, structurally-
+matched euro-area target sitting in NAWM II (2.17pp annual retail-deposit
+spread, same Gertler-Karadi leverage mechanism) that simply hasn't been
+adopted yet — a decision, not a research gap; noted that the current
+120bp entrepreneur premium + 80bp bank spread already recombine to
+almost exactly the classic 200bp BGG single-friction target, a property
+worth preserving consciously if the NAWM II spread is adopted. `chi^e`'s
+current value (0.05) is literally the generic BGG/US prior, not a
+euro-area number — `\textcite{Gelain2010}` (ECB WP 1171, Bayesian-
+estimated on euro-area AWM data) reports a posterior of 0.0276 (90% CI
+0.0118-0.0427), a real euro-area alternative. `sigma^e=0.975` and
+`QK/N^e=2.0` are both already well-supported by the same paper (posterior
+0.9769 for survival; 2.0 is Gelain's own calibration input, used
+successfully in a euro-area estimation). Added `Gelain2010` to
+`bibliography.bib`, verified against the primary-source PDF. Full
+reasoning and recommendations in `ToDoAugust12th.md` §3.
+
+`ToDoAugust12th.md` created.

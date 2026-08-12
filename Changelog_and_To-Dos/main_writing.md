@@ -148,6 +148,145 @@ Appendix l.1909: *"In this paper, $e^{x_t \ln(1-\Delta^b)}$ appears explicitly i
 
 ---
 
+## Part 4 — Post-implementation audit (2026-08-12): what actually happened when Blocks A/B/C were promoted
+
+You implemented most of Blocks A, B and C from this document into
+`status_quo_thesis_august_11th_evening.txt` (line numbers below refer to
+that file). Good news first, then the one real structural problem, found
+by cross-referencing every `\label{eq:...}` against every `\eqref{eq:...}`
+across the whole 3475-line document.
+
+**You used two different promotion strategies, and only one of them is safe.**
+
+- **Strategy 1 — full duplication** (Household FOCs, the Entrepreneurs
+  subsubsection, Public Authority, and the leverage constraint `eq:A323`
+  itself): the equation is defined once in the main text and *again*, in
+  full, in the appendix. This is exactly what Public Authority already did
+  before any of this started, and it works: the appendix stays
+  self-contained, nothing dangles. **This is the strategy to standardise
+  on.**
+- **Strategy 2 — cut and move** (most of Banking Block, most of Disaster
+  Transmission Mechanism, three of the four Market Clearing paragraphs,
+  and the Households block's β(θ_t)/Risk-Free-Rate paragraphs): the
+  content was *removed* from the appendix rather than duplicated. It now
+  exists only in the main text — and the appendix's own later sections
+  (which were written expecting a self-contained Appendix A) still
+  reference it.
+
+**Net effect: your framing of "what's now doubled and should be deleted"
+has it backwards for most of this content.** Only one equation
+(`eq:A323`) actually ended up duplicated, and that duplication is
+correct — leave it. The real problem is the opposite: **seven equations
+were removed from the appendix without a trace**, and the appendix's own
+Stationarization and Non-Stochastic Steady State sections — the most
+technical, load-bearing parts of Appendix A — now silently depend on
+definitions that only exist in the main text. A reader (or examiner)
+working through the appendix on its own, without the main text open
+alongside it, will hit unresolved-looking equation numbers.
+
+### Exactly what's orphaned, verified by grepping every `\label`/`\eqref` pair
+
+| Equation | Now defined only at | Appendix locations that cite it without defining it |
+|---|---|---|
+| Bank Balance Sheet Identity, `eq:A3_bankBS` (A.3.2.1) | main text l.598 | l.1692, 1750, 1752 (orphaned Banker-Value-Function paragraphs, see below); l.2030 (Good Market Clearing derivation); l.2462 (Stationarization, Banking Block) |
+| Home-Bias Portfolio Identity, `eq:A3_homebias` (A.3.2.4) | main text l.628 | l.1720; l.2464 (Stationarization); l.3149 (Steady State, Bank Block D8) |
+| Bank Net Worth Accumulation, `eq:A3_Bank_Value` (A.3.2.5) | main text l.649 | l.1720; l.2030; l.2863 (Stationarization, Public Authority/Market Clearing); l.3174, l.3209 (Steady State, Bank Block D8 / Public Authority D9) |
+| Asset-Specific Resilience / $H^b_t$, `eq:A3_resil` (A.3.3.2) | main text l.692 | l.1921 (the appendix's *own remaining* "Derivation of Closed Form $\Lambda^M$" subparagraph — it forward-references its own document's missing equation); l.2834 (Steady State, Sovereign Bond Block D3) |
+| Sovereign Bond Price, `eq:A3_bondprice` (A.3.3.3) | main text l.731 | l.1908; l.2834 |
+| Sovereign Bond Gross Return + spread, `eq:A3_Rb`/`eq:A3_ERb`/`eq:A3_spread` (A.3.3.4-6) | main text l.760, 775, 786 | l.2660 (Steady State D2); l.2845, 2846, 2865 (Steady State D3); l.3209 (Steady State D9) |
+| Endogenous Discount Factor, `eq:betatheta` (A.1.5) | main text l.294 | l.1908; l.2196, 2273 (Stationarization, Households); l.2696, 2713 (Steady State D2) |
+| Risk-Free Rate, `eq:riskfree_rate` (A.1.6) | main text l.305 | l.1228; l.2287, 2332, 2557 (Stationarization); l.2762 (Steady State D2) |
+| Loan Market Clearing, `eq:loanmarketclearing` (A.5.4) | main text l.912 | l.1721 (appendix's own Entrepreneurs paragraph, unchanged since yesterday, still contains this reference) |
+| Labour/Capital Services clearing, `eq:A5_labour` etc. (A.5.2-3) | main text l.889 | l.2085 (appendix, Non-Detrended equation system) |
+
+That's six equations feeding into the *Non-Stochastic Steady State*
+appendix (D2, D3, D8, D9) specifically — the section where correctness
+matters most, since it's what pins the values Dynare's `steady_state_model`
+block actually solves.
+
+### Structural nesting problem, separate from the missing equations
+
+The appendix's `\subsubsection{Banks with Sovereign Bond Holdings}` header
+(which used to sit at old-line 1422) is gone entirely — not moved, not
+renamed, just gone. Its content wasn't all deleted, though: "Banker Value
+Function and Optimisation" (l.1733) and "Incentive Constraint and Leverage
+Limit" (l.1858) are both still there, word-for-word — but now they sit
+directly under `\subsubsection{Entrepreneurs}` (l.1566) with no bank-section
+header to introduce them. Structurally, as the file stands, the appendix
+currently claims the Banker Value Function is part of the Entrepreneurs
+subsubsection. Restoring the header fixes this on its own.
+
+### Recommended fix — apply Strategy 1 retroactively
+
+For each row in the table above, restore a short, non-derivation
+definition to the appendix at (approximately) its old location — you
+already have the exact text, since it's what main_writing.md's Block A/B/C
+pointers were promoting *from* in the first place. Concretely:
+
+1. **Before appendix l.1733** ("Banker Value Function and Optimisation"):
+   restore the `\subsubsection{Banks with Sovereign Bond Holdings}` header,
+   its setup paragraph, and the Bank Balance Sheet Identity (`eq:A3_bankBS`)
+   — this also fixes the nesting problem.
+2. **After appendix l.1901** (end of "Incentive Constraint and Leverage
+   Limit"): restore Home-Bias Portfolio Identity (`eq:A3_homebias`) and
+   Bank Net Worth Accumulation (`eq:A3_Bank_Value`).
+3. **Before appendix l.1912** ("Derivation of Closed Form $\Lambda^M$"):
+   restore Asset-Specific Resilience (`eq:A3_resil`), Sovereign Bond Price
+   (`eq:A3_bondprice`), and Sovereign Bond Gross Return + spread
+   (`eq:A3_Rb`/`eq:A3_ERb`/`eq:A3_spread`) — this is also the fix for the
+   appendix's own Λ^M subparagraph forward-referencing a now-undefined
+   equation *within the same document section*.
+4. **In appendix Households**, right after the FOC block (around l.1229,
+   before "Capital-Goods Producer"): restore the Endogenous Discount
+   Factor β(θ_t) and Risk-Free Rate paragraphs.
+5. **In appendix Model Closing Conditions**, after Good Market Clearing
+   (around l.2077): restore Labour/Capital Services, Sovereign Bond, and
+   Loan Market Clearing.
+
+The Immediate/Lagged-channel two-channel paragraphs themselves are the one
+part of Disaster Transmission Mechanism that genuinely doesn't need an
+appendix copy — nothing downstream references them by equation label, so
+main-text-only is fine there, and matches the "this is the actual
+contribution, main text is its home" reasoning from Block A originally.
+
+### Two copy-edit issues surfaced while checking this
+
+- Main text l.601, l.604: "Bankers **thrn** maximise..." (typo for "then");
+  "...leverage constraint that reduces to a leverage **gap**" should almost
+  certainly read "leverage **cap**" — "gap" doesn't parse against the
+  surrounding sentence.
+- Main text l.823, the promoted "Lagged channel" paragraph's closing
+  sentence, has been hand-edited since the version proposed in Part 3 and
+  is now ungrammatical: *"It cnstruct this term silent for structural
+  reasons, as the realised returns... propagates thorugh the system under
+  pertubation methods."* Content is right (it correctly incorporates the
+  Flag 1 precision fix), but it needs a clean pass. Suggested replacement,
+  same content, parses correctly and fixes the three typos
+  (cnstruct/disaser-free/pertubation/recquire):
+
+  > *"This channel is silent for a structural reason, not merely a
+  > sampling one: the realised returns $R^b_t$ and $R^K_t$ entering the
+  > model's recursions are both coded at their disaster-free ($x=0$)
+  > branch by construction, so only the disaster probability $\theta_t$,
+  > not an actual default, propagates through the system under
+  > perturbation methods. Simulating a genuine disaster path would require
+  > re-deriving the realised-return terms with an explicit disaster
+  > realisation and a solution method that admits discrete draws, as
+  > proposed for the long-term bond extension (Appendix~\ref{sec:LongTermBond})."*
+
+### What does NOT need to move (answering the other half of the question)
+
+Checked the promoted main-text content itself for anything that's now
+*too* derivation-heavy for main text and should go back down: nothing
+found. The Banker Value Function derivation and the Λ^M closed-form
+derivation were both correctly left out of the main text (only the
+condensed intuition + result made it in, exactly per Block A's
+recommendation) — this part of the implementation is done right. The main
+text's scope is well-calibrated; the appendix's completeness is what
+needs the fix above.
+
+---
+
 ## Sequencing note
 
 Do these in the order **B → A → C**, not the order they're listed in the user's request:

@@ -232,7 +232,7 @@ sigr     = 1;         % Taylor-rule scaling coefficient on er (always needed,
 
 % ---- NEW banking/entrepreneur/sovereign calibration (2026-07-30) --------
 Deltab   = 0.37;      % sovereign haircut in a disaster (Cruces-Trebesch ~0.37)
-chie     = 0.05;      % elasticity of external finance premium wrt leverage (BGG/CMR)
+chie     = 0.00276;      % elasticity of external finance premium wrt leverage (BGG/CMR)
 premE    = 1.0030;    % target entrepreneur premium  E[R^K]/R^S (~120bp annual)
 levE     = 2.0;       % target entrepreneur leverage  Q k / N^e (BGG ~ 2)
 sigma_e  = 0.975;     % entrepreneur survival rate
