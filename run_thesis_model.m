@@ -12,7 +12,7 @@
 %      EVERY phi in PHI_GRID below, ONCE each, sharing the solved results
 %      across all three figures produced (no redundant solves).
 %   2. Computes the ERGODIC MEAN in the absence of shocks (the correct
-%      centring point for nonlinear/3rd-order IRFs), exactly as in the
+%      centring point for nonlinear/3rd-order RFs), exactly as in the
 %      Isore-Szczerbowicz (2017) replication code (uses Dynare's simult_).
 %   3. Builds GENERALISED IRFs to a disaster-risk shock (etheta): the
 %      difference between the shocked path and the no-shock path, in

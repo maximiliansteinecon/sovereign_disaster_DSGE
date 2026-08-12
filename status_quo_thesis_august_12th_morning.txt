@@ -85,7 +85,7 @@ Defended on September 2nd, 2026}
 %----------------------------------%
 
 \begin{abstract}
-\noident We develope an extension of the New Keynesian DSGE model by \textcite{Isore2017} and include capital-good producers, entrepreneurs facing an external finance premium, a bond holding banking block and an applied bond disaster risk term.  In this set-up, we find that sovereign disaster risk, priced continuously through bank balance sheets rather than only through the household's Euler equation, produces an amplification that is monotonic in home-bias exposure for consumption, investment, and spreads.
+We develope an extension of the New Keynesian DSGE model by \textcite{Isore2017} and include capital-good producers, entrepreneurs facing an external finance premium, a bond holding banking block and an applied bond disaster risk term.  Calibrated to the euro-area, we find that sovereign disaster risk, priced continuously through bank balance sheets rather than only through the household's Euler equation, produces an amplification that is monotonic in home-bias exposure for consumption, investment, and spreads.
 \end{abstract}
 
 \newpage
@@ -103,7 +103,7 @@ Sovereign defaults have a close historical association with emerging economies, 
 
 We find that hat sovereign disaster risk, priced continuously through bank balance sheets rather than only through the household’s Euler equation, produces an amplification that is monotonic in home-bias exposure for consumption, investment, and spreads
 
-Finally, this thesis is motivated by the constant development of specialised DSGE satelite models for euro-area monetary policy model development. As the main monetary policy authority within the Eurosystem of Central Banks, the European Central Bank itself uses structural, semi-structural and a wide range of empirical models \textcite{Cicarelli2024}. While the ECB-BASE acts as a semi-structural model for the euro area \parencite{Angelini2019}, the NAWM developed by \textcite{Coenen2008} is the structural DSGE model that in its first version extended \textcite{Christiano2005} and \textcite{Smets2003}, but has been regardede as obsolete after publication, due to non-inclusion of macro-financial frictions. \textcite{Coenen2018}, who's calibration values we make partially use of in Section \ref{secmain:calibrationandresults}, have updated this model by incorporating a financial sector that can account for financial frictions impacts on economic variables. This modern version is supported by specialised DSGE models to complement the forecasting assessments for the institutions macroeconomic projections.
+Finally, this thesis is motivated by the constant development of specialised DSGE satelite models for euro-area monetary policy model development. As the main monetary policy authority within the Eurosystem of Central Banks, the European Central Bank itself uses structural, semi-structural and a wide range of empirical models \textcite{Cicarelli2024}. While the ECB-BASE acts as a semi-structural model for the euro area \parencite{Angelini2019}, the NAWM developed by \textcite{Coenen2008} is the structural DSGE model that in its first version extended \textcite{Christiano2005} and \textcite{Smets2003}, but has been regardede as obsolete after publication, due to non-inclusion of macro-financial frictions. \textcite{Coenen2018}, who's calibration values we make partially use of in Section \ref{secmain:calibrationandresults}, have updated this model by incorporating a financial sector that can account for financial frictions impacts on economic variables. This modern version is supported by specialised DSGE models to complement the forecasting assessments for the institutions macroeconomic projections. However, as no such work of a sovereign default risk model exists, we want to develope a model that in its foundations could be used as such. 
 
 The paper is organized as follows: Section 1 develops the model, Section 2 discusses the calibration. Section 3 presents the obtained results from the model and discusses them further. Section 4 presents the results from conducted robustness checks. Section 5 concludes. 
 
@@ -598,10 +598,10 @@ Banks are owned by households. To motivate an endogenous constraint on bank leve
   \label{eq:A3_bankBS}
 \end{equation}
 %
-The home-bias parameter $\phi$ splits bank assets between loans and sovereign bonds. When $\phi = 0$ the model collapses to the standard \textcite{Gertler2011} specification with loans only. Bankers thrn maximise continuation value subject to a moral-hazard incentive constraint. This comes as both the value function and the constraint are linear in net worth and assets (proved in Appendix, eq. \eqref{eq:Banker_Value}).
+The home-bias parameter $\phi$ splits bank assets between loans and sovereign bonds. When $\phi = 0$ the model collapses to the standard \textcite{Gertler2011} specification with loans only. Bankers then maximise continuation value subject to a moral-hazard incentive constraint. This comes as both the value function and the constraint are linear in net worth and assets (proved in Appendix, eq. \eqref{eq:Banker_Value}).
 
 \paragraph{Banker's Leverage Constraint} Bankers expand assets to the limit whenever $\eta_t>0$ and therefore the franchise value of asset holdings is positive relative to the outside option of
-depositing at $R^d_t$, so the constraint binds with equality in equilibrium. This gives the individual bank's leverage constraint that reduces to a leverage gap.
+depositing at $R^d_t$, so the constraint binds with equality in equilibrium. This gives the individual bank's leverage constraint that reduces to a leverage cap.
  
 \begin{equation}\tag{A.3.2.3}\label{eq:A323}
     \,Q_t S_{j,t}+Q^b_t B^b_{j,t}
@@ -820,7 +820,7 @@ The second channel requires an actual default and transmits with a one-period la
     I_t,\,Y_t,\,C_t \downarrow \;\text{recession}
 \end{align*}
 
-The two channels are not competing descriptions of the same mechanism but genuinely separate margins, distinguished by what they require and how quickly they act. The immediate channel operates through the bank's forward-looking portfolio choice and requires only a change in $\theta_t$; it is present even along a sample path on which $x_t=1$ never realizes, and its magnitude is quantified in Section~\ref{sec:results}. The lagged channel operates through realized losses on bonds already on the balance sheet and requires $x_t=1$to be activated. It cnstruct this term silent for structural reasons, as the realised returns $R^b_t$ and $R^K_t$ entering the model's recursions are both coded at their disaser-free ($x=0$) branch by construction, so only the disaster probability $\theta_t$, not an actual default, propagates thorugh the system under pertubation methods. For simulation of a disaster path, the realised return terms would recquire a rederivation with a realised disaster term and a solution method that admits discrete draws, as proposed for the long-term bond extension (Appendix~\ref{sec:LongTermBond}).
+The two channels are not competing descriptions of the same mechanism but genuinely separate margins, distinguished by what they require and how quickly they act. The immediate channel operates through the bank's forward-looking portfolio choice and requires only a change in $\theta_t$; it is present even along a sample path on which $x_t=1$ never realizes, and its magnitude is quantified in Section~\ref{sec:results}. The lagged channel operates through realized losses on bonds already on the balance sheet and requires $x_t=1$to be activated. I construct this term silent for structural reasons, as the realised returns $R^b_t$ and $R^K_t$ entering the model's recursions are both coded at their disaster-free ($x=0$) branch by construction, so only the disaster probability $\theta_t$, not an actual default, propagates through the system under perturbation methods. For simulation of a disaster path, the realised return terms would reqcuire a rederivation with a realised disaster term and a solution method that admits discrete draws, as proposed for the long-term bond extension (Appendix~\ref{sec:LongTermBond}).
 
 \subsection{Public Authority}\label{secmain:public_authority}
 
@@ -1017,8 +1017,7 @@ $\rho_r$               & 0.93   & Interest-rate smoothing                       
   @{}p{0.08\textwidth}
   p{0.30\textwidth}
   >{\raggedleft\arraybackslash}p{0.13\textwidth}
-  >{\raggedleft\arraybackslash}p{0.13\textwidth}
-  >{\raggedleft\arraybackslash}p{0.13\textwidth}@{}
+  >{\raggedleft\arraybackslash}p{0.20\textwidth}@{}
 }
 \caption{Calibration of the banking, entrepreneur \& sovereign block}
 \label{tab:calibration_frictions} \\
@@ -1042,10 +1041,10 @@ $\rho_r$               & 0.93   & Interest-rate smoothing                       
 
 $\Delta^b$              & Sovereign haircut in a disaster                        & 37\%  &  \textcite{Cruces2013}  \\
 $\phi$                  & Home-bias: sovereign-bond share of bank assets         & 0.10  &  \textcite{Altavilla2017} \\
-$\chi^e$                & Elasticity of EFP w.r.t.\ entrepreneur leverage        & 0.05  &    \\
+    $\chi^e$                & Elasticity of EFP w.r.t.\ entrepreneur leverage    & 0.0276  &  \textcite{Gelain2010}  \\
 $\mathbb{E}[R^K]/R^S$   & Target entrepreneur premium ($\approx$120bp p.a.)      & 1.0030 &  \\
-$QK/N^e$                & Target entrepreneur leverage                           & 2.0    &    \\
-$\sigma^e$              & Entrepreneur survival rate                             & 0.975  &    \\
+$QK/N^e$                & Target entrepreneur leverage                           & 2.0    &  \textcite{Gelain2010}  \\
+$\sigma^e$              & Entrepreneur survival rate                             & 0.975  &  \textcite{Gelain2010}  \\
 $R^S/R^d$               & Bank loan spread ($\approx$80bp p.a.)                  & 1.0020 & \\
 $\sigma^b$              & Banker survival rate                                   & 0.95   & \textcite{Coenen2018} \\
 
@@ -1053,15 +1052,10 @@ $\sigma^b$              & Banker survival rate                                  
 
 \vspace{2pt}
 \footnotesize
-\noindent \textit{Notes:} The Full model combines the \textcite{Bernanke1999} entrepreneur block with the \textcite{Gertler2011} bank leverage block, following \textcite{Rannenberg2016}. The BGG model retains the entrepreneur friction only, with an unconstrained (perfectly elastic) banking sector; the GK model retains the bank leverage friction only, with entrepreneurs facing no external finance premium. Sources: $\Delta^b$ from \textcite{Cruces2013}; $\chi^e$, $\mathbb{E}[R^K]/R^S$, $QK/N^e$, $\sigma^e$ follow \textcite{Bernanke1999}-style targets$^\dagger$; $R^S/R^d$ follows \textcite{Rannenberg2016}'s ``double accelerator''$^\dagger$; $\phi$ is this paper's own home-bias calibration, order-of-magnitude consistent with \textcite{Altavilla2017}$^\dagger$; $\sigma^b$ follows the \textcite{Gertler2011}-style leverage literature$^\dagger$. $^\dagger$Currently generic US/BGG-literature targets rather than euro-area-specific estimates.
+\noindent \textit{Notes:} The Full model combines the \textcite{Bernanke1999} entrepreneur block with the \textcite{Gertler2011} bank leverage block.The BGG model retains the entrepreneur friction only, with an unconstrained (perfectly elastic) banking sector; the GK model retains the bank leverage friction only, with entrepreneurs facing no external finance premium. $\chi^e$ is the posterior mean in \textcite{Gelain2010}, after an initial calibration of 0.05
 \endgroup
 
-\subsection{Main Results}\label{sec:results}
-
-
-        \subsection{Model Parametrisation}
-            \subsubsection{Standard NK and BGG, Risk and Banking Parameters and Calibration Targets} (debt ratios, average spreads, volatilities)
-        \subsection{Baseline Results}
+        \subsection{Baseline Results}\label{sec:results}
             \subsubsection{Steady State and Standard Impulse Responses}
             \subsubsection{Effect of Sovereign Disaster Risk Shock on Means}
         \subsection{Tail-Risk Analysis}

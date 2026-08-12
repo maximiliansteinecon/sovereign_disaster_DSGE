@@ -232,7 +232,7 @@ sigr     = 1;         % Taylor-rule scaling coefficient on er (always needed,
 
 % ---- NEW banking/entrepreneur/sovereign calibration (2026-07-30) --------
 Deltab   = 0.37;      % sovereign haircut in a disaster (Cruces-Trebesch ~0.37)
-chie     = 0.00276;      % elasticity of external finance premium wrt leverage (BGG/CMR)
+chie     = 0.0276;      % elasticity of external finance premium wrt leverage (BGG/CMR)
 premE    = 1.0030;    % target entrepreneur premium  E[R^K]/R^S (~120bp annual)
 levE     = 2.0;       % target entrepreneur leverage  Q k / N^e (BGG ~ 2)
 sigma_e  = 0.975;     % entrepreneur survival rate
@@ -548,7 +548,7 @@ end;
 
 %==========================================================================
 %  8.  SOLUTION
-%      order=1  -> the third-order perturbation the thesis targets.
+%      order=3  -> the third-order perturbation the thesis targets.
 %      pruning  -> keeps 3rd-order simulations stable (Andreasen et al.).
 %      irf=0    -> IRFs are produced from the ERGODIC MEAN in the driver
 %                  run_thesis_model.m (correct notion at 3rd order), exactly
@@ -556,7 +556,7 @@ end;
 %      NOTE: to get a quick first look you can switch to order=1 and irf=20.
 %==========================================================================
 @#if ORDER > 1
-stoch_simul(order=@{ORDER}, pruning, irf=0, periods=0, replic=1, nograph);
+stoch_simul(order=@{ORDER}, pruning, irf=20, periods=0, replic=1, nograph);
 @#else
 stoch_simul(order=1, irf=20, periods=0, replic=1, nograph);
 @#endif
