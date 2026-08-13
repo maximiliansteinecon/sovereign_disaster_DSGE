@@ -383,38 +383,108 @@ one dense sentence/paragraph down substantially — together, meaningfully
 less dense without touching a single defined equation or the mechanism
 itself.
 
-### What to delete from Appendix A: much less than the framing assumed
+### What to delete from Appendix A — revised 2026-08-13 late, correcting the guidance above
 
-Checked this properly rather than assuming duplication = deletable.
-**Answer: almost nothing, and here's the concrete reason, not just a
-general caution.** Appendix A's Stationarization and Non-Stochastic
-Steady State sections reference these equations *by label*, not by
-prose — deleting an equation (not just trimming the sentence around it)
-from Appendix A would reproduce exactly the orphaning bug fixed in Part 4,
-two days after fixing it. The distinction that matters: **prose can be
-cut from the appendix freely; equations and their `\label{}` tags cannot,
-full stop**, no matter how many times the same equation is shown in the
-main text.
+**The "almost nothing" answer above was too conservative, and missed a
+real bug in the process.** The user pushed back with the right question:
+what if the label lives in the main text instead, and the appendix just
+references it? Checked directly — every one of the equations restored in
+Part 4 is now **duplicate-labelled**: both the main-text copy and the
+appendix copy declare the identical `\label{eq:...}`. Confirmed by count,
+not assumption — `eq:A3_bankBS`, `eq:A3_homebias`, `eq:A3_Bank_Value`,
+`eq:A3_resil`, `eq:A3_bondprice`, `eq:A3_Rb`, `eq:A3_ERb`, `eq:A3_spread`,
+`eq:A3_bondeuler`, `eq:betatheta`, `eq:riskfree_rate`, `eq:A5_labour`,
+`eq:loanmarketclearing` each appear **exactly twice** in the current
+file — and this isn't new to this week, either: the Entrepreneurs-block
+equations (`eq:A3_util`, `eq:A3_RK`, `eq:A3_EFP`, `eq:A3_NE`,
+`eq:A3_entrep_BS`, `eq:A3_indiff`) and the Household FOCs
+(`eq:SDF`, `eq:HHO_C`, `eq:HHO_Deposit_Euler`, `eq:CP_TobinsQ`) are all
+*also* duplicate-labelled, some going back before this week's work.
+Worst case: `eq:A323`, the leverage constraint, is **triplicated** — main
+text's Entrepreneurs section, main text's own "Banker's Leverage
+Constraint" paragraph, and the appendix all separately declare
+`\label{eq:A323}`.
 
-Given that constraint, two things ARE safe to also trim in the appendix,
-because they're prose-only:
+In LaTeX, a repeated `\label{}` doesn't throw a hard error, but every
+`\ref`/`\eqref` to that key resolves to whichever declaration was
+processed last — silently, with only a "Label ... multiply defined"
+warning to notice it by. Every one of these equations currently has an
+ambiguous jump target. This should have been flagged when Part 4
+recommended full duplication as "safe" — it's safe against the orphaning
+bug specifically, but it trades that bug for this one. Correcting the
+record here rather than leaving Part 4's advice standing as though it
+were complete.
 
-- Item 2 above (the duplicated "initiated"/"instantiated" sentence) — if
-  the appendix's own Entrepreneurs copy has the same duplicate (it's a
-  near-verbatim copy of the main text, so it very likely does), the same
-  one-line deletion applies there too.
-- Item 1's contract-theory setup, *if* you also want the appendix leaner
-  — this one's more optional than item 2, since unlike the main text, the
-  appendix's job is arguably to be the exhaustive version. Your call;
-  flagging it as available, not recommending it the way I'd recommend the
-  main-text cut.
+**The fix the user proposed is the right one: one canonical `\label{}`
+per equation, the other location references it via `\eqref{}` instead of
+re-declaring it.** This is not a compromise on Part 4's goal — Appendix
+A's Stationarization/Steady-State sections still resolve every
+`\eqref{}` correctly, because the label still exists exactly once,
+somewhere in the document; they never needed the label to be
+*physically inside Appendix A*, they needed it to *exist and be
+unambiguous*. A thesis appendix cross-referencing "the main text, a few
+hundred lines back, same document" is completely normal academic
+writing — it's a different situation from Aug 11's actual problem, which
+was equations referenced that weren't defined **anywhere at all**.
 
-Everything else currently in Appendix A's Banking Block and Disaster
-Transmission Mechanism — including the institutional Home-Bias paragraph,
-the Sovereign Bond Price derivation steps, and the promised-yield
-discussion that items 3-5 above trim from the main text — should **stay
-exactly as is**. That's not redundancy to clean up; that's the appendix
-doing its job now that it's finally complete.
+**Rule, applied consistently rather than case by case: main text is
+canonical for everything except where the appendix genuinely *derives*
+the equation across real, multi-step algebra — there, keep the appendix
+canonical, exactly like `eq:Banker_Value` already does.**
+`eq:Banker_Value` is the one label in this whole cluster that was never
+duplicated — it's declared once, in the appendix, at the end of the
+Bellman-equation argument, and the main text already just cites it
+(search *"proved in Appendix, eq. \eqref{eq:Banker\_Value}"*). That's the
+working template; extend it rather than invent a new pattern:
+
+- **Move to appendix-only (deduplicate toward Part 4's pattern for
+  `eq:Banker_Value`): `eq:A323`.** It's derived immediately after
+  `eq:Banker_Value` in the same appendix argument (substituting the
+  linear value function into the incentive constraint) — the same
+  "derived here, cited elsewhere" logic applies, and it's the triplicated
+  one, so this is the highest-value single fix. In the main text, replace
+  both displayed copies with prose stating the result and
+  `\eqref{eq:A323}` pointing at the appendix.
+- **Move to main-text-only (delete the appendix's `\label{}`, keep
+  appendix prose but reference `\eqref{}` back): everything else** —
+  `eq:A3_bankBS`, `eq:A3_homebias`, `eq:A3_Bank_Value`, `eq:A3_resil`,
+  `eq:A3_bondprice`, `eq:A3_Rb`/`A3_ERb`/`A3_spread`, `eq:A3_bondeuler`,
+  `eq:betatheta`, `eq:riskfree_rate`, `eq:A5_labour`,
+  `eq:loanmarketclearing`, and the whole Entrepreneurs/Household-FOC
+  cluster (`eq:A3_util`, `eq:A3_RK`, `eq:A3_EFP`, `eq:A3_NE`,
+  `eq:A3_entrep_BS`, `eq:A3_indiff`, `eq:SDF`, `eq:HHO_C`,
+  `eq:HHO_Deposit_Euler`, `eq:CP_TobinsQ`). None of these involve a
+  derivation the appendix earns and the main text doesn't — both copies
+  currently show the same identity or result with the same amount of
+  surrounding algebra, so there's no "derived here" argument for
+  appendix-canonical, and main text is what a reader hits first.
+
+### How much this actually unlocks in the appendix
+
+Once a paragraph's equation is no longer separately labelled there, the
+surrounding prose doesn't need to stand alone either — it can collapse
+to a sentence or two plus the `\eqref{}`. Concretely, in Appendix A's now
+mostly-redundant Banking Block and Disaster Transmission Mechanism, this
+means paragraphs like the full "Home-Bias Portfolio Identity" discussion
+(the Basel/HQLA institutional justification, the $\phi$/$A_{j,t}$
+algebra, the closing sentence about the counterfactual) can become
+something like: *"The home-bias portfolio identity (eq.~\eqref{eq:A3\_homebias})
+and its institutional motivation are given in Section~\ref{secmain:...}
+above."* — one sentence, not a full restated paragraph. The same applies
+to the Sovereign Bond Price derivation, the promised-yield discussion,
+and the Equilibrium Bond Pricing "why households don't hold bonds" aside
+that Part 5's main-text cuts (3-6) already shortened in the main text —
+once the label moves, the appendix doesn't need its own full version of
+that discussion at all, it needs a pointer. This is a substantially
+bigger cut than "tighten the sentences," which is what the original
+version of this section suggested — the user was right to push on it.
+
+One thing to decide, not a technical constraint: some examiners
+explicitly expect a thesis appendix to be readable standalone, without
+flipping back to the main text. Nothing here is a compile or correctness
+risk either way, so this is a judgment call about house style /
+supervisor expectations, not something with a "correct" answer from the
+document's own logic.
 
 ## Sequencing note
 
