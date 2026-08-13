@@ -2607,3 +2607,60 @@ successfully in a euro-area estimation). Added `Gelain2010` to
 reasoning and recommendations in `ToDoAugust12th.md` §3.
 
 `ToDoAugust12th.md` created.
+
+## 2026-08-13 — Appendix restoration confirmed complete; new citation gaps caught and fixed; density pass
+
+**All of Aug 12's appendix-orphaning restoration list is done.** Verified
+by diffing the committed Aug 12 morning file against tonight's version:
+all seven equations (Bank Balance Sheet Identity, Home-Bias Portfolio
+Identity, Bank Net Worth Accumulation, Asset-Specific Resilience,
+Sovereign Bond Price, Sovereign Bond Gross Return + spread, Households
+β(θ_t)/Risk-Free-Rate) are back in Appendix A, along with the `Banks with
+Sovereign Bonds` subsubsection header (fixing the nesting problem) and
+Model Closing Conditions' three missing market-clearing paragraphs.
+Appendix A is self-contained again.
+
+**Calibration: `phi` recalibrated from 0.10 to 0.03**, backed by a new,
+carefully-verified citation — fetched the actual source rather than
+trusting a search summary, given how much the parameter moved. Real:
+Claudia Buch (ECB Supervisory Board Chair), speech "The bank-sovereign
+nexus," 19 May 2026, citing ECB supervisory data for 317 euro-area banks
+and a 28% domestic-sovereign-bond share at end-2025 — both numbers in the
+thesis match the primary source exactly. `sigma_e` also changed, from
+0.975 (the prior, which I'd recommended keeping) to 0.9769 (Gelain 2010's
+posterior) — a reasonable alternative the user chose, not what was
+recommended, noted for the record rather than flagged as an error. Both
+previously-open calibration items (`R^S/R^d`, `E[R^K]/R^S`) resolved via
+the "reframe, don't replace" path from Aug 12: a new dagger-footnote
+explains the 120bp/80bp split against Gelain (2010)'s ~200bp
+single-friction benchmark. Full `.mod`-vs-table consistency check found
+no numeric mismatches.
+
+**Three more missing/broken citations caught**, on top of Buch2026:
+`\textcite{gerte}` in Table 1 (broken key, likely a truncated
+`Gertler2011`, left for the user to confirm rather than guessed at);
+`Taylor1993` (missing from `bibliography.bib`, now added — a better
+sourcing choice for the Taylor-rule weights than what was suggested
+earlier in the project); `Havranek2015` (missing since Aug 10, finally
+added, verified against a fresh search matching the thesis's own
+"2,735 estimates across 169 studies" figure exactly).
+
+**Density pass, at the user's request, now that Appendix A is complete
+enough to safely carry the full weight**: six main-text cut candidates in
+the Entrepreneurs-and-Banking-Sector section (a genuine duplicate
+sentence, unused contract-theory scaffolding, and several
+derivation/discursive passages the appendix already carries in full),
+written into `main_writing.md` Part 5 with snippet anchors instead of
+line numbers, per explicit instruction — line numbers have drifted on
+every single diff done this week and stopped being a reliable pointer
+format. Corrected the user's implicit premise on the appendix side: asked
+what could be *deleted* from Appendix A now that the main text covers it;
+the honest answer is almost nothing, since Appendix A's own
+Stationarization and Steady-State sections reference these equations by
+label, not by prose, and deleting them again would silently reopen the
+exact bug just fixed. Only prose is safe to trim in the appendix; the
+equations themselves stay, no matter how many times they also appear in
+the main text.
+
+`ToDoAugust13th14th.md` created, replacing `ToDoAugust12th.md` as the
+active list.

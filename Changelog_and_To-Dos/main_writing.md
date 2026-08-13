@@ -287,6 +287,135 @@ needs the fix above.
 
 ---
 
+## Part 5 — Density pass (2026-08-13): what to cut from the main text, and what NOT to delete from the appendix
+
+Re-read `status_quo_thesis_august_13h_night.txt` in full against this
+document. **First, the good news: Part 4's entire restoration list is
+done.** Every one of the seven equations flagged as orphaned on 2026-08-12
+is back in Appendix A (Bank Balance Sheet Identity, Home-Bias Portfolio
+Identity, Bank Net Worth Accumulation, Asset-Specific Resilience,
+Sovereign Bond Price, Sovereign Bond Gross Return + spread, and the
+Households β(θ_t)/Risk-Free-Rate paragraphs), the `Banks with Sovereign
+Bonds` subsubsection header is restored (fixing the nesting problem too),
+and Market Closing Conditions has its Labour/Capital, Sovereign Bond and
+Loan Market paragraphs back. Appendix A is self-contained again.
+
+**Per your note tonight, no line numbers below** — every pointer is a
+quoted snippet you can search for. Quoted text is copied verbatim from
+tonight's file; where a passage is long, only its opening and closing
+words are given, so you can select "from here to here."
+
+### Cut from the main text (Entrepreneurs and Banking Sector)
+
+Six candidates, none of which lose an equation, a citation, or the
+two-channel finding — that finding (the "Immediate channel" / "Lagged
+channel" paragraphs) should **not** be touched, it's the actual
+contribution. Everything below is either scaffolding that's never used
+again, a leftover duplicate, or discursive justification that the
+(now-complete) appendix already carries in full.
+
+1. **Contract-theory setup that's never used again.** From *"An
+   idiosyncratic productivity $\omega_{j,t+1}$ is drawn i.i.d."* through
+   *"$\bar\omega_t$ does not appear as a separate endogenous variable
+   below."* — introduces $\omega_{j,t+1}$, $F(\cdot)$, the monitoring cost
+   $\mu$, and the default threshold $\bar\omega_t$, none of which
+   reappear anywhere else in the main text (only $\chi^e$ and $f_0$, from
+   the reduced form, are actually used). Replace with one sentence:
+   something like *"Following the costly-state-verification framework of
+   \textcite{Townsend1979} and \textcite{Bernanke1999}, the optimal debt
+   contract generates a reduced-form external finance premium, taken as
+   given below (Appendix~\ref{sec:banking_block} has the underlying
+   contract-theoretic derivation)."*
+2. **A sentence duplicated right next to itself.** *"The capital-goods
+   producer's investment condition~\eqref{eq:CP\_TobinsQ}, initiated at
+   date $t+1$..."* is immediately followed by *"The capital-goods
+   producer's investment condition~\eqref{eq:CP\_TobinsQ}, instantiated at
+   date $t+1$..."* — same sentence, "initiated" vs. "instantiated," both
+   ending at *"...both determine the single date-$(t{+}1)$ price
+   $Q_{t+1}$:"* before the same displayed equation. Delete one copy —
+   this isn't a judgment call, it's a leftover from an edit.
+3. **Home-Bias institutional justification, currently one long
+   three-part sentence.** *"In the euro-area institutional context,
+   domestic banks are the predominant holders..."* through *"...favour
+   domestic over cross-border sovereign bond holdings
+   \parencite{Gennaioli2014,Bocola2016}"* stacks three separate
+   justifications (zero risk-weighting, HQLA eligibility, structural
+   incentives) in one sentence. The appendix's copy already carries this
+   in full; main text only needs the headline claim, e.g. *"Domestic
+   banks are the predominant holders of domestic sovereign debt in the
+   euro area, reflecting well-documented regulatory and structural
+   incentives \parencite{Gennaioli2014,Bocola2016}."*
+4. **The Sovereign Bond Price derivation steps.** Everything from
+   *"Following \textcite{Gabaix2012} for the closed-form expression..."*
+   through *"...which holds exactly."* — two displayed equation blocks
+   showing the intermediate substitution and the Gabaix decomposition
+   step by step. This is textbook appendix material — derivation grind
+   toward a result, not the result itself. Keep only the final boxed
+   equation (A.3.3.3) with a one-line pointer: *"Substituting the bond
+   return into the Euler equation and applying the \textcite{Gabaix2012}
+   decomposition (Appendix~\ref{sec:Disaster\_Transition}) gives the
+   closed-form bond price..."* then the equation.
+5. **The promised-yield-vs-expected-return justification.** From *"The
+   approximation holds for $R^f_t\approx1$..."* through *"...the
+   distinction is therefore quantitatively material and is maintained
+   throughout."* — five sentences of measurement justification (why
+   promised yield rather than expected return, the 1.6× ratio between
+   them). Trim to one sentence plus an appendix pointer: *"We report the
+   promised-yield spread $1/Q^b_t - R^f_t$ throughout, since it is the
+   object recorded in observed sovereign spreads and against which
+   $\Delta^b$ is calibrated (see Appendix~\ref{sec:Disaster\_Transition}
+   for its relationship to the expected-return spread)."*
+6. **The "why households don't hold bonds" aside, inside Equilibrium
+   Bond Pricing.** *"While in \textcite{Isore2017} bonds are held by
+   households..."* through *"...because the bank uses the household SDF
+   $Q_{t,t+1}$ as its discount factor."* re-derives a point the
+   Households subsection already establishes (households deposit with
+   banks rather than holding bonds directly). Condense to one sentence:
+   *"Because households hold no sovereign bonds
+   (Section~\ref{sec:households}), equation~\eqref{eq:A3\_bondeuler}
+   follows from the bank's equilibrium pricing requirement rather than a
+   household optimality condition, with an identical pricing implication
+   since the bank discounts with the household SDF."*
+
+Rough effect: cuts (1) and (6) each remove close to a full paragraph, (4)
+removes two equation blocks' worth of algebra, (3) and (5) each tighten
+one dense sentence/paragraph down substantially — together, meaningfully
+less dense without touching a single defined equation or the mechanism
+itself.
+
+### What to delete from Appendix A: much less than the framing assumed
+
+Checked this properly rather than assuming duplication = deletable.
+**Answer: almost nothing, and here's the concrete reason, not just a
+general caution.** Appendix A's Stationarization and Non-Stochastic
+Steady State sections reference these equations *by label*, not by
+prose — deleting an equation (not just trimming the sentence around it)
+from Appendix A would reproduce exactly the orphaning bug fixed in Part 4,
+two days after fixing it. The distinction that matters: **prose can be
+cut from the appendix freely; equations and their `\label{}` tags cannot,
+full stop**, no matter how many times the same equation is shown in the
+main text.
+
+Given that constraint, two things ARE safe to also trim in the appendix,
+because they're prose-only:
+
+- Item 2 above (the duplicated "initiated"/"instantiated" sentence) — if
+  the appendix's own Entrepreneurs copy has the same duplicate (it's a
+  near-verbatim copy of the main text, so it very likely does), the same
+  one-line deletion applies there too.
+- Item 1's contract-theory setup, *if* you also want the appendix leaner
+  — this one's more optional than item 2, since unlike the main text, the
+  appendix's job is arguably to be the exhaustive version. Your call;
+  flagging it as available, not recommending it the way I'd recommend the
+  main-text cut.
+
+Everything else currently in Appendix A's Banking Block and Disaster
+Transmission Mechanism — including the institutional Home-Bias paragraph,
+the Sovereign Bond Price derivation steps, and the promised-yield
+discussion that items 3-5 above trim from the main text — should **stay
+exactly as is**. That's not redundancy to clean up; that's the appendix
+doing its job now that it's finally complete.
+
 ## Sequencing note
 
 Do these in the order **B → A → C**, not the order they're listed in the user's request:

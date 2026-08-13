@@ -39,7 +39,7 @@
 %  was the problem, exactly as in Rannenberg (2016), whose double
 %  accelerator (entrepreneur + bank, both non-fixed) motivated re-testing
 %  this. Verified: resid exact zero, BK clean (9=9) at order 1, order=3
-%  pruning completes for both phi=0.10 and phi=0. See CHANGELOG for the
+%  pruning completes for both phi=0.03 and phi=1e-4. See CHANGELOG for the
 %  full economic rationale, all intermediate (rejected and accepted)
 %  specifications, and the original frictionless-firm equations preserved
 %  as comments where superseded.
@@ -94,11 +94,11 @@
 
 % -------------------------------------------------------------------------
 %  0.  MACRO SWITCH for the home-bias parameter (baseline vs counterfactual)
-%      Run  `dynare thesis_model`            -> PHIVAL defaults to 0.10
+%      Run  `dynare thesis_model`            -> PHIVAL defaults to 0.03
 %      Run  `dynare thesis_model -DPHIVAL=1e-4` -> counterfactual, no sov. channel
 % -------------------------------------------------------------------------
 @#ifndef PHIVAL
-    @#define PHIVAL = 0.10
+    @#define PHIVAL = 0.03
 @#endif
 % Perturbation order (3 = thesis target).  For a first DEBUG pass use
 %   `dynare thesis_model -DORDER=1`  to isolate steady-state / Blanchard-Kahn
@@ -232,16 +232,16 @@ sigr     = 1;         % Taylor-rule scaling coefficient on er (always needed,
 
 % ---- NEW banking/entrepreneur/sovereign calibration (2026-07-30) --------
 Deltab   = 0.37;      % sovereign haircut in a disaster (Cruces-Trebesch ~0.37)
-chie     = 0.0276;      % elasticity of external finance premium wrt leverage (BGG/CMR)
-premE    = 1.0030;    % target entrepreneur premium  E[R^K]/R^S (~120bp annual)
+chie     = 0.0276;    % elasticity of external finance premium wrt leverage (BGG/CMR)
+sigma_e  = 0.9769;    % entrepreneur survival rate
+sigma_b  = 0.95;      % banker survival rate
 levE     = 2.0;       % target entrepreneur leverage  Q k / N^e (BGG ~ 2)
-sigma_e  = 0.975;     % entrepreneur survival rate
+premE    = 1.0030;    % target entrepreneur premium  E[R^K]/R^S (~120bp annual)
 sprL     = 1.0020;    % bank loan spread R^S/R^d -- the BANK's own friction,
                        % distinct from the entrepreneur's premium above (two
                        % independent margins, as in Rannenberg 2016's double
                        % accelerator, NOT one friction relabelled as two)
 phi      = @{PHIVAL}; % home-bias: sovereign-bond share of bank assets (0=cf)
-sigma_b  = 0.95;      % banker survival rate
 % "lam" (fixed leverage) REMOVED -- bank leverage is ENDOGENOUS, derived
 % from the bank's own incentive constraint. "lambdadiv" (the divertable
 % fraction of assets) is calibrated in steady_state_model below so the
