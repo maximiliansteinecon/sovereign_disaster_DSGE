@@ -449,13 +449,7 @@ entrepreneur's utilisation condition~\eqref{eq:A3_util} both determine the singl
   \;=\;\frac{P^{k,\mathrm{real}}_{t+1}}{\delta_0\,\eta\,u_{t+1}^{\eta-1}}.
 \end{equation*}
 %
-Eliminating $Q_{t+1}$ between the two recovers exactly \textcite{Isore2017}'s single combined household condition:
-%
-\begin{equation*}
-    \frac{1}{1-\tau\!\left(\dfrac{I_{t+1}}{K_{t+1}}-\dfrac{\bar{I}}{\bar{K}}\right)} = \frac{P^{k,\mathrm{real}}_{t+1}}{\delta_0\,\eta\; u_{t+1}^{\,\eta-1}}
-\end{equation*}
-%
-confirming that the two-agent decomposition is algebraically equivalent to the original joint FOC.
+Eliminating $Q_{t+1}$ between the two recovers exactly \textcite{Isore2017}'s single combined household condition, confirming the two-agent decomposition is algebraically equivalent to the original joint FOC. The full derivation is in Appendix~\ref{subsec:entrepreneurs}.
 
 % ------------------------------------------------------------
 \paragraph{Return on Capital}
@@ -542,15 +536,7 @@ which constitutes an accounting identity, defining the quantity $Q_tS_t$ that en
 \paragraph{Capital Demand: Free-Entry Condition}
 \label{par:capital_market_clearing}
  
-Financing of $K_{t+1}$ is decided at the end of period $t$, taking $Q_t$ (capital-goods producer, Appendix~\ref{sec:households}), the loan rate $R^S_t$, and the premium schedule~\eqref{eq:A3_EFP} as given.  An individual entrepreneur is atomistic relative to the continuum and therefore treats both $R^S_t$ and the aggregate equity ratio entering $f(\cdot)$ parametrically: it does not perceive its own $K_{t+1}$ choice as moving either. Expected end-of-period profit is then
-%
-\begin{equation*}
-  \mathbb{E}_t[R^K_{t+1}]\,Q_tK_{t+1} - R^S_t\bigl(Q_tK_{t+1}-N^e_t\bigr)
-  \;=\;
-  \bigl(\mathbb{E}_t[R^K_{t+1}]-R^S_t\bigr)Q_tK_{t+1} + R^S_tN^e_t,
-\end{equation*}
-%
-which is linear in $K_{t+1}$. A determinate, finite, positive level of capital demand is therefore an equilibrium only if the coefficient on $K_{t+1}$ vanishes: at any strictly positive coefficient the atomistic entrepreneur prefers $K_{t+1}\to\infty$, viceversa at any strictly negative coefficient it prefers $K_{t+1}=0$. Following \textcite{Gertler2011}, free entry and competitive credit markets impose exactly that 
+Financing of $K_{t+1}$ is decided at the end of period $t$, taking $Q_t$ (capital-goods producer, Appendix~\ref{sec:households}), the loan rate $R^S_t$, and the premium schedule~\eqref{eq:A3_EFP} as given.  An individual entrepreneur is atomistic relative to the continuum and therefore treats both $R^S_t$ and the aggregate equity ratio entering $f(\cdot)$ parametrically: it does not perceive its own $K_{t+1}$ choice as moving either.  Because expected profit is linear in $K_{t+1}$, a determinate equilibrium requires the coefficient on $K_{t+1}$ to vanish — otherwise the atomistic entrepreneur would want an unbounded or zero capital stock (Appendix, full argument). Following \textcite{Gertler2011}, free entry and competitive credit markets impose exactly that:
 
 %
 % A.3.1.6 -- the participation / free-entry condition, where f(.) enters:
@@ -606,21 +592,14 @@ depositing at $R^d_t$, so the constraint binds with equality in equilibrium. Thi
 
 Domestic banks are the predominant holders of domestic sovereign debt in the euro area, reflecting well-documented regulatory and structural incentives \parencite{Gennaioli2014,Bocola2016}.
 
-The parameter $\phi \in [0,1)$ captures this as a structural characteristic of the bank balance sheet rather than a portfolio decision variable. Given these institutional frictions banks are effectively price-takers in the sovereign bond market at the composition margin, and $\phi$ is calibrated to the observed average domestic sovereign bond share in euro-area bank total assets. Formally, $\phi$ is defined as the bond share of total assets $A_{j,t}\equiv Q_tS_{j,t}+Q^b_tB^b_{j,t}$ (as prior defined in paragraph \ref{par:A322}): 
-%
-\begin{equation*}
-  Q^b_t B^b_{j,t} = \phi\, A_{j,t}, \qquad Q_t S_{j,t} = (1-\phi)\, A_{j,t}.
-\end{equation*}
-%
-Dividing the two gives the portfolio condition directly:
+The parameter $\phi \in [0,1)$ captures this as a structural characteristic of the bank balance sheet rather than a portfolio decision variable. Given these institutional frictions banks are effectively price-takers in the sovereign bond market at the composition margin, and $\phi$ is calibrated to the observed average domestic sovereign bond share in euro-area bank total assets.Formally, $\phi$ is the bond share of total assets $A_{j,t}\equiv Q_tS_{j,t}+Q^b_tB^b_{j,t}$, giving the portfolio condition
 %
 \begin{equation}
   Q^b_t B^b_t \;=\; \frac{\phi}{1-\phi}\,Q_tS_t
   \tag{2.4.9}\label{eq:A3_homebias}
 \end{equation}
 %
-Combined with the entrepreneur balance sheet~\eqref{eq:A3_entrep_BS},
-equation~\eqref{eq:A3_homebias} closes the bank asset side as $Q_tS_t$ is pinned by entrepreneur equity and the binding leverage constraint \eqref{eq:A323}, and $Q^b_t B^b_t$ is then determined proportionally. The counterfactual sets $\phi = 0$, which eliminates the sovereign bond portfolio to the standard \textcite{Gertler2011} specification with loans only, shutting down the sovereign-bank transmission channel while preserving the standard BGG financial accelerator.
+Combined with the entrepreneur balance sheet~\eqref{eq:A3_entrep_BS}, equation~\eqref{eq:A3_homebias} closes the bank asset side as $Q_tS_t$ is pinned by entrepreneur equity and the binding leverage constraint \eqref{eq:A323}, and $Q^b_t B^b_t$ is then determined proportionally. The counterfactual sets $\phi = 0$, which eliminates the sovereign bond portfolio to the standard \textcite{Gertler2011} specification with loans only, shutting down the sovereign-bank transmission channel while preserving the standard BGG financial accelerator.
 
 \paragraph{Bank Net Worth Accumulation.}
 \label{par:A325}
@@ -775,7 +754,7 @@ The second channel requires an actual default and transmits with a one-period la
     I_t,\,Y_t,\,C_t \downarrow \;\text{recession}
 \end{align*}
 
-The two channels are not competing descriptions of the same mechanism but genuinely separate margins, distinguished by what they require and how quickly they act. The immediate channel operates through the bank's forward-looking portfolio choice and requires only a change in $\theta_t$; it is present even along a sample path on which $x_t=1$ never realizes, and its magnitude is quantified in Section~\ref{sec:results}. The lagged channel operates through realized losses on bonds already on the balance sheet and requires $x_t=1$to be activated. This term is constructed silent for structural reasons, as the realised returns $R^b_t$ and $R^K_t$ entering the model's recursions are both coded at their disaster-free ($x=0$) branch by construction, so only the disaster probability $\theta_t$, not an actual default, propagates through the system under perturbation methods. For simulation of a disaster path, the realised return terms would require a rederivation with a realised disaster term and a solution method that admits discrete draws, as proposed for the long-term bond extension (Appendix~\ref{sec:LongTermBond}).
+The two channels are not competing descriptions of the same mechanism but genuinely separate margins, distinguished by what they require and how quickly they act. The immediate channel operates through the bank's forward-looking portfolio choice and requires only a change in $\theta_t$; it is present even along a sample path on which $x_t=1$ never realizes, and its magnitude is quantified in Section~\ref{sec:results}. The lagged channel operates through realized losses on bonds already on the balance sheet and requires $x_t=1$to be activated. This channel is silent for a structural reason, as the realised returns $R^b_t$ and $R^K_t$ entering the model's recursions are both coded at their disaster-free ($x=0$) branch by construction, so only the disaster probability $\theta_t$, not an actual default, propagates through the system under perturbation methods. For simulation of a disaster path, the realised return terms would require a rederivation with a realised disaster term and a solution method that admits discrete draws, as proposed for the long-term bond extension (Appendix~\ref{sec:LongTermBond}).
 
 \subsection{Public Authority}\label{secmain:public_authority}
 
@@ -815,7 +794,7 @@ where $\pi_{t+1} \equiv p_{t+1}/p_t - 1$ is the net inflation rate. This is a st
 % 
 where $\rho_r \in (0,1)$ is the interest rate smoothing parameter, $\phi_\pi > 1$ the inflation response coefficient (Taylor principle), $\phi_Y > 0$ the output gap coefficient, and $\bar{r}$ the steady-state nominal rate. The disaster probability $\theta_t$ does not enter the Taylor rule directly; it affects $r_t$ only through its general equilibrium effects on $\pi_t$ and $Y_t$.
 
-We implement these measure as standard new keynesian elements, even though actual enformecemt in the economy is not common sense. Whether consumers actually have a sound understanding and incorporate both principles has been studied by \textcite{Draeger2016}, which find that about 52\% build expectations which are in line with the Fisher equation, while 46\% include the Taylor rule relation in forming their expectations.
+We implement these measures as standard new keynesian elements, even though actual enforcement in the economy is not common sense. Whether consumers actually have a sound understanding and incorporate both principles has been studied by \textcite{Draeger2016}, which find that about 52\% build expectations which are in line with the Fisher equation, while 46\% include the Taylor rule relation in forming their expectations.
 % \parencite[Eq.~11, Appendix~A.3, Eq.~A.21]{Isore2017} 
  
 % \noindent\textit{Steady-state note:} At the non-stochastic steady state, $r_{t-1} = r_t = \bar{r}$ and $\pi_t = \bar{\pi}$, $Y_t/z_t = \bar{Y}$. The rule is trivially satisfied. $\bar{r}$ is pinned by the Fisher equation at steady state: $1 + \bar{r} = \bar{R}^f \cdot (1 + \bar{\pi})$.

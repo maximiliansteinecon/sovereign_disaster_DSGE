@@ -249,7 +249,7 @@ phi      = @{PHIVAL}; % home-bias: sovereign-bond share of bank assets (0=cf)
 % CHANGELOG_dynare_debug.md for the full derivation.
 
 % ---- parameter transformations (Gourio 2012/2014) -----------------------
-psi = 1 - (1-psitilde)/(1+varpi); % has no counterpart in the thesis, which defines psi directly the inverse EIS.  It yields psi = 1.3003, not 2. 
+psi = 1 - (1-psitilde)/(1+varpi); % Old Comment - is it actually true? has no counterpart in the thesis, which defines psi directly the inverse EIS.  It yields psi = 1.3003, not 2. 
 chi = 1 - (1-gamma)/(1-psi);
 
 %==========================================================================
