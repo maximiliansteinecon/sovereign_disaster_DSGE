@@ -32,7 +32,51 @@ days** away.
       function is introduced, and list both `psitilde=2` (target,
       \textcite{Isore2017}) and `psi≈1.3003` (derived) in Table 1.**
       **Est.: 20 min**, text and table together.
-- [x] **Leverage target resolved: adopt $\Phi=6$ from `\textcite{Coenen2018}`.**
+- [ ] **REOPENED — not actually resolved. The citation logic still holds,
+      but $\Phi=5.5$ breaks Blanchard-Kahn at the high end of the
+      home-bias sweep, and $\Phi=6$ will likely be worse, not better.**
+      Tested $\Phi=5.5$ across the full $\phi$ sweep: baseline
+      ($\phi=0.10$) and core ($\phi=0.20$) solve cleanly. $\phi=0.50$
+      nominally "passes" the rank condition but with **two literal `Inf`
+      eigenvalues** in the spectrum — a result I would not trust even
+      though the count happens to work out. $\phi=0.80$ **fails outright**:
+      8 eigenvalues $>1$ where 9 are needed, "rank condition ISN'T
+      verified," hard Blanchard-Kahn error, `stoch_simul` aborts.
+      **Leading hypothesis: numerical conditioning, not a new economic
+      bug or a real determinacy loss** — the model already had
+      huge-but-finite eigenvalues (1e16-1e20 range) at every calibration
+      checked this month, flagged and accepted back on 2026-08-02; the
+      progression to literal `Inf` here is erratic across $\phi$ (2.1e20
+      at 0.10, 1.1e19 at 0.20, `Inf` at 0.50, `Inf` again at 0.80) rather
+      than a smooth trend, which points more toward ill-conditioning
+      being pushed over a floating-point edge than toward a genuine
+      economic bifurcation. **Can't rule out the alternative, though**: a
+      bank that is both more levered and more concentrated in one asset
+      is, in a literal economic sense, closer to fragile — this could be
+      a real determinacy boundary, which would actually be a legitimate
+      (if inconvenient) finding, not a bug.
+      **What actually matters for the thesis right now: the baseline
+      result is not at risk.** $\phi=0.10$ is clean. This only threatens
+      the "BEYOND-CALIBRATION ILLUSTRATION" sweep ($\phi=0.50$/$0.80$),
+      which is explicitly non-core by its own label.
+      **Diagnostic steps before touching the `.mod` file again** (both
+      cheap, both worth doing before deciding anything):
+      1. Re-run $\phi=0.80$ at the *old* `levss=4.0` to check whether this
+         is new (broken by this week's leverage change) or was already
+         marginal and just never got stress-tested at the extreme end of
+         the sweep before.
+      2. Map the actual breaking point: try $\phi=0.30/0.40/0.60/0.70$ at
+         `levss=5.5` — a smooth degradation across these points would
+         support the conditioning hypothesis; a sudden cliff at one
+         specific value would support a genuine determinacy boundary.
+      **Given 5.5 already breaks, do not move to $\Phi=6$ before this is
+      understood** — higher leverage amplifies the same balance-sheet
+      channel, so 6 is expected to fail at least as early in the $\phi$
+      sweep as 5.5 does, likely earlier. The Coenen (2018) citation
+      reasoning from before still stands on its own merits — this isn't
+      about the justification being wrong, it's about whether the number
+      it points to is numerically usable across the full sweep this
+      thesis wants to run. Old (unresolved, superseded by the above):
       User found the NAWM~II footnote themselves (absconding rate and
       start-up funds jointly calibrated to $\Phi=6$ and a 2.17pp retail
       spread) and asked the right follow-up question — does importing

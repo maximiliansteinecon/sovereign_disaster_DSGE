@@ -308,7 +308,7 @@ QSss  = knss - Ness;                    % bank loans = capital value NET of entr
 % --- bank block: leverage TARGET (4.0, same numeric target as the old
 % fixed "lam") anchors the calibration; lev itself is now an ENDOGENOUS
 % variable in the dynamic model (see eqs 26/26a-d below). -----------------
-levss = 4.0;
+levss = 5.5;
 Ass   = QSss/(1-phi);
 QbBss = phi*Ass;
 Nbss  = Ass/levss;
