@@ -32,29 +32,41 @@ days** away.
       function is introduced, and list both `psitilde=2` (target,
       \textcite{Isore2017}) and `psi≈1.3003` (derived) in Table 1.**
       **Est.: 20 min**, text and table together.
-- [ ] **Leverage target $\Phi=4$: genuinely no citation, and I couldn't
-      hand you one tonight.** Traced its origin: it's inherited from an
-      older version of the model where leverage was a fixed parameter
-      called `lam`, preserved as the endogenous mechanism's target so the
-      rest of the steady state wouldn't need re-deriving — a sound
-      *engineering* reason, not an economic one. Searched for
-      Gertler-Karadi (2011)'s own leverage target to see if 4 already
-      matches their baseline; the search surfaced their parameter *names*
-      (ξ pins leverage) but not the actual number from their Table 1 —
-      inconclusive, would need someone to actually open that table.
-      **Three honest paths, your call:** (a) find GK (2011)'s real number
-      and adopt/cite it directly if it's close to 4; (b) if it isn't, or
-      you'd rather not re-calibrate this late, write one honest sentence
-      instead of a citation — something like *"the target leverage ratio
-      of 4 is retained from this model's earlier development for
-      numerical continuity, within the range considered in the
-      Gertler-Karadi lineage"* — true, defensible, doesn't overclaim; (c)
-      recalibrate to NAWM II's Φ=6, which you already cite elsewhere in
-      this exact section, for a document that's internally consistent on
-      one benchmark rather than two unexplained numbers. I'd lean (b)
-      unless (a) turns out to be quick. **Est.: (a) 10 min to check the
-      GK paper's actual table; (b) 10 min, no `.mod` change; (c) 15 min +
-      a re-solve.**
+- [x] **Leverage target resolved: adopt $\Phi=6$ from `\textcite{Coenen2018}`.**
+      User found the NAWM~II footnote themselves (absconding rate and
+      start-up funds jointly calibrated to $\Phi=6$ and a 2.17pp retail
+      spread) and asked the right follow-up question — does importing
+      $\Phi$ also require importing the 2.17pp spread, and moving
+      `premE`/`sprL`'s citations off \textcite{Gelain2010}? **Reasoned
+      answer: no.** Leverage is a pure balance-sheet-structure fact, no
+      double-counting risk, transfers cleanly. The spread doesn't
+      transfer, because NAWM's 2.17pp is *their* single-friction total
+      (no entrepreneur layer in their model), structurally the same kind
+      of object as Gelain's 200bp single-friction total — importing both
+      totals and stacking them on top of each other would double-count
+      the same real-world wedge twice. This is exactly the identification
+      problem the existing dagger-footnote already names; the reasoning
+      just needed to be applied to this specific question. Confirmed
+      mechanically too: `levss` and `sprL` are already independent
+      targets in the `.mod` file's own `steady_state_model` block —
+      `lambdadiv` is back-solved as a function of both, so changing
+      `levss` alone doesn't force `sprL` to move.
+      **Action, for the user to implement:** `levss = 4.0` → `levss =
+      6.0`, cite `\textcite{Coenen2018}` (joins `sigma_b`, already cited
+      there — Table 2 becomes more internally grouped, not less). Leave
+      `sprL`, `premE`, and the Gelain (2010) 120bp/80bp footnote
+      untouched. **Est.: 2 min `.mod` edit + a re-solve (pending — verify
+      `resid;`/`check;` stay clean at $\Phi=6$, same as any calibration
+      change).**
+- [ ] **Consequence, now scheduled rather than open-ended: re-verify the
+      two-channel magnitude only after the $\Phi=6$ re-solve lands, not
+      before.** Higher steady-state leverage directly scales the
+      immediate channel (assets = $\lambda_t\times$ net worth), so this
+      change is expected to move IRF magnitudes, not just the table. The
+      existing "re-verify two-channel magnitude at final calibration"
+      to-do item (carried from the 12th) now has a concrete trigger: do
+      it after this specific change, since this is likely the last
+      calibration-value change before that check is meaningful.
 - [x] **The "(27) BANK NET WORTH -- DIVERGENCE from thesis B.24" comment
       is resolved, not a live bug — verified tonight, term by term,
       against the actual current Appendix B text (not just the `.mod`
