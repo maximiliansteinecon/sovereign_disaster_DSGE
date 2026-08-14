@@ -486,6 +486,63 @@ risk either way, so this is a judgment call about house style /
 supervisor expectations, not something with a "correct" answer from the
 document's own logic.
 
+## Part 6 — Three more full derivations still in the main text (2026-08-14)
+
+Re-swept the Entrepreneurs-and-Banking main text after last night's
+edits, specifically hunting for live algebra (not just discursive prose)
+that Part 5 didn't catch. Found three. Same rule as always: state the
+result, cite the appendix (which already has every one of these in full)
+for the steps. Snippet-anchored, no line numbers.
+
+1. **The $Q_{t+1}$-elimination step in "Consistency with the
+   Capital-Goods Producer."** After the duplicate sentence was removed
+   last night, this paragraph still shows the full elimination: the two
+   pricing conditions are displayed, then *"Eliminating $Q_{t+1}$ between
+   the two recovers exactly \textcite{Isore2017}'s single combined
+   household condition:"* followed by a second displayed equation
+   (algebraically the same statement, just with $Q_{t+1}$ substituted
+   out), ending *"...confirming that the two-agent decomposition is
+   algebraically equivalent to the original joint FOC."* That's a live
+   proof-by-substitution shown in the main text. Suggested replacement,
+   keeping the first equation (it's needed, it states the two pricing
+   conditions) but cutting the second: *"Eliminating $Q_{t+1}$ between
+   the two recovers exactly \textcite{Isore2017}'s single combined
+   household condition, confirming the two-agent decomposition is
+   algebraically equivalent to the original joint FOC (Appendix, full
+   substitution)."*
+2. **The profit-linearity argument in "Capital Demand: Free-Entry
+   Condition."** From *"Expected end-of-period profit is then"* through
+   *"...viceversa at any strictly negative coefficient it prefers
+   $K_{t+1}=0$."* — this sets up the expected-profit expression, shows
+   it's linear in $K_{t+1}$, and argues through the two boundary cases
+   (coefficient positive → $K\to\infty$; negative → $K=0$) before
+   concluding free entry pins the coefficient at zero. That middle
+   section is an economic argument carried out in full, not just stated.
+   Suggested replacement: *"Because expected profit is linear in
+   $K_{t+1}$, a determinate equilibrium requires the coefficient on
+   $K_{t+1}$ to vanish — otherwise the atomistic entrepreneur would want
+   an unbounded or zero capital stock (Appendix, full argument).
+   Following \textcite{Gertler2011}, free entry and competitive credit
+   markets impose exactly that:"* then keep the displayed free-entry
+   condition (eq. 2.4.6) as is — that equation is the result and should
+   stay.
+3. **The two-step ratio-and-divide in "Home-Bias Portfolio Identity."**
+   *"Formally, $\phi$ is defined as the bond share of total assets..."*
+   through *"Dividing the two gives the portfolio condition directly:"*
+   shows the definition, then a displayed two-line ratio, then divides
+   them to reach the final identity — a short derivation, but a shown
+   one. Suggested replacement: cut straight from the definition sentence
+   to the result, e.g. *"Formally, $\phi$ is the bond share of total
+   assets $A_{j,t}\equiv Q_tS_{j,t}+Q^b_tB^b_{j,t}$, giving the portfolio
+   condition"* then the final boxed identity (eq. 2.4.9) directly —
+   dropping the intermediate two-line display entirely.
+
+None of these were touched by last night's pass, which focused on the
+Sovereign Bond Price derivation and the label-canonicalization work —
+these three are a different, smaller category (short in-text arguments
+rather than multi-line algebra blocks), easy to miss on a first sweep,
+which is exactly why a second pass caught them.
+
 ## Sequencing note
 
 Do these in the order **B → A → C**, not the order they're listed in the user's request:

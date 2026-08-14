@@ -206,7 +206,7 @@ Each period, the economy faces a small but time-varying probability of a soverei
 A binary disaster $x_{t+1}\in\{0,1\}$ is drawn in period $t$. In the BAU state $x_{t+1} = 0$, sovereign bonds are repaid in full. In the disaster state $x_{t+1} = 1$, bondholders receive only a fraction $(1-\Delta^b)$ of the face value.The disaster will affect the sovereign bond haircut channel and destroy physical capital with the hypothesis that the disaster transmission runs through bond pricing, bank balance sheets, and through capital destruction as in \textcite{Gourio2012, Isore2017}. The consequences of this haircut for bank net worth and credit supply are discussed in Appendix \ref{sec:banking_block}. The disaster probability $\theta_t$ follows an exogenous log-AR(1) process specification as in \textcite{Isore2017}
 
 \begin{equation}\label{eq:disaster_AR}
-    \ln\theta_t = (1-\rho_\theta) \ln\bar\theta + \rho_\theta\ln\theta_{t-1} + \sigma_\theta\varepsilon_{\theta,t}, \qquad \varepsilon_{\theta,t} \overset{\text{i.i.d.}}{\sim}
+    \ln\theta_t = (1-\rho_\theta) \ln\bar\theta + \rho_\theta\ln\theta_{t-1} + \sigma_\theta\varepsilon_{\theta,t}, \qquad \varepsilon_{\theta,t} \overset{\text{i.i.d.}}{\sim} \tag{2.2.1}
   \mathcal{N}(0,1)
 \end{equation}
 %
@@ -241,7 +241,7 @@ The economy is populated by a representative household who derives utility from 
     +\,\beta_0
     \Bigl(\mathbb{E}_t\bigl[\tilde{V}_{t+1}^{1-\gamma}\bigr]\Bigr)^{\!
       \frac{1-\psi}{1-\gamma}}
-  \Biggr]^{\!\frac{1}{1-\psi}}
+  \Biggr]^{\!\frac{1}{1-\psi}} \tag{2.2.2}
 \end{equation}
 %
 where $\beta_0\in(0,1)$ is the subjective discount factor, $\mathbb{E}_t$ the conditional expectations operator, $\psi>0$ the inverse of the intertemporal elasticity of substitution (\textsc{EIS}\,$=1/\psi$), $\gamma>0$ the coefficient of relative risk aversion (\textsc{rra}), and $\varpi>0$ the leisure weight in the consumption-leisure bundle.  Crucially, the Epstein-Zin formulation allows $\gamma\neq\psi$, decoupling risk aversion from the \textsc{ies}; when $\gamma=\psi$ the recursion collapses to standard expected utility. 
@@ -252,7 +252,7 @@ The household's budget constraint is adapted from the standard disaster-risk lit
 C_t + T_t + D_t
 \;=\;
 W^{\mathrm{real}}_t\,L_t 
- + R^d_{t-1}\,D_{t-1} + \Pi_t^f+ \Pi_t^{cp}
+ + R^d_{t-1}\,D_{t-1} + \Pi_t^f+ \Pi_t^{cp}\tag{2.2.3}
 \end{equation}
 %
 where $D_t$ are real bank deposits earning gross rate $R^d_t$ next period, $T_t$ lump-sum taxes, $W^{\mathrm{real}}_t\equiv W_t/p_t$ the real wage, $\Pi_t^f$ dividends from monopolistic firms and dividens from capital producers. 
@@ -260,9 +260,9 @@ where $D_t$ are real bank deposits earning gross rate $R^d_t$ next period, $T_t$
 The capital-goods producer are a competitive, household-owned pass-through but not preference-bearing agent with a technology of new installed capital delivered per unit final good is discounted by the adjustment cost, 
 
 \begin{equation}
-    \Pi_t^{cp} = Q_t \left[I_t - \frac{\tau}{2}K_t\left(\frac{I_t}{K_t} - \frac{\bar{I}}{\bar{K}}\right)^2 \right] - I_t
+    \Pi_t^{cp} = Q_t \left[I_t - \frac{\tau}{2}K_t\left(\frac{I_t}{K_t} - \frac{\bar{I}}{\bar{K}}\right)^2 \right] - I_t \tag{2.4}
 \end{equation}
-
+%
 $K_t$ enters only as a scale variable (the aggregate installed capital stock, taken as given by the producer, and owned by entrepreneurs — see Appendix~\ref{sec:banking_block}). The producer is not preference-bearing and solves a static problem each period, so no Euler equation or new state variable is introduced. Maximising the capital good's producers profit over $I_t$ yields
 %
 \begin{equation*}
@@ -273,10 +273,9 @@ which gives Tobin's $Q$:
 %
 \begin{equation}
   Q_t = \frac{1}{1-\tau\!\left(\dfrac{I_t}{K_t}-\dfrac{\bar{I}}{\bar{K}}\right)}
-  \tag{A.1.4}\label{eq:CP_TobinsQ}
+  \tag{2.2.5}\label{eq:CP_TobinsQ}
 \end{equation}
 %
-
 The household chooses the sequence $\{C_t,L_t,D_t\}_{t=0}^{\infty}$ to maximise utility \eqref{eq:EZW} subject to the budget constraint \eqref{eq:budget}, absent any direct sovereign-bond exposure.  First-order optimality conditions are derived in Appendix~\ref{AppendixA}. We obtain their final results as
 %
 \begin{align}
@@ -284,26 +283,24 @@ The household chooses the sequence $\{C_t,L_t,D_t\}_{t=0}^{\infty}$ to maximise 
       \left(\frac{C_{t+1}}{C_t}\right)^{\!-\psi}
       \!\!\left(\frac{1-L_{t+1}}{1-L_t}\right)^{\!\varpi(1-\psi)}
       \frac{V_{t+1}^{-\chi}}
-           {\bigl(\mathbb{E}_t V_{t+1}^{1-\chi}\bigr)^{\frac{-\chi}{1-\chi}}} \tag{A.1.1}\label{eq:SDF} \\[6mm]
-    C_t &= \frac{W^{real}_t(1-L_t)}{\varpi} \tag{A.1.2}\label{eq:HHO_C} \\[6mm]
-  1 &= E_t[Q_{t,t+1}R_t^d] \tag{A.1.3}\label{eq:HHO_Deposit_Euler}
+           {\bigl(\mathbb{E}_t V_{t+1}^{1-\chi}\bigr)^{\frac{-\chi}{1-\chi}}} \tag{2.2.6}\label{eq:SDF} \\[6mm]
+    C_t &= \frac{W^{real}_t(1-L_t)}{\varpi}\tag{2.2.7} \label{eq:HHO_C} \\[6mm]
+  1 &= E_t[Q_{t,t+1}R_t^d] \tag{2.2.8}\label{eq:HHO_Deposit_Euler}
 \end{align}
 %
-\paragraph{Endogenous Discount Factor $\beta(\theta_t)$.}
+
 Following \textcite{Isore2017}, we integrate the disaster realisation $x_{t+1}$ out of the certainty equivalent $\mathcal{R}_t$ directly and using the Gourio (2012) scaling $\tilde V_{t+1}\big|_{x_{t+1}=1}=(1-\Delta^k)\,\tilde V_{t+1}\big|_{x_{t+1}=0}$ together with the symmetric productivity disaster\footnote{Productivity $z_t$ also contracts by $(1-\Delta^k)$ in the disaster state, following \textcite{Isore2017}.}, the binary indicator $x_{t+1}$ is eliminated through the \textcite{Gourio2012} trick in the detrended equilibrium system. The cost of this elimination is that the pseudo-discount factor $\beta(\theta_t)$ becomes time-varying:
 \begin{equation}\label{eq:betatheta}
     \beta(\theta_t)
     \;=\;
     \beta_0
-    \Bigl[(1-\theta_t)+\theta_t(1-\Delta^k)^{1-\gamma}\Bigr]^{(1-\psi)/(1-\gamma)} \tag{A.1.5}
+    \Bigl[(1-\theta_t)+\theta_t(1-\Delta^k)^{1-\gamma}\Bigr]^{(1-\psi)/(1-\gamma)} \tag{2.2.9}
 \end{equation}
 At $\Delta^k=0$ or $\theta_t=0$ this reduces to $\beta_0$. For $\Delta^k>0$ and $\theta_t>0$, $\beta(\theta_t)$ varies with the disaster probability. When $\theta_t$ rises, the pseudo-discount factor shifts, producing an endogenous preference shock in the sense of \textcite{Isore2017}. The detrended Bellman, SDF, and capital-return equations (Appendix~\ref{sec:detrending}) carry $\beta(\theta_t)$ in place of $\beta_0$. This derivation is purely a property of the household's recursive preferences and is unaffected by which agent holds physical capital. The elimination applies to the certainty equivalent specifically. The indicator $x_{t+1}$ survives elsewhere in the household block, in particular in the trend factor $\Gamma_{t+1}$ carried by the stochastic discount factor itself and is integrated out separately wherever it appears; $\beta(\theta_t)$ is therefore not a universal substitute for the Gourio operation but the result of applying it at one specific exponent, $\kappa=1-\gamma$.
-
-\paragraph{Risk-Free Rate and Deposit Market.}
 While \textcite{Isore2017} identify the risk-free rate through a household bond Euler $\mathbb{E}_t[Q_{t,t+1}\frac{(1+r_t)}{(1+\pi_{t+1})}]=1$, households in this model hold no sovereign bonds, so \eqref{eq:HHO_Deposit_Euler} replaces that equation on the household side. The risk-free rate is defined as
 %
 \begin{equation*}\label{eq:riskfree_rate}
-  R^f_t \;\equiv\; \frac{1}{\mathbb{E}_t[Q_{t,t+1}]} \tag{A.1.6}
+  R^f_t \;\equiv\; \frac{1}{\mathbb{E}_t[Q_{t,t+1}]} \tag{2.2.10}
 \end{equation*}
 %
 from the SDF directly, independently of market clearing. The deposit market clearing condition $R^d_t = R^f_t$, then ensures the deposit rate equals the risk-free rate in equilibrium, closing the household's asset pricing block. 
@@ -316,16 +313,16 @@ Because households save exclusively through bank deposits and banks never defaul
 The economy has final and intermediate good producers. The first faces a maximisation problem of final aggregated goods under monopolistic competition, while the latter first minimizes costs to maximize profits. Calculations for each optimisation step can be found in Appendix~\ref{appsec:firms}
 
 
- \subsubsection{Final Good Production}
+\subsubsection{Final Good Production}
  
 Following \textcite{Isore2017} in the origins of \textcite{DixitStiglitz1977}, we assume that a representative final-goods firm aggregates intermediate varieties $Y_{j,t}$ into final output in monopolistic competition 
 \begin{equation}\label{eq:aggregator}
-  Y_t = \left(\int_0^1 Y_{j,t}^{(\nu-1)/\nu}\,dj\right)^{\nu/(\nu-1)} \tag{A.2.1}
+  Y_t = \left(\int_0^1 Y_{j,t}^{(\nu-1)/\nu}\,dj\right)^{\nu/(\nu-1)} \tag{2.3.1}
 \end{equation}
 %
 The profit profit maximisation gives demand for variety $j$:
 \begin{equation}\label{eq:demand}
-  Y_{j,t} = Y_t\left(\frac{p_{j,t}}{p_t}\right)^{-\nu} \tag{A.2.2}
+  Y_{j,t} = Y_t\left(\frac{p_{j,t}}{p_t}\right)^{-\nu} \tag{2.3.2}
 \end{equation}
 %
 Since we can constitute that the final good is the aggregation of prices times their intermediate quantities, we can write the aggregate price index as 
@@ -342,24 +339,24 @@ The production of an intermediate good follows a two-step process. First, the fi
 \paragraph{Cost Minimisation} Before final goods can be aggregated, intermediate good producers use labor and capital as production inputs. To minimise production costs, they choose optimal factor quantities in each given time period. Therefore, we assume that these firms take the wage $W_t$, the rental rate of capital $P_t^k$ as well as nominal factor prices as given. The underlying production function requires these firms produce at least as much of the intermediate good as it is demanded at a given price. The intra-temporal intermediate firm problem results in 
 
 \begin{equation}\label{eq:cost_minimisation_int}
-    \min_{L_{j,t}, \tilde{K}_{j,t}} W_{t}L_{j,t} + P_t^k\tilde{K}_{j,t} \qquad \text{s.t.} \quad \tilde{K}^\alpha_{j,t}(z_tL_{j,t})^{1-\alpha} \geq \left(\frac{p_{j,t}}{p_t}\right)^{-\nu}Y_t \tag{A.2.3}
+    \min_{L_{j,t}, \tilde{K}_{j,t}} W_{t}L_{j,t} + P_t^k\tilde{K}_{j,t} \qquad \text{s.t.} \quad \tilde{K}^\alpha_{j,t}(z_tL_{j,t})^{1-\alpha} \geq \left(\frac{p_{j,t}}{p_t}\right)^{-\nu}Y_t \tag{2.3.3}
 \end{equation}
 %
 where $z_t$ denotes the level of productivity and $\tilde{K}_{j,t} \equiv u_tK_{j,t}$ expresses effective capital. Their first order solutions are derived in Appendix \ref{appsec:firms}. Hence, the aggregated real term optimality conditions are 
 %
 \begin{equation*}
-    w_t = mc^*_t(1-\alpha)z_t^{1-\alpha}\tilde{K}_t^\alpha L_t^{-\alpha} \tag{A.2.4}
+    w_t = mc^*_t(1-\alpha)z_t^{1-\alpha}\tilde{K}_t^\alpha L_t^{-\alpha} \tag{2.3.4}
 \end{equation*}
 %
 and
 \begin{equation*}\label{eq:resale_price}
-    P_t^{k, real} = mc^*_t\cdot\alpha\cdot z^{1-\alpha}\tilde{K}_t^{\alpha-1} L_t^{1-\alpha}   \tag{A.2.5}
+    P_t^{k, real} = mc^*_t\cdot\alpha\cdot z^{1-\alpha}\tilde{K}_t^{\alpha-1} L_t^{1-\alpha}   \tag{2.3.5}
 \end{equation*}
 %
 As we further follow \textcite{Gourio2012} for the disaster process, we assume that productivity grows at 
 
 \begin{equation} \label{eq:prod_process}
-    \frac{z_{t+1}}{z_t} = e^{x_{t+1}\ln(1-\Delta^k)+\mu+\epsilon_{z,t+1}} \tag{A.2.7}
+    \frac{z_{t+1}}{z_t} = e^{x_{t+1}\ln(1-\Delta^k)+\mu+\epsilon_{z,t+1}} \tag{2.3.6}
 \end{equation}
 % 
 \paragraph{Profit Maximisation}
@@ -369,14 +366,14 @@ $t+s$ in which $p_{j,t}$ remains fixed:
 \begin{equation}\label{eq:calvo_max}
     \max_{p_{j,t}}\; E_t \sum_{s=0}^\infty (\zeta)^s Q_{t, t+s}
     \left(p_{j,t}Y_{j,t+s} - W_{t+s}L_{j,t+s} - P^k_{t+s}\tilde{K}_{j,t+s}
-    \right) \tag{A.2.8a}
+    \right) \tag{2.3.7}
 \end{equation}
 %
 where $Q_{t, t+s} \equiv \Lambda_{t+s}^B/\Lambda_t^B$ is the stochastic discount factor inherited from the household problem, with $Q_t = 1$.
 %
 The ratio between recent price and current price required to derive the inflation rate ratio is derived in a maximisation Appendix \ref{appsec:profitmax}. Defining the gross reset inflation rate as $1+\pi_t^* \equiv p_t^*/p_{t-1}$  and the gross inflation rate as $1+\pi_t \equiv p_t/p_{t-1}$, such that $p_t^*/p_t = (1+\pi_t^*)/(1+\pi_t)$, the ratio above can be written recursively by introducing auxiliary variables $\Xi_{1_t}$ and $\Xi_{2_t}$:
 %
-\begin{equation}\label{eq:reset_inflation}\tag{A.2.9}
+\begin{equation}\label{eq:reset_inflation}\tag{2.3.8}
     1 + \pi_t^* = \frac{\nu}{\nu-1}\frac{\Xi_{1_t}}{\Xi_{2_t}}(1+\pi_t)
 \end{equation}
 %
@@ -384,9 +381,9 @@ where the recursive auxiliary variables are defined as
 %
 \begin{align}
     \Xi_{1_t} &= Y_t mc_t^* + \zeta\, E_t\!\left[Q_{t,t+1}
-    (1+\pi_{t+1})^\nu \,\Xi_{1_{t+1}}\right] \label{eq:aux1}\tag{A.2.10}\\[4pt]
+    (1+\pi_{t+1})^\nu \,\Xi_{1_{t+1}}\right] \label{eq:aux1}\tag{2.3.9}\\[4pt]
     \Xi_{2_t} &= Y_t + \zeta\, E_t\!\left[Q_{t,t+1}
-    (1+\pi_{t+1})^{\nu-1}\,\Xi_{2_{t+1}}\right] \label{eq:aux2}\tag{A.2.11}
+    (1+\pi_{t+1})^{\nu-1}\,\Xi_{2_{t+1}}\right] \label{eq:aux2}\tag{2.3.10}
 \end{align}
 %
 with $mc_t^*$ the real marginal cost of production at time $t$.
@@ -400,20 +397,20 @@ with $mc_t^*$ the real marginal cost of production at time $t$.
 so the inflation rate is expressed as 
 
 \begin{equation}\label{eq:inflation_rate}
-    (1+\pi_t)^{1-\nu} = (1-\zeta)(1+\pi_t^*)^{1-\nu} + \zeta \tag{A.2.12}
+    (1+\pi_t)^{1-\nu} = (1-\zeta)(1+\pi_t^*)^{1-\nu} + \zeta \tag{2.3.11}
 \end{equation}
 %
 This is helpful for determining the aggregate production function as we can make use of the budget constraint from the cost minimisation of intermediate firms in (\ref{eq:cost_minimisation_int}) and aggregating aross intermediate firms. The derivation can be found in Appendix~\ref{appsec:agginflation}. The resulting aggregate production function 
 
 \begin{equation}\label{eq:agg_production}
-Y_t = \frac{\tilde{K_t}^\alpha(z_tL_t)^{1-\alpha}}{\int_0^1(\frac{p_{j,t}}{p_t})^{-\nu}} = \frac{\tilde{K_t}^\alpha(z_tL_t)^{1-\alpha}}{\Omega} \tag{A.2.13}
+Y_t = \frac{\tilde{K_t}^\alpha(z_tL_t)^{1-\alpha}}{\int_0^1(\frac{p_{j,t}}{p_t})^{-\nu}} = \frac{\tilde{K_t}^\alpha(z_tL_t)^{1-\alpha}}{\Omega} \tag{2.3.12}
 \end{equation}
 %
 is leveled with $\Omega$ as price distortion measure due to relative dispersion in relative prices from sticky prices. With the Calvo-Pricing assumption, the inflation rate can be written in aggregated terms of $\Omega$:
 
 \begin{align*}\label{eq:omega}
     \Omega =& \int_0^1\left(\frac{p_{j,t}}{p_t}\right)^{-\nu} dj = (1-\zeta)\left(\frac{p_t^*}{p_t}\right)^{-\nu} + p_t^\nu\int_{1-\zeta}^1p_{{j,t-1}}^{-\nu} dj = p_t^{\nu}\int_0^1 p_t^{-\nu} \\[3mm]
-    =& \quad (1-\zeta)\left(\frac{1+\pi_t}{1+\pi^*_t}\right)^{\nu} + \zeta(1+\pi_t)^{\nu}\Omega_{t-1} \tag{A.2.14}
+    =& \quad (1-\zeta)\left(\frac{1+\pi_t}{1+\pi^*_t}\right)^{\nu} + \zeta(1+\pi_t)^{\nu}\Omega_{t-1} \tag{2.3.13}
 \end{align*}
 
 
@@ -425,9 +422,7 @@ This section extends the developments of \textcite{Isore2017} by integrating an 
 
 The economy consists of a continuum of identical, risk-neutral entrepreneurs of mass one. Each purchase $K_{t+1}$ units of installed capital at the end of period~$t$ from the capital goods producer (Appendix~\ref{sec:households}) at price $Q_t$ and rents capital to intermediate goods firms in period $t=1$ at the real rental rate $P^k_{t+1}$. capital that is retained at the same period is valued at the same price $Q_t$ that applies to newly purchased units. The framing of buying and selling capital used throughout this section is a standard accounting convention in this literature and not a literal transaction. A continuing entrepreneur need not physically dispose of capital it retains, since resale and purchase occur at the same price. Each entrepreneur has net worth $N^e_t$ and finances the gap $Q_tK_{t+1} - N^e_t$ by borrowing from a bank at gross real loan rate $R^S_t$, contracted at end of period~$t$.
 
-An idiosyncratic productivity $\omega_{j,t+1}$ is drawn i.i.d.\ with $\mathbb{E}[\omega] = 1$ and c.d.f.\ $F(\cdot)$. The bank cannot observe $\omega_{j,t+1}$ without paying a monitoring cost $\mu \in (0,1)$ of the entrepreneur's gross revenue, which is the costly state verification (CSV) problem of \textcite{Townsend1979}. The optimal contract specifies a default threshold $\bar{\omega}_t$ such that entrepreneur $j$ defaults if and only if $\omega_{j,t+1} < \bar{\omega}_t$. Because entrepreneurs are risk-neutral, they absorb aggregate risk and the participation constraint holds state-by-state after aggregate shocks to $R^K_{t+1}$ realise \parencite[Section~III]{Bernanke1999}.We assume the reduced-form external finance premium as derived in \textcite[pp. 1352]{Bernanke1999} as given.  Consequently, $\bar\omega_t$ does not appear as a separate endogenous variable below.
-
-$K_{t+1}$ here denotes the quantity committed to at the end of period $t$, before $x_{t+1}$ is reaslized while the capital law of motion's $K_{t+1}$ denotes the  the same object after the disaster realization, related by the Gourio factor.
+Following the costly-state-verification framework of \textcite{Townsend1979} and \textcite{Bernanke1999}, the optimal debt contract generates a reduced-form external finance premium, taken as given below. The underlying contract-theory is derived in Appendix~\ref{sec:banking_block}. $K_{t+1}$ here denotes the quantity committed to at the end of period $t$, before $x_{t+1}$ is reaslized while the capital law of motion's $K_{t+1}$ denotes the  the same object after the disaster realization, related by the Gourio factor.
 Given capital $K_{t+1}$ acquired at $t$, the entrepreneur chooses period-$(t{+}1)$ utilisation $u_{t+1}$ to maximise gross revenue from the capital stock. Doing so takes as given the rental price $P^{k,real}_{t+1}$ as derived in the intermediate good prodcuers cost minimisation resulting in equation~\ref{eq:resale_price} and the resale price $Q_{t+1}$ set by the capital-goods producer (Equation~\ref{eq:CP_TobinsQ}). Since the disaster factor $e^{x_{t+1}\ln(1-\Delta^k)}$ and the capital stock $K_{t+1}$ scale total revenue multiplicatively and do not depend on $u_{t+1}$, maximising realised revenue (for any realisation of $x_{t+1}$ and any idiosyncratic draw $\omega_{j,t+1}$) is equivalent to maximising per-unit revenue:
 %
 \begin{equation*}
@@ -438,7 +433,7 @@ This objective is well-defined independently of the debt contract's default thre
 %
 \begin{equation}
   P_{t+1}^{k, real}  = Q_{t+1}\,\delta_0\,\eta\,u_{t+1}^{\eta-1}
-  \tag{A.3.1.1}\label{eq:A3_util}
+  \tag{2.4.1}\label{eq:A3_util}
 \end{equation}
 %
 with second-order condition $-Q_{t+1}\delta_0\eta(\eta-1)u_{t+1}^{\eta-2}<0$, showing that the standard convexity assumption on the depreciation function is satisfied for $\eta>1$ which has been already imposed throughout the model. 
@@ -447,8 +442,6 @@ with second-order condition $-Q_{t+1}\delta_0\eta(\eta-1)u_{t+1}^{\eta-2}<0$, sh
 The two margins that \textcite{Isore2017}'s household jointly optimises are now split across two agents, but both continue to price the same
 market-clearing capital good. The capital-goods producer's investment condition~\eqref{eq:CP_TobinsQ}, initiated at date $t+1$, and the
 entrepreneur's utilisation condition~\eqref{eq:A3_util} both determine the single date-$(t{+}1)$ price $Q_{t+1}$:
-%
-The capital-goods producer's investment condition~\eqref{eq:CP_TobinsQ}, instantiated at date $t+1$, and the entrepreneur's utilisation condition~\eqref{eq:A3_util} both determine the single date-$(t{+}1)$ price $Q_{t+1}$:
 %
 \begin{equation*}
   Q_{t+1}
@@ -475,7 +468,7 @@ Evaluated at the optimal utilisation \eqref{eq:A3_util}, the gross real return t
   = e^{x_{t+1}\ln(1-\Delta^k)}\,
     \frac{P^{k, real}_{t+1}\, u_{t+1}
           + Q_{t+1}\bigl(1 - \delta_0\, u_{t+1}^{\eta}\bigr)}
-         {Q_t} \tag{A.3.1.2}
+         {Q_t} \tag{2.4.2}
   \label{eq:A3_RK}
 \end{equation}
 %
@@ -500,7 +493,7 @@ problem.  We use the reduced form of \textcite{Bernanke1999}:
   \;\equiv\; f_0
     \left(\frac{N^e_t}{Q_t K_{t+1}}\right)^{\!-\chi^e},
   \qquad \chi^e > 0,\; f_0 > 0
-  \label{eq:A3_EFP} \tag{A.3.1.3}
+  \label{eq:A3_EFP} \tag{2.4.3}
 \end{equation}
 %
 where $N^e_t / Q_t K_{t+1}$ is the entrepreneur's equity share in total capital, with $Q_t$ the capital producer's price. When $N^e_t$ falls, the premium widens, amplifying the initial shock through the financial accelerator. The parameter $f_0$ is back-solved from a target target
@@ -521,7 +514,7 @@ the entrepreneurs net worth to tend towards a value of zero:
       \underbrace{R^K_t \cdot Q_{t-1}K_t}_{\text{gross return on capital}}
       - R^S_{t-1} \cdot \underbrace{\bigl(Q_{t-1}K_t - N^e_{t-1}\bigr)}_{\text{interest on externally financed capital}}
     \right]
-    + \iota^e \tag{A.3.1.4}
+    + \iota^e \tag{2.4.4}
   \label{eq:A3_NE}
 \end{equation}
 % 
@@ -536,7 +529,7 @@ In the standard \textcite{Bernanke1999} model without a banking sector, the lend
 The value to entrepreneurs equals the funding gap:
 
 \begin{equation}
-  Q_tS_t \;\equiv\; Q_t K_{t+1} - N^e_t \tag{A.3.1.5}
+  Q_tS_t \;\equiv\; Q_t K_{t+1} - N^e_t \tag{2.4.5}
   \label{eq:A3_entrep_BS}
 \end{equation}
 %
@@ -564,7 +557,7 @@ which is linear in $K_{t+1}$. A determinate, finite, positive level of capital d
 \begin{equation}
   \mathbb{E}_t\!\left[R^K_{t+1}\right]
   = f\!\left(\frac{N_t^e}{Q_tK_{t+1}}\right) R^S_t
-  \label{eq:A3_indiff} \tag{A.3.1.6}
+  \label{eq:A3_indiff} \tag{2.4.6}
 \end{equation}
 \textcite{Isore2017} impose the household capital Euler $\mathbb{E}_t[R^K_{t+1}] = R^f_t$ directly. In this model, entrepreneurs finance capital with bank loans, so the relevant no-arbitrage condition is against the loan rate, with $\mathbb{E}_t[R^K_{t+1}] > R^S_t \geq R^d_t = R^f_t$. Equation~\eqref{eq:A3_indiff} replaces their capital Euler and is the equation that connects the firm sector \ref{appsec:firms} to the banking sector \ref{sec:A3.2}. 
 
@@ -594,16 +587,14 @@ Banks are owned by households. To motivate an endogenous constraint on bank leve
   + \underbrace{\,Q^b_t B^b_{j,t}}_{\text{sovereign bonds}}
   =
   \underbrace{N^b_{j,t}}_{\text{net worth}}
-  + \underbrace{D_{j,t}}_{\text{deposits}} \tag{A.3.2.1}
+  + \underbrace{D_{j,t}}_{\text{deposits}} \tag{2.4.7}
   \label{eq:A3_bankBS}
 \end{equation}
 %
-The home-bias parameter $\phi$ splits bank assets between loans and sovereign bonds. When $\phi = 0$ the model collapses to the standard \textcite{Gertler2011} specification with loans only. Bankers then maximise continuation value subject to a moral-hazard incentive constraint. This comes as both the value function and the constraint are linear in net worth and assets (proved in Appendix, eq. \eqref{eq:Banker_Value}).
-
-\paragraph{Banker's Leverage Constraint} Bankers expand assets to the limit whenever $\eta_t>0$ and therefore the franchise value of asset holdings is positive relative to the outside option of
+The home-bias parameter $\phi$ splits bank assets between loans and sovereign bonds. When $\phi = 0$ the model collapses to the standard \textcite{Gertler2011} specification with loans only. Bankers then maximise continuation value subject to a moral-hazard incentive constraint. This comes as both the value function and the constraint are linear in net worth and assets (proved in Appendix, eq. \eqref{eq:Banker_Value}). Bankers expand assets to the limit whenever $\eta_t>0$ and therefore the franchise value of asset holdings is positive relative to the outside option of
 depositing at $R^d_t$, so the constraint binds with equality in equilibrium. This gives the individual bank's leverage constraint that reduces to a leverage cap.
  
-\begin{equation}\tag{A.3.2.3}\label{eq:A323}
+\begin{equation}\tag{2.4.8}
     \,Q_t S_{j,t}+Q^b_t B^b_{j,t}
     \;\leq\;
     \lambda_t\,N^b_{j,t}
@@ -613,7 +604,7 @@ depositing at $R^d_t$, so the constraint binds with equality in equilibrium. Thi
 \paragraph{Home-Bias Portfolio Identity}
 \label{par:A324}
 
-In the euro-area institutional context, domestic banks are the predominant holders of domestic sovereign debt, reflecting the zero risk-weight treatment of home-country government bonds under Basel capital requirements, their eligibility as high-quality liquid assets and the structural incentives that systematically favour domestic over cross-border sovereign bond holdings \parencite{Gennaioli2014,Bocola2016}
+Domestic banks are the predominant holders of domestic sovereign debt in the euro area, reflecting well-documented regulatory and structural incentives \parencite{Gennaioli2014,Bocola2016}.
 
 The parameter $\phi \in [0,1)$ captures this as a structural characteristic of the bank balance sheet rather than a portfolio decision variable. Given these institutional frictions banks are effectively price-takers in the sovereign bond market at the composition margin, and $\phi$ is calibrated to the observed average domestic sovereign bond share in euro-area bank total assets. Formally, $\phi$ is defined as the bond share of total assets $A_{j,t}\equiv Q_tS_{j,t}+Q^b_tB^b_{j,t}$ (as prior defined in paragraph \ref{par:A322}): 
 %
@@ -625,7 +616,7 @@ Dividing the two gives the portfolio condition directly:
 %
 \begin{equation}
   Q^b_t B^b_t \;=\; \frac{\phi}{1-\phi}\,Q_tS_t
-  \tag{A.3.2.4}\label{eq:A3_homebias}
+  \tag{2.4.9}\label{eq:A3_homebias}
 \end{equation}
 %
 Combined with the entrepreneur balance sheet~\eqref{eq:A3_entrep_BS},
@@ -645,7 +636,7 @@ startup transfers $\iota$ to newly entering bankers, the \textcite{Gertler2011} 
       + (R^b_t - R^d_{t-1})\,\,Q^b_{t-1}B^b_{t-1}
       + R^d_{t-1}\,N^b_{t-1}
     \Bigr]
-    + \iota \tag{A.3.2.5}
+    + \iota \tag{2.4.10}
   \label{eq:A3_Bank_Value}
 \end{equation}
 %
@@ -673,7 +664,7 @@ The bank's outside option is the deposit rate, which satisfies the household dep
  
 \begin{equation}
   \mathbb{E}_t\!\left[\frac{\Lambda^B_{t,t+1}}{\Lambda^B_{t}}\, R^b_{t+1}\right] = 1
-  \tag{A.3.3.1}
+  \tag{2.4.11}
   \label{eq:A3_bondeuler}
 \end{equation}
 %
@@ -688,7 +679,7 @@ Following \textcite{Gabaix2012}, the linearity-generating process assigns each r
  
 \begin{equation}
   H^b_t \;=\; 1 - \theta_t \cdot \Delta^b \cdot \tilde\Lambda^M
-  \tag{A.3.3.2}
+  \tag{2.4.12}
   \label{eq:A3_resil}
 \end{equation}
 %
@@ -701,50 +692,16 @@ where $\Delta^b \in (0,1)$ is the sovereign haircut in a disaster and
        {\mathbb{E}_t\!\left[M_{t+1}\right]}
 \end{equation*}
 %
-is the disaster SDF loading, normalised by the unconditional conditional mean of the stochastic discount factor rather than by its no-disaster realisation.  The normalisation is what makes $H^b_t$ commensurate with the risk-free rate $R^f_t=1/\mathbb{E}_t[M_{t+1}]$ against which it is divided in~\eqref{eq:A3_bondprice}; without it the bond Euler~\eqref{eq:A3_bondeuler} would hold only to first order in $\theta_t$.  $H^b_t$ captures the disaster-probability-weighted reduction in the bond's risk-adjusted payoff.
+is the disaster SDF loading, normalised by the unconditional conditional mean of the stochastic discount factor rather than by its no-disaster realisation.  The normalisation is what makes $H^b_t$ commensurate with the risk-free rate $R^f_t=1/\mathbb{E}_t[M_{t+1}]$ against which it is divided in~\eqref{eq:A3_bondprice}; without it the bond Euler~\eqref{eq:A3_bondeuler} would hold only to first order in $\theta_t$.  $H^b_t$ captures the disaster-probability-weighted reduction in the bond's risk-adjusted payoff. Substituting the bond return into the Euler equation and applying the \textcite{Gabaix2012} decomposition gives the closed-form bond price:
 
-% ------------------------------------------------------------
-\paragraph{Sovereign Bond Price}
-\label{par:A333}
-
-Following \textcite{Gabaix2012} for the closed-form expression for $Q^b_t$ via the linearity-generating process and \textcite{Isore2017} for implement their risky-bond extension implementation, we substitute the gross real return $R^b_{t+1} = (1 - x_{t+1}\Delta^b)/Q^b_t$ into the bond Euler~\eqref{eq:A3_bondeuler} and by taking expectations:
-
-\begin{equation*}
-  \frac{1}{Q^b_t}\,
-  \mathbb{E}_t\!\left[\Lambda^B_{t,t+1}
-  \bigl(1 - x_{t+1}\Delta^b\bigr)\right] = 1
-\end{equation*}
-%
-We can then apply the \textcite{Gabaix2012} decomposition, separating the two states of $x_{t+1}$ in the expectation and using
-$\mathbb{E}_t[\Lambda^B_{t,t+1}]=1/R^f_t$,
-%
 \begin{align*}
-  \mathbb{E}_t\!\left[\Lambda^B_{t,t+1}\bigl(1-x_{t+1}\Delta^b\bigr)\right]
-  &= \mathbb{E}_t\!\left[\Lambda^B_{t,t+1}\right]
-     -\Delta^b\,\theta_t\,M^{d}_{t+1} \\[3pt]
-  &= \mathbb{E}_t\!\left[\Lambda^B_{t,t+1}\right]
-     \left(1-\Delta^b\,\theta_t\,
-     \frac{M^{d}_{t+1}}{\mathbb{E}_t[\Lambda^B_{t,t+1}]}\right)
-   = \frac{1-\theta_t\,\Delta^b\,\tilde\Lambda^M_t}{R^f_t}
+   \frac{1-\theta_t\,\Delta^b\,\tilde\Lambda^M_t}{R^f_t}
    = \frac{H^b_t}{R^f_t}
-   \tag{A.3.3.3}
+   \tag{2.4.13}
    \label{eq:A3_bondprice}
 \end{align*}
 %
-which holds exactly.
-%
-% \parencite[Appendix~A.8, Eq.~A.40]{Isore2017};
-% \parencite[Eq.~4]{Gabaix2012}.
-% 
-
-% \textcite{Isore2017} allow capital destruction ($\Delta^k > 0$),  which modifies $\beta(\theta_t)$ and introduces a disaster factor in the household capital Euler.
- 
-% \noindent\textit{Stationarization flag:} $Q^b_t$ is a ratio of dimensionless objects; $R^f_t$ is a gross rate. Both are scale-invariant. $\to$ Appendix~B.
- 
-% \medskip
-% \noindent\textit{Dynare implementation note:}
-% Equation~\eqref{eq:A3_bondprice} is used directly in Dynare as a closed-form expression in place of iterating on the full bond Euler. It is exact at the non-stochastic steady state and correct to first order in perturbation. At third order, small deviations from the full bond Euler may arise; these are accepted as the cost of preserving tractability, consistent with the approach of \textcite{Isore2017} in their risky-bond extension.
-
+The decomposition is derived in Appendix~\ref{sec:Disaster_Transition}.
 
 % ------------------------------------------------------------
 \paragraph{Sovereign Bond Gross Return}
@@ -756,7 +713,7 @@ for the disaster haircut:
 \begin{equation}
   R^b_{t+1}
   = \frac{1 - x_{t+1}\,\Delta^b}{Q^b_t}
-  \tag{A.3.3.4}
+  \tag{2.4.14}
   \label{eq:A3_Rb}
 \end{equation}
 %
@@ -771,7 +728,7 @@ equation~\eqref{eq:A3_bondprice}, we arrive at the expected sovereign bond gross
   = \frac{1 - \theta_t\,\Delta^b}{Q^b_t}
   = \frac{(1 - \theta_t\,\Delta^b)\,R^f_t}
          {1 - \theta_t\,\Delta^b\,\tilde\Lambda^M}
-  \tag{A.3.3.5}
+  \tag{2.4.15}
   \label{eq:A3_ERb}
 \end{equation}
 % \noindent\textit{Stationarization flag:} $R^b_{t+1}$ is a gross rate --- scale-invariant. $\to$ Appendix~B.
@@ -782,13 +739,11 @@ The sovereign spread is defined as the excess of the bond's promised gross yield
   \;\equiv\; \frac{1}{Q^b_t} - R^f_t
   \;=\; R^f_t\,\frac{\theta_t\,\Delta^b\,\tilde\Lambda^M_t}{H^b_t}
   \;\approx\; \theta_t \cdot \Delta^b \cdot \tilde\Lambda^M_t
-  \tag{A.3.3.6}
+  \tag{2.4.16}
   \label{eq:A3_spread}
 \end{equation}
 %
-The approximation holds for $R^f_t\approx1$ and small $\theta_t\Delta^b\tilde\Lambda^M_t$, which is appropriate given the calibration of $\theta_t$ to rare-event frequencies following \textcite{Barro2006}.  The promised yield $1/Q^b_t$ is used rather than the expected return $\mathbb{E}_t[R^b_{t+1}]$ because it is the object recorded in observed sovereign yield spreads, and therefore the object against which $\Delta^b$ is calibrated and against which the Spread-at-Risk statistics of Section~\ref{sec:results} are reported. The two differ by the expected loss: from~\eqref{eq:A3_ERb}, $\mathbb{E}_t[R^b_{t+1}] -R^f_t=R^f_t\,\theta_t\Delta^b(\tilde\Lambda^M_t-1)/H^b_t$, which strips out the actuarially fair component and retains only the risk premium.  At the baseline calibration the promised-yield spread is roughly $1.6$ times the expected-return spread; the distinction is therefore quantitatively material and is maintained throughout. 
-
-
+We report the promised-yield spread $1/Q^b_t - R^f_t$ throughout, since it is the object recorded in observed sovereign spreads and against which $\Delta^b$ is calibrated (see Appendix~\ref{sec:Disaster_Transition} for its relationship to the expected-return spread).
 
 Disaster risk propagates to real activity through two distinct channels, operating on different horizons and through different equations. The first is immediate and requires no default to ever occur, while the second requires a realised loss and therefore only activates with a lag.
 
@@ -820,7 +775,7 @@ The second channel requires an actual default and transmits with a one-period la
     I_t,\,Y_t,\,C_t \downarrow \;\text{recession}
 \end{align*}
 
-The two channels are not competing descriptions of the same mechanism but genuinely separate margins, distinguished by what they require and how quickly they act. The immediate channel operates through the bank's forward-looking portfolio choice and requires only a change in $\theta_t$; it is present even along a sample path on which $x_t=1$ never realizes, and its magnitude is quantified in Section~\ref{sec:results}. The lagged channel operates through realized losses on bonds already on the balance sheet and requires $x_t=1$to be activated. This term is constructed as not inforcable for structural reasons, as the realised returns $R^b_t$ and $R^K_t$ entering the model's recursions are both coded at their disaster-free ($x=0$) branch by construction, so only the disaster probability $\theta_t$, not an actual default, propagates through the system under perturbation methods. For simulation of a disaster path, the realised return terms would require a rederivation with a realised disaster term and a solution method that admits discrete draws, as proposed for the long-term bond extension (Appendix~\ref{sec:LongTermBond}).
+The two channels are not competing descriptions of the same mechanism but genuinely separate margins, distinguished by what they require and how quickly they act. The immediate channel operates through the bank's forward-looking portfolio choice and requires only a change in $\theta_t$; it is present even along a sample path on which $x_t=1$ never realizes, and its magnitude is quantified in Section~\ref{sec:results}. The lagged channel operates through realized losses on bonds already on the balance sheet and requires $x_t=1$to be activated. This term is constructed silent for structural reasons, as the realised returns $R^b_t$ and $R^K_t$ entering the model's recursions are both coded at their disaster-free ($x=0$) branch by construction, so only the disaster probability $\theta_t$, not an actual default, propagates through the system under perturbation methods. For simulation of a disaster path, the realised return terms would require a rederivation with a realised disaster term and a solution method that admits discrete draws, as proposed for the long-term bond extension (Appendix~\ref{sec:LongTermBond}).
 
 \subsection{Public Authority}\label{secmain:public_authority}
 
@@ -831,7 +786,7 @@ The government issues one-period nominal bonds $B_{t+1}$ at the beginning of per
  
 \begin{equation}
   T_t = R^b_t Q^b_{t-1} B^b_{t-1} - Q^b_t B^b_t 
-  \tag{A.4.1}
+  \tag{2.5.1}
   \label{eq:A4_govBC}
 \end{equation}
 %
@@ -841,7 +796,7 @@ We are then left with determining the Fisher Equation and Taylor Rule. The nomin
  
 \begin{equation}
   R^f_t = \frac{1 + r_t}{\mathbb{E}_t[1 + \pi_{t+1}]}
-  \tag{A.4.2}
+  \tag{2.5.2}
   \label{eq:A4_fisher}
 \end{equation}
 %
@@ -854,13 +809,13 @@ where $\pi_{t+1} \equiv p_{t+1}/p_t - 1$ is the net inflation rate. This is a st
             + \phi_Y\!\left(\frac{Y_t}{z_t} - \bar{Y}\right)
             + \bar{r}
           \right]
-  \tag{A.4.3}
+  \tag{2.5.3}
   \label{eq:A4_taylor}
 \end{equation}
 % 
 where $\rho_r \in (0,1)$ is the interest rate smoothing parameter, $\phi_\pi > 1$ the inflation response coefficient (Taylor principle), $\phi_Y > 0$ the output gap coefficient, and $\bar{r}$ the steady-state nominal rate. The disaster probability $\theta_t$ does not enter the Taylor rule directly; it affects $r_t$ only through its general equilibrium effects on $\pi_t$ and $Y_t$.
 
-Whether consumers actually have a sound understanding and incorporate both principles has been studied by \textcite{Draeger2016}, which find that about 52\% build expectations which are in line with the Fisher equation, while 46\% include the Taylor rule relation in forming their expectations.
+We implement these measure as standard new keynesian elements, even though actual enformecemt in the economy is not common sense. Whether consumers actually have a sound understanding and incorporate both principles has been studied by \textcite{Draeger2016}, which find that about 52\% build expectations which are in line with the Fisher equation, while 46\% include the Taylor rule relation in forming their expectations.
 % \parencite[Eq.~11, Appendix~A.3, Eq.~A.21]{Isore2017} 
  
 % \noindent\textit{Steady-state note:} At the non-stochastic steady state, $r_{t-1} = r_t = \bar{r}$ and $\pi_t = \bar{\pi}$, $Y_t/z_t = \bar{Y}$. The rule is trivially satisfied. $\bar{r}$ is pinned by the Fisher equation at steady state: $1 + \bar{r} = \bar{R}^f \cdot (1 + \bar{\pi})$.
@@ -874,7 +829,7 @@ Market clearing conditions impose the requirement that all markets clear simulta
 % 
 \paragraph{Good Market} Every financial claim in this model (loans, deposits, sovereign bonds, entrepreneur and bank net worth) is held by one agent and owed by another. This means that trading or accumulating these claims reallocates resources already counted once and neither creates nor destroys them. The aggregate resource constraint follows from going back only the flows that connect the financial layer to real production and consumption. By the firm's income identity, the right-hand side equals aggregate output:
 \begin{equation}
-Y_t=C_t+I_t \tag{A.5.1}
+Y_t=C_t+I_t \tag{2.6.1}
 \end{equation}
 
 % ------------------------------------------------------------
@@ -885,10 +840,10 @@ Aggregate demand for labour and capital services from intermediate goods firms e
  
 \begin{align}
   \int_0^1 L_{j,t}\,dj = L_t 
-  \tag{A.5.2}
+  \tag{2.6.2}
     \label{eq:A5_labour} \\[4mm]
   \int_0^1 \tilde{K}_{j,t}\,dj = \tilde{K}_t 
-  \tag{A.5.3}
+  \tag{2.6.3}
 \end{align}
 %
 These conditions are already used in the cost minimisation process during the derivation of the aggregate production function \eqref{eq:cost_minimisation_int} where it eliminates the firm-level labour demand from the aggregate resource constraint. At the equilibrium level, they ensure that the real wage $W^{\text{real}}_t$ and the real rental rate $P^{k,\text{real}}_t$ adjust to clear the labour and capital services market. 
@@ -910,7 +865,7 @@ Sovereign bond market clearing follows directly from the home-bias identity~\eqr
 The quantity $Q_tS_t$ appears on both sides of the credit market. From the entrepreneur's balance sheet~\eqref{eq:A3_entrep_BS}, $Q_tS_t = Q_tK_{t+1}-N^e_t$ is loan \emph{demand}, determined by the capital entrepreneurs wish to finance net of their own net worth. From the aggregated binding leverage constraint~\eqref{eq:A323} together with the home-bias identity~\eqref{eq:A3_homebias}, $Q_tS_t = (1-\phi)\lambda_t N^b_t$ is loan \emph{supply}, determined by bank net worth and the leverage limit. Their equality,
 %
 \begin{equation*}\label{eq:loanmarketclearing}
-  Q_tK_{t+1}-N^e_t \;=\; (1-\phi)\,\lambda_t\,N^b_t, \tag{A.5.4}
+  Q_tK_{t+1}-N^e_t \;=\; (1-\phi)\,\lambda_t\,N^b_t, \tag{2.6.4}
 \end{equation*}
 %
 is the loan market clearing condition. It is not an independent structural equation but the requirement that entrepreneur credit demand and bank credit supply coincide; equivalently, it pins the equilibrium loan rate $R^S_t$ at which the entrepreneur participation condition~\eqref{eq:A3_indiff} holds. As with deposit and sovereign bond market clearing, it is a consequence of the agents' optimality conditions rather than an addition to them.
@@ -922,19 +877,12 @@ is the loan market clearing condition. It is not an independent structural equat
 
 \subsection{Calibration}
 
-In this paper, we decide to calibrate targeted moments following \textcite{Isore2017} on disaster risk variables, utility function values and further for the capital adjustment cost and calvo-price stickiness parameter, while most production parameters and public authority targets come from \textcite{Taylor1993, Coenen2018}. Further, we need to newly fit parameters related to the banking sector to financial market data. Several of \textcite{Isore2017} targets are themselves drawn from the broader macro-finance literature. Therefore, Table \ref{tab:calibration_one} shows the calibration values with their sourcing from \textcite{Isore2017}. They take their baseline values for capital and productivity destruction from \textcite{Barro2008}, and the persistence of log-disaster risk from \textcite{Gourio2012}. The standard deviation of disaster-risk innovation has been derived by themselves to match empirical evidence. Further, utility parameters have relied solely on \textcite{Gourio2012} as the valuation of leisure goes along with the Epstein-Zin preferences utility function form. Regarding the degree of risk aversion, also taken from \textcite{Gourio2012}, \textcite{Isore2017} note that the literature reports statistically significant values between 2 and 4, though the magnitude does not affect the sign of the response, consistent with the theoretical results. For the discount factor $\beta_0$, we follow \textcite{Bernanke1999} and \textcite{Gertler2011} in setting $\beta_0 = 0.9985$. However, this is of minor relevance, as \textcite{Isore2017} finds that this parameter plays no material role for the results obtained, \textbf{which we can confirm. }
+In this paper, we decide to calibrate targeted moments following \textcite{Isore2017} on disaster risk variables, utility function values and further for the capital adjustment cost and calvo-price stickiness parameter, while most production parameters and public authority targets come from \textcite{Taylor1993, Coenen2018}. Further, we need to newly fit parameters related to the banking sector to financial market data. Several of \textcite{Isore2017} targets are themselves drawn from the broader macro-finance literature. Therefore, Table \ref{tab:calibration_one} shows the calibration values with their sourcing from \textcite{Isore2017}. They take their baseline values for capital and productivity destruction from \textcite{Barro2008}, and the persistence of log-disaster risk from \textcite{Gourio2012}. The standard deviation of disaster-risk innovation has been derived by themselves to match empirical evidence. Further, utility parameters have relied solely on \textcite{Gourio2012} as the valuation of leisure goes along with the Epstein-Zin preferences utility function form. Regarding the degree of risk aversion, also taken from \textcite{Gourio2012}, \textcite{Isore2017} note that \textcite{Barro2008} report a mean estimate near 3, with a 95\% confidence interval of 2 to 4. For the discount factor $\beta_0$, we follow \textcite{Bernanke1999} and \textcite{Gertler2011} in setting $\beta_0 = 0.9985$. However, this is of minor relevance, as \textcite{Isore2017} finds that this parameter plays no material role for the results obtained, \textbf{which we can confirm. }
 
 For the elasticity of intertemporal substitution, we follow \textcite{Isore2017} in setting the EIS  to 0.5 rather than the value of 2 used by \textcite{Gourio2012}. The two calibrations belong to different traditions as far as we can identify. First, there are models targeting asset-pricing moments to match the level, volatility, and cyclicality of the equity premium, which is often exactly 2 as in \textcite{Barro2008, Gourio2012}, but requires generally an EIS above unity. Second, the broader macro-consumption literature instead finds values below unity, with \textcite{Havranek2015}'s meta-analysis of 2{,}735 estimates across 169 studies reporting a mean close to 0.5. Since this paper targets macroeconomic and credit-market outcomes rather than asset-pricing moments the rationale for the higher value does not apply, and we adopt $\mathrm{EIS}=0.5$ accordingly, exactly as \textcite{Isore2017} do for the same reason. \textcite{Isore2017} themselves show the two calibrations produce qualitatively identical, sign-mirrored dynamics, so the choice is not first-order for the model's qualitative predictions, but it is the natural default given this paper's focus. For the remaining standard Keynesian parameters, we replace \textcite{Isore2017}'s literature values with those calibrated in the ECB's NAWM~II model (\textcite{Coenen2018}) and borrow the Taylor-rule weight parameters from \textcite{Taylor1993} directly. 
 
-For the banking, entrepreneur and sovereign block that we newly integrate, all targets need discussion as we newly source them. The sovereign haircut $\Delta^b=0.37$ matches \textcite{Cruces2013}'s documented average haircut across 180 sovereign debt restructurings between 1970 and 2010. To determine the actual home bias value $\phi$, we calculate the home-bias parameter by using the  product of total sovereign bond holdings to total assets ($\approx$9.3\%) and the share of domestic bonds within that total ($\approx$28\%) based on ECB supervisory data for a sample of 317 euro area banks \parencite{Buch2026}. In a period between December 2014 and December 2025, this value has been between 1.7\% and 3.3\% in the Euro-area, with a more recent reading of around 2.5\%. Therefore $\phi$ is set to 0.03, matching euro area banks' current domestic sovereign bond exposure as a share of total assets. For the banker survival rate $\sigma^b$, we follow \textcite{Coenen2018} again, whose wholesale banks are subject to the same Gertler-Karadi leverage constraint used in this thesis. NAWM II's wholesale  banks are the natural counterpart to our banking sector, as they are the layer bearing the leverage constraint. For the values of EFP elasticity $\chi^e$ and the entrepreneur survival rate $\sigma^e$, we use the posterior mean estimates and the calibration parameter for the entrepreneur leverage rate by \textcite{Gelain2010}, who estimates a model with the external finance premium for the euro-area. Therefore, we adopt the same fixed steady-state entrepreneur target originating in \textcite{Bernanke1999}. To our knowledge, there is no empirical paper that gives a value for its decomposition into numerical values for the entrepreneur premium and bank loan spread. In this absence of a euro-area estimate for a combined BGG-GK specification, we set the aggregate premium in a share of 120bp/80bp between the entrepreneur and bank frictions as the yearly target to be consistent with the euro-area's approximative 217 bp single friction benchmark from \textcite{Gelain2010}, which is the bank-only spread in their paper alone. 
+For the banking, entrepreneur and sovereign block that we newly integrate, all targets need discussion as we newly source them. The sovereign haircut $\Delta^b=0.37$ matches \textcite{Cruces2013}'s documented average haircut across 180 sovereign debt restructurings between 1970 and 2010. To determine the actual home bias value $\phi$, we calculate the home-bias parameter by using the  product of total sovereign bond holdings to total assets ($\approx$9.3\%) and the share of domestic bonds within that total ($\approx$28\%) based on ECB supervisory data for a sample of 317 euro area banks \parencite{Buch2026}. In a period between December 2014 and December 2025, this value has been between 1.7\% and 3.3\% in the Euro-area, with a more recent reading of around 2.5\%. Therefore $\phi$ is set to 0.03, matching euro area banks' current domestic sovereign bond exposure as a share of total assets. For the banker survival rate $\sigma^b$, we follow \textcite{Coenen2018} again, whose wholesale banks are subject to the same Gertler-Karadi leverage constraint used in this thesis. NAWM II's wholesale  banks are the natural counterpart to our banking sector, as they are the layer bearing the leverage constraint. For the values of EFP elasticity $\chi^e$ and the entrepreneur survival rate $\sigma^e$, we use the posterior mean estimates and the calibration parameter for the entrepreneur leverage rate by \textcite{Gelain2010}, who estimates a model with the external finance premium for the euro-area. Therefore, we adopt the same fixed steady-state entrepreneur target originating in \textcite{Bernanke1999}. To our knowledge, there is no empirical paper that gives a value for its decomposition into numerical values for the entrepreneur premium and bank loan spread. In this absence of a euro-area estimate for a combined BGG-GK specification, we set the aggregate premium in a share of 120bp/80bp between the entrepreneur and bank frictions as the yearly target to be consistent with the euro-area's approximative 200 bp single friction benchmark from \textcite{Gelain2010}, which is the bank-only spread in their paper alone. Table \ref{tab:calibration_frictions} lists the non-policy parameters for our model. 
 
-
-
-
- 
-Table \ref{tab:calibration_two} lists the non-policy parameters from \textcite{Bernanke1999} and \textcite{Gertler2011} against the decision for our model. 
-
-For $\beta$ However, \textcite{Isore2017} argue that this parameter plays no severe role in the results and we can confirm so for our set-up.
 
 \begingroup
 \footnotesize
@@ -974,7 +922,7 @@ $\sigma_\theta$        & 0.60   & Std.\ dev.\ of (log) disaster-risk innovations
 
 \multicolumn{4}{@{}l}{\textsc{Utility function}} \\
 \addlinespace[2pt]
-$\beta_0$              & 0.9985 & Subjective discount factor                            & \textcite{Bernanke1999} and \textcite{gerte} \\
+$\beta_0$              & 0.9985 & Subjective discount factor                            & \textcite{Bernanke1999} and \textcite{Gertler2011} \\
 $1/\tilde\psi$           & 0.5  & EIS                               & \textcite{Isore2017} \\
 $\gamma$               & 3.8    & Relative risk-aversion coefficient                    &  \textcite{Gourio2012} \\
 $\varpi$               & 2.33   & Leisure preference                                    &  \textcite{Gourio2012} \\
@@ -1216,9 +1164,9 @@ We obtain the household's optimality conditions as
       \left(\frac{C_{t+1}}{C_t}\right)^{\!-\psi}
       \!\!\left(\frac{1-L_{t+1}}{1-L_t}\right)^{\!\varpi(1-\psi)}
       \frac{V_{t+1}^{-\chi}}
-           {\bigl(\mathbb{E}_t V_{t+1}^{1-\chi}\bigr)^{\frac{-\chi}{1-\chi}}} \tag{A.1.1}\label{eq:SDF} \\[6mm]
-    C_t &= \frac{W^{real}_t(1-L_t)}{\varpi} \tag{A.1.2}\label{eq:HHO_C} \\[6mm]
-  1 &= E_t[Q_{t,t+1}R_t^d] \tag{A.1.3}\label{eq:HHO_Deposit_Euler}
+           {\bigl(\mathbb{E}_t V_{t+1}^{1-\chi}\bigr)^{\frac{-\chi}{1-\chi}}} \tag{A.1.1} \\[6mm]
+    C_t &= \frac{W^{real}_t(1-L_t)}{\varpi} \tag{A.1.2}\\[6mm]
+  1 &= E_t[Q_{t,t+1}R_t^d] \tag{A.1.3}
 \end{align}
 %
 Equation~\eqref{eq:SDF} defines $Q_{t,t+1}$ state by state as a random variable measurable at $t+1$, not its conditional mean. The disaster
@@ -1239,7 +1187,7 @@ At $\Delta^k=0$ or $\theta_t=0$ this reduces to $\beta_0$. For $\Delta^k>0$ and 
 \paragraph{Risk-Free Rate and Deposit Market.}
 While \textcite{Isore2017} identify the risk-free rate through a household bond Euler $\mathbb{E}_t[Q_{t,t+1}\frac{(1+r_t)}{(1+\pi_{t+1})}]=1$, households in this model hold no sovereign bonds, so \eqref{eq:HHO_Deposit_Euler} replaces that equation on the household side. The risk-free rate is defined as
 %
-\begin{equation*}\label{eq:riskfree_rate}
+\begin{equation*}
   R^f_t \;\equiv\; \frac{1}{\mathbb{E}_t[Q_{t,t+1}]} \tag{A.1.6}
 \end{equation*}
 %
@@ -1267,7 +1215,6 @@ which gives Tobin's $Q$:
 %
 \begin{equation}
   Q_t = \frac{1}{1-\tau\!\left(\dfrac{I_t}{K_t}-\dfrac{\bar{I}}{\bar{K}}\right)}
-  \tag{A.1.4}\label{eq:CP_TobinsQ}
 \end{equation}
 %
 identical in form to \textcite{Isore2017}'s household-derived Tobin's-Q relation, since the underlying adjustment-cost technology is unchanged. Only the agent solving the maximisation problem has moved from the household's joint utilisation-investment margin to the capital-goods producer's own problem to be consistent with the argument that household owned entrepreneurs make capital and investment decisions. At the steady state $I/K=\bar I/\bar K$ gives $\bar Q=1$ and $\overline{\Pi^{cp}}=0$, meaning that the producer earns zero profit along the balanced growth path, as a competitive technology with no rents should. Away from the steady state $\Pi_t^{cp}$ is generally small and second-order in the investment gap; it is tracked in the household budget constraint but drops out of the aggregate resource constraint, since $I_t$ is real final-good use regardless of how the transaction between producer and entrepreneur nets out privately.
@@ -1607,7 +1554,7 @@ This objective is well-defined independently of the debt contract's default thre
 %
 \begin{equation}
   P_{t+1}^{k, real}  = Q_{t+1}\,\delta_0\,\eta\,u_{t+1}^{\eta-1}
-  \tag{A.3.1.1}\label{eq:A3_util}
+  \tag{A.3.1.1}
 \end{equation}
 %
 with second-order condition $-Q_{t+1}\delta_0\eta(\eta-1)u_{t+1}^{\eta-2}<0$, showing that the standard convexity assumption on the depreciation function is satisfied for $\eta>1$ which has been already imposed throughout the model. 
@@ -1616,8 +1563,6 @@ with second-order condition $-Q_{t+1}\delta_0\eta(\eta-1)u_{t+1}^{\eta-2}<0$, sh
 The two margins that \textcite{Isore2017}'s household jointly optimises are now split across two agents, but both continue to price the same
 market-clearing capital good. The capital-goods producer's investment condition~\eqref{eq:CP_TobinsQ}, initiated at date $t+1$, and the
 entrepreneur's utilisation condition~\eqref{eq:A3_util} both determine the single date-$(t{+}1)$ price $Q_{t+1}$:
-%
-The capital-goods producer's investment condition~\eqref{eq:CP_TobinsQ}, instantiated at date $t+1$, and the entrepreneur's utilisation condition~\eqref{eq:A3_util} both determine the single date-$(t{+}1)$ price $Q_{t+1}$:
 %
 \begin{equation*}
   Q_{t+1}
@@ -1645,7 +1590,6 @@ Evaluated at the optimal utilisation \eqref{eq:A3_util}, the gross real return t
     \frac{P^{k, real}_{t+1}\, u_{t+1}
           + Q_{t+1}\bigl(1 - \delta_0\, u_{t+1}^{\eta}\bigr)}
          {Q_t} \tag{A.3.1.2}
-  \label{eq:A3_RK}
 \end{equation}
 %
 where $u_{t+1}$ solves \eqref{eq:A3_util} and $\delta_{t+1} = \delta_0\, u_{t+1}^{\eta}$ is the resulting utilisation-dependent depreciation rate.
@@ -1668,8 +1612,7 @@ problem.  We use the reduced form of \textcite{Bernanke1999}:
   f\!\left(\frac{N^e_t}{Q_t K_{t+1}}\right)
   \;\equiv\; f_0
     \left(\frac{N^e_t}{Q_t K_{t+1}}\right)^{\!-\chi^e},
-  \qquad \chi^e > 0,\; f_0 > 0
-  \label{eq:A3_EFP} \tag{A.3.1.3}
+  \qquad \chi^e > 0,\; f_0 > 0\tag{A.3.1.3}
 \end{equation}
 %
 where $N^e_t / Q_t K_{t+1}$ is the entrepreneur's equity share in total capital, with $Q_t$ the capital producer's price. When $N^e_t$ falls, the premium widens, amplifying the initial shock through the financial accelerator. The parameter $f_0$ is back-solved from a target target
@@ -1691,7 +1634,6 @@ the entrepreneurs net worth to tend towards a value of zero:
       - R^S_{t-1} \cdot \underbrace{\bigl(Q_{t-1}K_t - N^e_{t-1}\bigr)}_{\text{interest on externally financed capital}}
     \right]
     + \iota^e \tag{A.3.1.4}
-  \label{eq:A3_NE}
 \end{equation}
 % 
 In the standard \textcite{Bernanke1999} model without a banking sector, the lender's opportunity cost is the risk-free rate, so equation~\eqref{eq:A3_EFP} places the premium between $\mathbb{E}_t[R^K_{t+1}]$ and $R^f_t$ directly.  Here the lender is a constrained bank whose required return on the loan book is $R^S_t>R^d_t$, determined by the binding leverage constraint~\eqref{eq:A323} together with loan-market clearing (A.5.4).  The premium of~\eqref{eq:A3_EFP} then applies on top of $R^S_t$ rather than on top of $R^f_t$, which is the sense in which the two frictions stack.
@@ -1706,7 +1648,6 @@ The value to entrepreneurs equals the funding gap:
 
 \begin{equation}
   Q_tS_t \;\equiv\; Q_t K_{t+1} - N^e_t \tag{A.3.1.5}
-  \label{eq:A3_entrep_BS}
 \end{equation}
 %
 which constitutes an accounting identity, defining the quantity $Q_tS_t$ that enters the bank balance sheet equation~\eqref{eq:A3_bankBS} and the leverage constraint equation~\eqref{eq:A323}.
@@ -1732,8 +1673,7 @@ which is linear in $K_{t+1}$. A determinate, finite, positive level of capital d
 % A.3.1.6 -- the participation / free-entry condition, where f(.) enters:
 \begin{equation}
   \mathbb{E}_t\!\left[R^K_{t+1}\right]
-  = f\!\left(\frac{N_t^e}{Q_tK_{t+1}}\right) R^S_t
-  \label{eq:A3_indiff} \tag{A.3.1.6}
+  = f\!\left(\frac{N_t^e}{Q_tK_{t+1}}\right) R^S_t \tag{A.3.1.6}
 \end{equation}
 \textcite{Isore2017} impose the household capital Euler $\mathbb{E}_t[R^K_{t+1}] = R^f_t$ directly. In this model, entrepreneurs finance capital with bank loans, so the relevant no-arbitrage condition is against the loan rate, with $\mathbb{E}_t[R^K_{t+1}] > R^S_t \geq R^d_t = R^f_t$. Equation~\eqref{eq:A3_indiff} replaces their capital Euler and is the equation that connects the firm sector \ref{appsec:firms} to the banking sector \ref{sec:A3.2}. 
 
@@ -1766,7 +1706,6 @@ Banks are owned by households. To motivate an endogenous constraint on bank leve
   =
   \underbrace{N^b_{j,t}}_{\text{net worth}}
   + \underbrace{D_{j,t}}_{\text{deposits}} \tag{A.3.2.1}
-  \label{eq:A3_bankBS}
 \end{equation}
 %
 The home-bias parameter $\phi$ splits bank assets between loans and sovereign bonds. When $\phi = 0$ the model collapses to the standard \textcite{Gertler2011} specification with loans only. Bankers then maximise continuation value subject to a moral-hazard incentive constraint. This comes as both the value function and the constraint are linear in net worth and assets (proved in Appendix, eq. \eqref{eq:Banker_Value}).
@@ -1969,7 +1908,7 @@ Dividing the two gives the portfolio condition directly:
 %
 \begin{equation}
   Q^b_t B^b_t \;=\; \frac{\phi}{1-\phi}\,Q_tS_t
-  \tag{A.3.2.4}\label{eq:A3_homebias}
+  \tag{A.3.2.4}
 \end{equation}
 %
 Combined with the entrepreneur balance sheet~\eqref{eq:A3_entrep_BS},
@@ -1990,7 +1929,6 @@ startup transfers $\iota$ to newly entering bankers, the \textcite{Gertler2011} 
       + R^d_{t-1}\,N^b_{t-1}
     \Bigr]
     + \iota \tag{A.3.2.5}
-  \label{eq:A3_Bank_Value}
 \end{equation}
 %
 Surviving bankers earn at first the excess return on loans $(R^S_{t-1} - R^d_t)$ on their loan portfolio, secondly the excess return on sovereign bonds $(R^b_t - R^d_t)$ on their bond portfolio and thirdly the deposit rate on their existing net worth. The startup transfer $\iota$ is calibrated residually following \textcite{Christiano2014} to match a target $\bar{N}^b/\bar{K}$ ratio.
@@ -2024,12 +1962,9 @@ The bank's outside option is the deposit rate, which satisfies the household dep
 \begin{equation}
   \mathbb{E}_t\!\left[\frac{\Lambda^B_{t,t+1}}{\Lambda^B_{t}}\, R^b_{t+1}\right] = 1
   \tag{A.3.3.1}
-  \label{eq:A3_bondeuler}
 \end{equation}
 %
-While in \textcite{Isore2017} bonds are held by households and therefore the household optimality condition incorporates sovereign bonds, we assume for the sake of isolating the sovereign-bank transmission channel cleanly that households do not hold sovereign bonds. Their budget constraint contains no bond term (see \ref{sec:households}). Equation~\eqref{eq:A3_bondeuler} is therefore derived from the bank's equilibrium pricing requirement, not the household's optimality condition. The pricing implication is identical because the bank uses the household SDF $Q_{t,t+1}$ as its discount factor.
-
-Equation~\eqref{eq:A3_bondeuler} is the equilibrium bond pricing condition for which $Q^b_t$ adjusts endogenously until it holds. It takes the standard asset pricing form $\mathbb{E}_t[Q_{t,t+1} R^i_{t+1}] = 1$ for asset~$i$, identical in structure to \textcite{Isore2017} but derived from the bank's willingness-to-hold condition rather than a portfolio first-order condition.
+Because households hold no sovereign bonds (Section~\ref{sec:households}), equation~\eqref{eq:A3_bondeuler} follows from the bank's equilibrium pricing requirement rather than a household optimality condition, with an identical pricing implication since the bank discounts with the household SDF. Therefore, equation~\eqref{eq:A3_bondeuler} is the equilibrium bond pricing condition for which $Q^b_t$ adjusts endogenously until it holds. It takes the standard asset pricing form $\mathbb{E}_t[Q_{t,t+1} R^i_{t+1}] = 1$ for asset~$i$, identical in structure to \textcite{Isore2017} but derived from the bank's willingness-to-hold condition rather than a portfolio first-order condition.
 
 
 \paragraph{Asset-Specific Resilience.}
@@ -2040,7 +1975,6 @@ Following \textcite{Gabaix2012}, the linearity-generating process assigns each r
 \begin{equation}
   H^b_t \;=\; 1 - \theta_t \cdot \Delta^b \cdot \tilde\Lambda^M
   \tag{A.3.3.2}
-  \label{eq:A3_resil}
 \end{equation}
 %
 where $\Delta^b \in (0,1)$ is the sovereign haircut in a disaster and
@@ -2079,7 +2013,6 @@ $\mathbb{E}_t[\Lambda^B_{t,t+1}]=1/R^f_t$,
    = \frac{1-\theta_t\,\Delta^b\,\tilde\Lambda^M_t}{R^f_t}
    = \frac{H^b_t}{R^f_t}
    \tag{A.3.3.3}
-   \label{eq:A3_bondprice}
 \end{align*}
 %
 which holds exactly.
@@ -2108,7 +2041,6 @@ for the disaster haircut:
   R^b_{t+1}
   = \frac{1 - x_{t+1}\,\Delta^b}{Q^b_t}
   \tag{A.3.3.4}
-  \label{eq:A3_Rb}
 \end{equation}
 %
 where $x_{t+1} \in \{0,1\}$ is the disaster realisation at the
@@ -2123,7 +2055,6 @@ equation~\eqref{eq:A3_bondprice}, we arrive at the expected sovereign bond gross
   = \frac{(1 - \theta_t\,\Delta^b)\,R^f_t}
          {1 - \theta_t\,\Delta^b\,\tilde\Lambda^M}
   \tag{A.3.3.5}
-  \label{eq:A3_ERb}
 \end{equation}
 % \noindent\textit{Stationarization flag:} $R^b_{t+1}$ is a gross rate --- scale-invariant. $\to$ Appendix~B.
 The sovereign spread is defined as the excess of the bond's promised gross yield over the risk-free rate,
@@ -2134,7 +2065,6 @@ The sovereign spread is defined as the excess of the bond's promised gross yield
   \;=\; R^f_t\,\frac{\theta_t\,\Delta^b\,\tilde\Lambda^M_t}{H^b_t}
   \;\approx\; \theta_t \cdot \Delta^b \cdot \tilde\Lambda^M_t
   \tag{A.3.3.6}
-  \label{eq:A3_spread}
 \end{equation}
 %
 The approximation holds for $R^f_t\approx1$ and small $\theta_t\Delta^b\tilde\Lambda^M_t$, which is appropriate given the calibration of $\theta_t$ to rare-event frequencies following \textcite{Barro2006}.  The promised yield $1/Q^b_t$ is used rather than the expected return $\mathbb{E}_t[R^b_{t+1}]$ because it is the object recorded in observed sovereign yield spreads, and therefore the object against which $\Delta^b$ is calibrated and against which the Spread-at-Risk statistics of Section~\ref{sec:results} are reported. The two differ by the expected loss: from~\eqref{eq:A3_ERb}, $\mathbb{E}_t[R^b_{t+1}] -R^f_t=R^f_t\,\theta_t\Delta^b(\tilde\Lambda^M_t-1)/H^b_t$, which strips out the actuarially fair component and retains only the risk premium.  At the baseline calibration the promised-yield spread is roughly $1.6$ times the expected-return spread; the distinction is therefore quantitatively material and is maintained throughout. 
@@ -2142,48 +2072,6 @@ The approximation holds for $R^f_t\approx1$ and small $\theta_t\Delta^b\tilde\La
 
 
 Disaster risk propagates to real activity through two distinct channels, operating on different horizons and through different equations. The first is immediate and requires no default to ever occur, while the second requires a realised loss and therefore only activates with a lag.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 \subparagraph{Derivation of Closed Form $\Lambda^M$}
@@ -2361,8 +2249,7 @@ Aggregate demand for labour and capital services from intermediate goods firms e
  
 \begin{align}
   \int_0^1 L_{j,t}\,dj = L_t 
-  \tag{A.5.2}
-    \label{eq:A5_labour} \\[4mm]
+  \tag{A.5.2} \\[4mm]
   \int_0^1 \tilde{K}_{j,t}\,dj = \tilde{K}_t 
   \tag{A.5.3}
 \end{align}
@@ -2385,7 +2272,7 @@ Sovereign bond market clearing follows directly from the home-bias identity~\eqr
 \label{par:loan_clearing}
 The quantity $Q_tS_t$ appears on both sides of the credit market. From the entrepreneur's balance sheet~\eqref{eq:A3_entrep_BS}, $Q_tS_t = Q_tK_{t+1}-N^e_t$ is loan \emph{demand}, determined by the capital entrepreneurs wish to finance net of their own net worth. From the aggregated binding leverage constraint~\eqref{eq:A323} together with the home-bias identity~\eqref{eq:A3_homebias}, $Q_tS_t = (1-\phi)\lambda_t N^b_t$ is loan \emph{supply}, determined by bank net worth and the leverage limit. Their equality,
 %
-\begin{equation*}\label{eq:loanmarketclearing}
+\begin{equation*}
   Q_tK_{t+1}-N^e_t \;=\; (1-\phi)\,\lambda_t\,N^b_t, \tag{A.5.4}
 \end{equation*}
 %

@@ -1,5 +1,166 @@
 # To-Do — August 13th/14th
 
+## Update, next morning: label-canonicalization and Part 5 cuts — verified done
+
+Diffed the working file against the last commit. **Essentially everything
+from last night's label discussion and Part 5 is implemented, precisely.**
+Confirmed by reading the diff directly, not assumed:
+
+- [x] Every duplicate `\label{}` from last night's list has been resolved
+      the way we agreed: main text keeps the label for all the identity/
+      result equations (bank balance sheet, home-bias, bank net worth,
+      resilience, bond price, bond return/spread, bond Euler, β(θ_t),
+      risk-free rate, market clearing, the whole Entrepreneurs/Household-FOC
+      set); the appendix copies now carry the same `\tag{}` number but no
+      `\label{}`, so they display correctly and cross-reference back to
+      the main text unambiguously. `eq:A323` (the leverage constraint)
+      went the other way as recommended — the *main text* copies lost
+      their labels, the appendix's stays, matching the `eq:Banker_Value`
+      pattern. No more duplicate-label warnings waiting to happen.
+- [x] All six Part 5 main-text cuts are in: the CSV/contract-theory setup
+      is condensed to one sentence pointing at the appendix, the duplicate
+      "initiated"/"instantiated" sentence is gone, the Home-Bias
+      institutional paragraph is one sentence now, the Sovereign Bond
+      Price derivation steps are cut down to the final result plus an
+      appendix pointer, the promised-yield paragraph is one sentence, and
+      the "why households don't hold bonds" aside is condensed — in
+      *both* the main text and the appendix copy, consolidated rather
+      than just cut in one place.
+- [x] Main text now has its own sequential equation numbering (2.2.x for
+      Households, 2.3.x for Firms, 2.4.x for Entrepreneurs/Banking, 2.5.x
+      Public Authority, 2.6.x Market Clearing) independent of the
+      appendix's `A.x.y.z` scheme. Wasn't asked for, but it's the right
+      call — a main-text equation shouldn't carry a number that implies
+      its home is Appendix A.
+- [x] `gerte` → `Gertler2011`, fixed and confirmed correct.
+- [x] The risk-aversion sentence is now accurate: "a mean estimate near 3,
+      with a 95% confidence interval of 2 to 4" — no longer conflating a
+      confidence interval with statistical significance. (Cited to
+      `\textcite{Barro2008}` rather than the Barro & Jin (2011) source I'd
+      guessed at — I don't have primary-source certainty on which Barro
+      paper \textcite{Isore2017} itself cites for this range, and
+      `Barro2008` is already an established key in your bibliography for
+      the neighbouring disaster parameters, so no objection, just flagging
+      that I haven't independently verified this specific attribution the
+      way I verified Gelain/Coenen/Buch.)
+- [x] The dangling "For $\beta$ However..." fragment is deleted, not just
+      fixed — correct call, it was fully redundant by then.
+- [x] **Good independent catch, worth confirming explicitly: the
+      dagger-footnote's "217bp" became "200bp."** This was a real
+      mislabelling I should have caught myself — 217bp is NAWM II's own
+      bank-only spread (from \textcite{Coenen2018}, used for the `R^S/R^d`
+      discussion), not \textcite{Gelain2010}'s figure. Gelain's own target
+      is 200bp, matching the classic single-friction BGG number I
+      referenced on the 12th. Attributing 217bp to Gelain in that footnote
+      would have been a real citation error; fixing it to 200bp makes the
+      sentence accurate. Good catch.
+- [ ] **New, minor, not yet addressed:** the Taylor Rule paragraph picked
+      up a new sentence — search *"even though actual enformecemt in the
+      economy is not common sense"* — reads roughly (typo:
+      "enformecemt" → "enforcement"; "measure" → "measures") and the
+      point being made isn't fully clear as written (possibly: real-world
+      compliance with Taylor-rule-consistent expectations isn't
+      guaranteed just because the model imposes the rule mechanically?).
+      Worth a rewrite once you confirm what you meant — I don't want to
+      guess your intent and put words in your mouth on this one.
+      **Est.: 5 min once you've decided the point you're making.**
+- [ ] The lagged-channel sentence, fourth pass: *"This term is constructed
+      silent for structural reasons"* — better than "not inforcable," but
+      "constructed silent" still isn't quite idiomatic. Same fix as
+      before, still on offer: *"This channel is silent for a structural
+      reason:"* as the lead-in, nothing else needs to change. **Est.: 30
+      sec, purely cosmetic at this point.**
+
+## Update: three genuine calibration gaps found doing the .mod cross-check
+
+Checked every parameter in `thesis_model_v3.mod`'s `parameters` block (36
+names) against Table 1 and Table 2, in both directions.
+
+**Direction 1 — table row with no `.mod` backing: none found.** Every
+row in both tables corresponds to a real, assigned parameter in the
+`.mod` file with a matching value. Clean.
+
+**Direction 2 — calibrated in `.mod`, not discussed anywhere in the
+calibration text — three real gaps:**
+
+- [ ] **Bank leverage target, $\Phi=4$, is completely absent from the
+      write-up.** Search the `.mod` file for `levss = 4.0` — this is a
+      real, hard-coded, load-bearing steady-state target (the divertable-
+      asset-fraction parameter `lambdadiv`, i.e. $\theta^b$, is back-solved
+      from it). It never appears in Table 2 or the calibration prose,
+      despite the text already citing NAWM~II's own leverage target
+      ($\Phi=6$) for `sigma_b` a few lines away — a reader who knows to
+      compare the two will wonder why yours is lower and find no answer.
+      This is the highest-value of the three: it's a headline,
+      easily-benchmarked number that's currently invisible.
+      **Recommend:** add a row to Table 2 ($\Phi$ or $\theta^b$, target
+      leverage 4, note the comparison to NAWM~II's 6 explicitly rather
+      than let a reader find the gap themselves). **Est.: 15 min**,
+      mostly deciding how to frame the 4-vs-6 comparison.
+- [ ] **`psi` (the actual EIS-like curvature entering the recursive
+      utility function, $\approx$1.3003) vs. `psitilde` (the table's
+      "EIS" row, $=2$) — flagged in the `.mod` file's own comment as a
+      known gap, still open.** Search *"has no counterpart in the
+      thesis"* in `thesis_model_v3.mod` — that's the user's own note,
+      not mine. `psitilde=2` is what Table 1 reports as "EIS," but the
+      felicity function actually uses `psi = 1 - (1-psitilde)/(1+varpi)`,
+      a Gourio (2012/2014) transformation, evaluating to $\approx 1.3003$
+      — a materially different number from 2. This predates this week's
+      work (it's in the engagement's own history) but it's still
+      unresolved and it's exactly the kind of thing that undermines "is
+      the calibration section complete" if an examiner works through the
+      utility function by hand. **Recommend:** either add the
+      transformation formula and both numbers to the text/Table 1
+      (footnote is enough), or confirm `psitilde` is the only one worth
+      reporting and say explicitly why. **Est.: 15-20 min.**
+- [ ] **Smaller, related: $\chi$ (the Epstein-Zin exponent,
+      $\chi=1-(1-\gamma)/(1-\psi)$) appears in the main text's SDF
+      equation (search *"V_{t+1}^{-\chi}"*) without ever being defined in
+      the main text** — its definition is appendix-only (the $V=\tilde
+      V_t^{1-\psi}$ substitution step). Once the `psi`/`psitilde`
+      question above is resolved, worth a one-clause main-text mention of
+      what $\chi$ is, since a main-text-only reader currently hits an
+      undefined symbol in a displayed equation. **Est.: 5 min, bundle
+      with the item above.**
+- [ ] Not flagging as a gap, just noting for completeness: `eta`
+      (utilisation-cost curvature) and `f0`/`iotae`/`iotab` (back-solved
+      residual calibration targets) are correctly absent from the tables
+      — they're outputs of the calibration procedure, not independent
+      choices, so they don't need their own rows. `eta` is worth a
+      half-sentence somewhere though, since the main text asserts a
+      property about it ("$\eta>1$ which has been already imposed
+      throughout the model") without ever saying what pins its value —
+      low priority, doesn't rise to the level of the three above.
+
+## New main-text derivation cuts found tonight — see `main_writing.md` Part 6
+
+Asked to find *remaining* full derivations in the Entrepreneurs-and-
+Banking main text, beyond Part 5. Found three, all still present,
+unaddressed by last night's edits (which cut the Sovereign Bond Price
+derivation but not these). Snippet-anchored detail, with suggested
+rephrasing, is in `main_writing.md` Part 6 rather than duplicated here:
+the "Consistency with the Capital-Goods Producer" paragraph's live
+$Q_{t+1}$-elimination step, the "Capital Demand: Free-Entry Condition"
+paragraph's profit-linearity argument, and the Home-Bias paragraph's
+two-step ratio-and-divide derivation. None of these touch an equation
+that needs to move — same pattern as before: state the result, cite the
+appendix (which already has the derivation in full) for the steps.
+
+## Noted: the line-by-line `.mod`-vs-equations check is understood as the next ask
+
+You mentioned you'll want the MATLAB/Dynare code checked line-by-line
+against every equation in the document before deciding on Results,
+specifically because Appendix C (Non-Stochastic Steady State) builds on B
+(Stationarization) which builds on A (Model Appendix) — so an error
+introduced at any layer propagates. Not attempting that here since you
+framed it as a forthcoming, separate ask, not part of tonight's list —
+flagging only that I understand the scope and why it matters (it's the
+right check to run before Results, given how much has shifted under the
+`.mod` file this week: `phi`, `sigma_e`, `chie` all changed, and this
+morning's find that `psi`\,$\neq$\,`psitilde` means at least one
+appendix-derived closed form may currently assume a value the `.mod`
+doesn't actually use). Ready whenever you want to run it.
+
 Replaces `ToDoAugust12th.md` as the active list (kept, not deleted — full
 history of what was found and fixed on the 12th is there). Reviewed
 tonight's file (`status_quo_thesis_august_13h_night.txt`) by diffing
