@@ -2664,3 +2664,65 @@ the main text.
 
 `ToDoAugust13th14th.md` created, replacing `ToDoAugust12th.md` as the
 active list.
+
+## 2026-08-14 (3am) — Model-integrity check: psi/psitilde, leverage=4, and the "DIVERGENCE" comment
+
+User, working late, asked for a rigorous gut-check after noticing the
+`.mod` file's own comment on the bank net worth equation: *"DIVERGENCE
+from thesis B.24."* Four things resolved, one genuinely left open.
+
+**`psi = 1 - (1-psitilde)/(1+varpi)`: correct, re-derived independently
+tonight, not just re-cited from the Aug-2/Aug-4 entries above.**
+Differentiating the felicity function shows the effective consumption
+curvature is a $\varpi$-scaled function of the targeted inverse-EIS —
+structurally the right correction for a CES consumption-leisure
+aggregator under Epstein-Zin, not an ad hoc fix. Verdict unchanged from
+three weeks ago: fix the thesis text (add the formula + both values to
+Table 1), not the `.mod`. Caveat also unchanged: still haven't opened
+Gourio (2012) directly to confirm the exact split is his.
+
+**Leverage target $\Phi=4$: a real gap, not resolved tonight.** Traced
+to an older fixed-`lam` version of the model, preserved for numerical
+continuity when leverage was made endogenous — an engineering reason,
+not a citation. Searched for Gertler-Karadi (2011)'s own leverage target;
+found their parameter names, not their actual Table 1 number — genuinely
+inconclusive. Gave the user three honest paths (find GK's real number;
+write an honest continuity sentence instead of a false citation;
+recalibrate to NAWM II's own Φ=6, already cited elsewhere in the same
+section) rather than picking one for them.
+
+**The "DIVERGENCE" comment: resolved, verified term-by-term against the
+actual current Appendix B text, not just re-read.** `B.23` is genuinely
+the bank net worth equation, `B.24` is genuinely "Resilience and SDF
+loading" — both checked directly against the `.mod`'s `Nb` and `Hb`
+equations, every term accounted for. The comment is a historical note:
+inserting the "Endogenous Leverage Multiplier" block (B.21a-d) shifted
+every subsequent appendix equation number by four slots relative to an
+earlier draft, and the user's own past self correctly caught and
+documented the shift at the time. Not a live bug. Flagged for tomorrow's
+line-by-line pass anyway, since if one `(B.xx)` comment went stale,
+others might have too — cheap to rule out systematically.
+
+**Verdict on "is this a real dynamic model": yes, no red flags.**
+`stoch_simul(order=3, pruning)` is Dynare's genuine perturbation solver,
+a standard published choice for disaster-risk models (the risk premium
+is invisible below second order). Re-read the historical Blanchard-Kahn
+debugging in full: a real over-determination bug (fixed leverage +
+independent net-worth accumulation = one degree too many) was properly
+root-caused and fixed by deriving leverage endogenously from the bank's
+own incentive constraint, verified with `resid;` (exact zero), `check;`
+(clean rank condition), and a completing `stoch_simul` at order 3. That
+debugging history is itself the evidence — you don't hit a genuine BK
+failure in a hard-coded system.
+
+**Bonus: the changelog's own endogenous-leverage derivation is already
+written into Appendix B** ("Endogenous Leverage Multiplier" paragraph,
+right after B.20/B.21) — must have happened earlier this week, hadn't
+been registered until tonight's check. No action needed there.
+
+`ToDoAugust14th.md` created — fresh file, not appended to the 13th/14th
+one, since the user asked for "August 14 solely" before going to bed.
+Forward-looking: leads with the two still-open items (psi/psitilde text
+fix, leverage-4 decision) and sets up tomorrow's full line-by-line
+`.mod`-vs-equations check as the main task, sequenced by risk (Banking
+block first, since it changed most this week) rather than top-to-bottom.
