@@ -232,8 +232,8 @@ sigr     = 1;         % Taylor-rule scaling coefficient on er (always needed,
 
 % ---- NEW banking/entrepreneur/sovereign calibration (2026-07-30) --------
 Deltab   = 0.37;      % sovereign haircut in a disaster (Cruces-Trebesch ~0.37)
-chie     = 0.0276;    % elasticity of external finance premium wrt leverage (BGG/CMR)
-sigma_e  = 0.9769;    % entrepreneur survival rate
+chie     = 0.0276;    % elasticity of external finance premium wrt leverage (Gelain 2010 posterior)
+sigma_e  = 0.9769;    % entrepreneur survival rate (Gelain 2010 posterior)
 sigma_b  = 0.95;      % banker survival rate
 levE     = 2.0;       % target entrepreneur leverage  Q k / N^e (BGG ~ 2)
 premE    = 1.0030;    % target entrepreneur premium  E[R^K]/R^S (~120bp annual)
@@ -308,7 +308,7 @@ QSss  = knss - Ness;                    % bank loans = capital value NET of entr
 % --- bank block: leverage TARGET (4.0, same numeric target as the old
 % fixed "lam") anchors the calibration; lev itself is now an ENDOGENOUS
 % variable in the dynamic model (see eqs 26/26a-d below). -----------------
-levss = 5.5;
+levss = 6;      % Coenen et al. (2018) / NAWM II wholesale-bank leverage target
 Ass   = QSss/(1-phi);
 QbBss = phi*Ass;
 Nbss  = Ass/levss;
