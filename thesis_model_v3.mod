@@ -14,7 +14,7 @@
 %     (ii)  a Gertler-Karadi (2011) bank block with an ENDOGENOUS binding
 %           leverage constraint (GK), derived from the bank's own
 %           incentive constraint (see "2026-07-30 RESOLUTION" below),
-%           forming, together with (i), a Rannenberg (2016)-style double
+%           forming, together with (iio), a Rannenberg (2016)-style double
 %           financial accelerator, and
 %     (iii) a home-bias sovereign-bond channel + Gabaix (2012) closed-form
 %           bond price, normalised per the corrected A.3.3.2 (thesis'

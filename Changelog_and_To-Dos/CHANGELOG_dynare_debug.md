@@ -2908,3 +2908,109 @@ thesis:**
 `table_calibration.csv`, `table_tail_risk_moments.csv`,
 `table_phi_sweep.csv`, plus consolidated `thesis_model_results.mat`.
 Ready to write directly into the Results chapter.
+
+## 2026-08-16 — Opus review of Main text + Appendix A: verdict, and two real appendix/`.mod` forks found
+
+User sent `status_quo_August16th.txt` (Opus's independent review of Main
+text + Appendix A, changes already implemented, manifest in
+`Opus_Changelog.md`) with an explicit worry: Opus argued at one point
+that the sovereign-bank channel requires the disaster to actually
+realise, which would undercut this week's entire results run if true.
+
+**"Must realise the disaster" — not live, correctly self-retracted.**
+`Opus_Changelog.md` Part C item 7 already retracts this, citing this
+project's own numbers (impact-lev 0.00769, 4.63%-of-peak share, the
+clean 14-point φ-sweep). Independently re-verified by grepping the
+entire implemented Aug-16 text for every variant of the claim: none of
+it survived. Both the main text and Appendix A now correctly state the
+two-channel structure, with the lagged/realised channel honestly
+disclosed as structurally inactive by construction, not fatally broken.
+Nothing to fix here.
+
+**Fisher equation — real, confirmed three-way contradiction.** Main text
+stated the simple form `R^f=(1+r)/E[1+pi']`; Appendix A and B both
+already stated the exact form `E[M(1+r)/(1+pi')]=1`, with A explicitly
+claiming "the approximate form is therefore not used"; `.mod` (`Q =
+pi(+1)/r; Rf = 1/Q;`) provably implements the simple form under Dynare's
+own expectation semantics (`r`, `Q` are t-measurable, so this reduces
+exactly to `Q_t=E_t[pi_{t+1}]/r_t`, unconditionally, at any perturbation
+order). Appendix A and B were right; the main text was stale.
+
+**Taylor rule output-gap form — Appendix A alone had drifted.** A.4.3 had
+a log-gap (Opus's dimensional fix); main text, Appendix B (B.31), and
+`.mod` (`phiy*(y-STEADY_STATE(y))`) all still had a level gap. Three
+sources agreed; Appendix A was the outlier this time.
+
+**User correction, important:** initially recommended fixing the text to
+match `.mod` in both cases, treating the `.mod` as ground truth. User
+correctly pushed back — Appendix B and C were originally derived (by
+Claude, an earlier session) FROM an earlier version of Appendix A, and
+the `.mod` was coded from that old B/C. Now that A has been substantively
+improved, the direction of authority is A → B → C → `.mod`, not the
+reverse. Re-derived both equations properly on that basis: a full
+no-arbitrage derivation of the exact Fisher relation (mirroring the
+already-established sovereign-bond-pricing logic, i.e. an asset priced by
+the household SDF without being literally held), with the precise
+covariance+Jensen collapse condition worked out and tied to why it fails
+here (theta_t moves the SDF and expected inflation jointly); and the
+dimensional Taylor-rule fix with a quantitative level-vs-log bridge
+(`phiy_log ≈ phiy_level · Ybar ≈ 0.5×0.701 ≈ 0.35` at this calibration).
+Two smaller bugs caught while drafting: main text's `\lambda_pi,\lambda_Y`
+collides with the bank leverage multiplier `\lambda_t` (worse than the
+`\phi` collision it replaced) — standardised on `\varphi_\pi,\varphi_Y`;
+Appendix A's Taylor-rule closing sentence claimed the model is "driven by
+epsilon_z and epsilon_theta" — `.mod`'s `varexo` has no epsilon_z at all
+(deterministic trend growth), corrected to epsilon_theta alone (epsilon_r
+declared, stderr 0).
+
+**Capital timing (A4, K^n vs K) — left genuinely open.** Attempted the
+full index algebra connecting Appendix B's B.1 (plain `k=K/z` notation)
+to `.mod` eq(10) (which uses the `k^n=K'/z` convention established
+elsewhere in the same appendix). Did not reach closure — flagged open
+rather than force a verdict, consistent with catching a comparable
+indexing error on the entrepreneur net-worth check earlier this week.
+Steady-state relationship `knss=exp(muz)*kss` independently confirmed
+correct; GIRF behavior for investment/capital looks economically sane
+(evidence against a severe bug, not proof of correctness).
+
+**Deliverables:** `Fisher_Taylor_Replacement_Draft.md` (full derivations,
+ready to paste into main text + Appendix A) and
+`Appendix_A_Review_Assessment_Aug16.md` (handoff document for the
+Appendix B/C deepening pass, explicit on the A→B→C authority direction,
+what B.30/B.31 need once the new A lands, and the open A4 item) — both
+in this directory. No `.mod` change made or currently required; the
+Fisher equation is the one place a future `.mod` change is possible,
+explicitly deferred until B/C are rederived and handed back.
+
+## 2026-08-17 — Taylor rule recommendation reversed: level gap was right, IS2017 confirms it
+
+The 2026-08-16 Taylor-rule fix (log-gap output term, on a dimensional
+argument) was wrong. User supplied IS2017's own equations directly: their
+eq. 11 (level form) and eq. A.21 (stationarized) both use exactly the
+level gap `(Y_t/z_t - Ybar)` / `(y_t - ybar)` already present in this
+thesis's main text, Appendix B (B.31), and `.mod`
+(`phiy*(y-STEADY_STATE(y))`). Appendix A's log-gap "fix" — proposed by
+Opus's A7 item, then further justified/derived by Claude on 2026-08-16 —
+was the thing that had drifted from the template neither had checked
+against. The dimensional argument was mathematically fine in isolation
+but the wrong test to apply: "more rigorous in the abstract" is not the
+same question as "matches the source this thesis says it follows."
+
+Corrected in place in `Fisher_Taylor_Replacement_Draft.md` and
+`Appendix_A_Review_Assessment_Aug16.md` (both now cite IS2017 (11)/(A.21)
+directly for the Taylor rule; both note B.31 needs no rederivation, only
+a coefficient-symbol rename to `\varphi_\pi,\varphi_Y`, matching the
+Fisher equation's B.30 in requiring no substantive change). The Fisher
+equation conclusion is unaffected and independently corroborated: this
+thesis's own main text already states, predating this whole review, that
+"IS2017 identify the risk-free rate through a household bond Euler
+`E_t[M_{t,t+1}(1+r_t)/(1+pi_{t+1})]=1`" — the exact form, matching the
+Aug-16 draft, not the simple form that draft replaced.
+
+Net effect: of the two equations flagged as genuine appendix/`.mod`
+forks on Aug 16, one (Fisher) required bringing the main text up to
+Appendix A/B's already-correct exact form; the other (Taylor rule)
+required bringing Appendix A back down to what the main text, Appendix
+B, and `.mod` already had right. Two different directions, same
+underlying fix: align everything to what the cited source template
+actually says, checked directly rather than assumed.
