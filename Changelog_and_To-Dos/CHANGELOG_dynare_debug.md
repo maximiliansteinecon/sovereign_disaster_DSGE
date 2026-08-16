@@ -2726,3 +2726,185 @@ Forward-looking: leads with the two still-open items (psi/psitilde text
 fix, leverage-4 decision) and sets up tomorrow's full line-by-line
 `.mod`-vs-equations check as the main task, sequenced by risk (Banking
 block first, since it changed most this week) rather than top-to-bottom.
+
+## 2026-08-14 (later) — Leverage resolved to Φ=6 (NAWM II); order-3 fragility narrowed, not eliminated
+
+User pushed back hard on the still-open leverage question from the
+3am entry, reporting real breakage: `levss=5.5` throws a hard
+Blanchard-Kahn failure at φ=0.80 (8 unstable roots for 9 forward-looking
+variables), and a suspiciously huge value showed up in the results. Spent
+the session bisecting rather than guessing.
+
+**Sequence tested, each a full `resid;`/`steady;`/`check;`/`stoch_simul`
+pass, not just a steady-state recompute:** `levss=5.5` (breaks at
+φ=0.80, marginal-but-present at lower φ too), `levss=5` (cleaner, still
+fragile at the extreme end), reverted `levss` to the old `4.0` alongside
+`chie→0.05`/`sigma_e→0.975` (the pre-Gelain BGG/US values) to test
+whether the *entrepreneur* calibration was the actual culprit — no
+change in the failure pattern, ruling that hypothesis out. Also
+temporarily reverted five NK parameters (`delta0`, `alpha`, `upsilon`,
+`muz`, `piss`, `rhor`) to their pre-NAWM-swap values as a second
+independent hypothesis test — backed up first, fully restored after,
+also no change. **Conclusion: leverage level and both calibration swaps
+are exonerated.** The order=1/order=2/order=3 comparison is the real
+signature: order=1 is clean at every level tested, order=2 mostly clean,
+order=3 mostly broken — points at a third-derivative-specific issue, not
+a calibration problem.
+
+**Structural hypothesis, not yet fixed:** `lev = nuB/(lambdadiv - etaB)`
+is a rational function (division) embedded in the forward-looking
+`OmB`/`etaB`/`nuB` recursion, structurally different from the `v^(-chi)`
+power-term issue already fixed in an earlier session. Read all 35
+`model;`-block equations end to end specifically hunting for any other
+un-normalized `X^(something)` term sharing the `v` term's pattern —
+found none. The `lev` division is the only remaining structural
+candidate, but rewriting it is a real equation-level change requiring
+sign-off (per standing instruction), not something to do unilaterally
+under a hand-in deadline.
+
+**User caught a real inconsistency:** after this exoneration, the
+session kept testing/recommending `levss=4` out of habit, without
+re-applying the NAWM II (Coenen et al. 2018) Φ=6 target already
+identified as the empirically justified number. User: *"we did not use
+an empirical value for lev now and sticked with 4."* Correct catch, not
+a finding — acknowledged directly, `levss` set to `6` (Coenen, Karadi,
+Schmidt & Warne 2018 / NAWM II wholesale-bank leverage target). Full run
+at Φ=6, baseline φ=0.03: clean (no Inf eigenvalue), all five GIRF
+scenarios clean (no NaN/Inf).
+
+**Cleanest academic resolution, given ~12 days to hand-in:** document the
+order-3 fragility as a known, investigated, non-corrupting limitation in
+6.2 (Robustness and Limitations) — every calibration hypothesis
+eliminated, most likely tied to the `lev` division, empirically validated
+as non-corrupting since every actual reported GIRF/ergodic-mean output is
+clean. Defer the `lev` rewrite as optional future robustness work rather
+than block Results on it.
+
+**Real, independent bug found and fixed along the way:** `run_thesis_model.m`'s
+`scen` row labelled `'Baseline (\phi=0.03)'` was actually passing
+`-DPHIVAL=0.10` — every "Baseline" run in every log sent this week had
+silently been φ=0.10, not 0.03. Fixed.
+
+## 2026-08-15 (morning) — Appendix A→B→C consistency check
+
+User request: verify Appendix A builds cleanly into B, and B into C,
+"because we later need to shorten the whole appendix, we need it to be
+correct at its most dense capacity" — using the newest draft,
+`status_quo_thesis_august_15h_morning.txt`. Read Appendix B (B.1-B.32)
+and Appendix C (D0-D10, C.1a-C.36) in full, cross-checked against
+Appendix A's Banking/Disaster-Transmission text and hand-verified
+specific formulas against the `.mod`'s `steady_state_model` block.
+
+**Confirmed exact matches, term by term:** C.4 (risk-free rate), C.19
+(η=P̄^{k,real}/δ₀), C.23-C.24 (κ, ℱ=f₀κ^{-χᵉ}), C.27-C.28 (entrepreneur
+net worth/ιᵉ — caught and self-corrected one hand-derivation error here,
+conflating `.mod`'s `k(-1)` with `kss` instead of the correct
+`k(-1)ss=k^n_ss=e^{μz}k_ss`), C.34-C.35 (ς, ν̄ᵇ, θᵇ against `spreadAss`,
+`OmBss`, `lambdadiv` — verified via the substitution Q̄ᵇ=1/R̄ᶠ that
+`OmBss`'s argument collapses to exactly the closed form C.35 states), and
+the standard NK block B.4-B.14 (unchanged by this week's calibration
+work, checked anyway).
+
+**Two genuine findings, neither a computational bug:**
+1. `.mod`'s `v`/`vss` is actually v̄^{1-ψ} (the object the `CE` recursion
+   is built around), not the v̄ that Appendix C's C.6 explicitly defines
+   and solves for (C.6 takes the final 1/(1-ψ) root; the `.mod` never
+   does). Internally consistent, nothing computes wrong, but a reader
+   checking `vss` against C.6 as literally written won't get a match
+   without this flagged. Needs a footnote or a rename before the
+   appendix is shortened.
+2. B.29 (Government Budget Constraint) keeps a raw `x_t`, unlike every
+   other Appendix B equation, all of which apply the Gourio
+   θ_t-substitution. Low-stakes — `T_t` isn't implemented in the `.mod`,
+   and C.36 sidesteps it via the steady-state-at-x=0 convention — but
+   worth normalizing for consistency later.
+
+**One cosmetic gap:** equation tag **C.33 doesn't exist** — the sequence
+jumps C.32 (`\label{eq:D_iota}`) straight to C.34 (`\label{eq:D_varsigma}`)
+with no missing content, just an orphaned numbering gap. Renumber before
+submission.
+
+**One item left open:** Appendix D10's admissibility condition (vii),
+ιᵉ,ιᵇ>0, is derived in the text but `iotae`/`iotab` are calibration-block
+*parameters* in the `.mod`, never printed in Dynare's steady-state table
+— never directly confirmed their sign from any log this week. Flagged
+for a one-line `disp()` check (closed the same day, see next entry).
+
+**Verdict:** yes, the appendix builds cleanly A→B→C. Every formula
+checked across the household/NK, entrepreneur, and bank/disaster-
+transmission blocks traces correctly through detrending and steady-state
+evaluation into the `.mod`'s actual implemented equations. The two
+findings above are documentation/numbering polish, not substantive
+errors — the appendix is safe to use as the basis for the later
+shortening pass.
+
+## 2026-08-15 — Admissibility check closed; full Results-chapter pipeline built
+
+Two follow-on requests from the same session: (1) add the admissibility
+check the previous entry left open, and (2) build out `run_thesis_model.m`
+into the actual Results-chapter pipeline per `main_results_path.md`'s
+Tier 1/Tier 2 map, now that the appendix check gave the green light.
+
+**Admissibility closed.** Added a live `iotae`/`iotab` sign check
+(pulled from `M_.params`, since Dynare never prints them) to the main
+scenario loop. Confirmed `iotae>0` and `iotab>0` at every φ tested (1e-4,
+0.03, 0.20, 0.30, 0.50). No violation anywhere.
+
+**`run_thesis_model.m` rebuilt into the full Tier-1+2 pipeline**, one
+file per the project's own "exactly one .mod and one .m file" rule —
+new sections as local functions, wired through the existing solve loop
+rather than duplicating it, plus one deliberately-duplicated
+script-level φ-sweep loop (not a function) to avoid the real risk of
+`dynare()`'s global-workspace mechanism misbehaving inside a function
+scope, which was not worth testing under a deadline. New deliverables:
+two-channel decomposition + safe-haven check (5.2.2), steady-state
+comparison table (5.2.1), calibration table sourced live from `M_.params`
+(5.1), a 20,000-quarter stochastic simulation with tail moments and
+Output-/Spread-at-Risk (5.3.1/5.3.2), and a 14-point continuous φ
+sensitivity sweep, φ=0 to 0.50 (5.4.1/6.1).
+
+**Two real bugs caught by the first full run, before either reached the
+thesis:**
+1. `local_calibration_table` crashed looking up `levss` in `M_.params` —
+   it isn't a declared parameter, it's a throwaway local inside
+   `steady_state_model`. Fixed by sourcing the number from `lev`'s actual
+   endogenous steady-state value instead.
+2. The safe-haven check's own logic was backwards: it required `Qb`'s
+   GIRF to keep getting *more* negative every quarter, which a
+   mean-reverting response to a persistent-but-decaying shock (ρ_θ=0.9)
+   will never do. Diagnosed with a small standalone single-scenario
+   script rather than re-running the full 30-40 minute pipeline blind —
+   the actual path falls to −0.0184% on impact and recovers monotonically
+   back toward zero without ever crossing it, which *is* the safe-haven
+   result. Fixed the check to test for "no sign reversal," not
+   "monotonically deepening."
+
+**Results, once both fixes were in and the full pipeline re-ran clean:**
+- Two-channel decomposition: impact-period leverage response is 4.63% of
+  its own peak (peak at t=5) at baseline φ=0.03; `Nb` exactly 0 at
+  impact, confirming the channel really is pre-net-worth.
+- Safe-haven: `Qb` never reverses sign (confirmed); `Hb` dominates `Rf`
+  from t=1 onward (confirmed) — at the impact period only, `Rf`'s fast
+  Fisher-equation jump (0.0101%) briefly exceeds `Hb`'s move (0.0084%),
+  a real, tiny, reportable nuance rather than a violation.
+- **φ-sweep: all 14 points, φ=0 through φ=0.50, solve cleanly — zero Inf
+  eigenvalues anywhere, including exactly φ=0.** Resolves the standing
+  φ=0 numerical-fragility question from `ToDoAugust1st.md` §2: at the
+  current Φ=6/Gelain-posterior calibration, whatever motivated using
+  1e-4 as a "smoother counterfactual" is gone. (The earlier φ=0.80/
+  levss=5.5 hard BK failure was a different, now-superseded calibration —
+  not re-tested, since it's moot.) Peak spread response and the
+  impact-leverage-share are both smooth and monotonic in φ across the
+  full range.
+- Tail-risk moments (20,000-quarter simulation): genuinely fat-tailed and
+  asymmetric — sovereign spread skew 3.33/kurtosis 22.75, consumption
+  skew −1.25/kurtosis 7.36, bank leverage mean 7.78 against the 6.0
+  steady-state target with skew 1.24. This is the evidence that actually
+  earns "tail" in the thesis title.
+
+**Output:** `Fig1_Headline_GIRF`, `Fig2_Core_Phi_Sweep`,
+`Fig3_Beyond_Calibration`, `Fig4_Phi_Sweep` (.fig/.png), and
+`table_two_channel_safehaven.csv`, `table_steady_state.csv`,
+`table_calibration.csv`, `table_tail_risk_moments.csv`,
+`table_phi_sweep.csv`, plus consolidated `thesis_model_results.mat`.
+Ready to write directly into the Results chapter.
