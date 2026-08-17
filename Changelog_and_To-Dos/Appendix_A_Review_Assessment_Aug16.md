@@ -1,9 +1,13 @@
 # Assessment of the Appendix A Review Pass (for the Appendix B/C Deepening Pass)
 
-**Updated 2026-08-17: the Taylor rule item below was wrong in the
-2026-08-16 version and has been corrected in place (marked below) —
-level gap confirmed correct against IS2017's own equations (11)/(A.21),
-not the log gap this assessment originally recommended.**
+**Updated 2026-08-17 (two corrections, both marked in place below):**
+(1) the Taylor rule item was wrong in the 2026-08-16 version — level
+gap confirmed correct against IS2017's own equations (11)/(A.21), not
+the log gap originally recommended; (2) the Fisher equation's *location*
+(not its functional form, which was already right) has moved from
+Appendix A.4 (Public Authority) to Appendix A.1 (Households), matching
+where IS2017's own analogous equation lives — the user correctly noted
+IS2017's Public Authority section carries no Fisher equation at all.
 
 Written 2026-08-16 by Claude Code, working directly against
 `thesis_model_v3.mod` and the full Dynare/MATLAB results pipeline for
@@ -88,21 +92,40 @@ explicitly asserting "the approximate form is therefore not used"; the
 Dynare's own expectation semantics.
 
 **Resolution direction, per the governing principle above: Appendix A
-and B were right; the main text was stale.** A full, from-first-principles
-derivation of the exact form (no-arbitrage pricing of a notional
-zero-net-supply nominal bond via the household SDF, exactly parallel to
-how the sovereign bond price is already derived) plus the precise
-collapse condition (covariance + Jensen decomposition, and *why* both
-fail in this model — $\theta_t$ moves the SDF and expected inflation
-jointly) has been written and handed to the user as
-`Fisher_Taylor_Replacement_Draft.md`, ready to paste into both the main
-text and Appendix A.
+and B were right on the functional form; the main text was stale.** A
+full, from-first-principles derivation of the exact form (no-arbitrage
+pricing of a notional zero-net-supply nominal bond via the household
+SDF, exactly parallel to how the sovereign bond price is already
+derived) plus the precise collapse condition (covariance + Jensen
+decomposition, and *why* both fail in this model — $\theta_t$ moves the
+SDF and expected inflation jointly) has been written and handed to the
+user as `Fisher_Taylor_Replacement_Draft.md`.
 
-**Consequence for this B/C pass: none needed.** B.30 already states the
+**Placement corrected 2026-08-17, separately from the functional-form
+question.** The user asked why IS2017's own Public Authority section
+(§2.4, checked directly) carries no Fisher equation at all. Correct
+observation: IS2017 aren't missing this equation, it lives in their
+Households section, since their household holds the nominal sovereign
+bond directly and its own bond Euler plays this role — this thesis's
+own text already quotes that IS2017 equation, in Households, at the
+point explaining why the deposit Euler replaces it on the household
+side, but never delivers the replacement there. **The full derivation
+now lives in Appendix A.1 (Households), immediately after A.1.6, not in
+Appendix A.4 (Public Authority).** Public Authority keeps only the GBC
+and Taylor rule, matching IS2017's own leaner structure — with one
+cross-reference sentence pointing back to A.1 for how $r_t$ relates to
+$R^f_t$. The mathematics is unchanged from the first draft; only its
+location moved, plus retagging to A.1.7 (was A.4.2).
+
+**Consequence for this B/C pass: none needed, either for the
+functional-form question or the relocation.** B.30 already states the
 exact form correctly and requires no change — every term in it
 ($r,\pi,\mathcal{M}_{t,t+1}$) is already stationary, so the level
-equation detrends into B.30 unchanged. This was one of the cases where
-B/C were already ahead of A.
+equation detrends into B.30 unchanged. Appendix B is organised by
+equation type (SDF-discounted vs. trend-discounted), not by which
+agent's problem an equation originally came from, so B.30's existing
+position needs no analogous relocation — only its surrounding text
+could optionally note it now corresponds to A.1.7 rather than A.4.2.
 
 **Consequence for a later `.mod` pass (not yet decided, out of scope for
 you right now):** if the exact form is adopted computationally, the

@@ -1,97 +1,112 @@
 # Fisher Equation & Taylor Rule — Final Draft Replacement Text
 
-Drafted 2026-08-16, **Taylor rule corrected 2026-08-17.**
+Drafted 2026-08-16. Taylor rule corrected 2026-08-17 (level gap, not
+log gap). **Fisher equation relocated 2026-08-17** (Households, not
+Public Authority). This version (v3) supersedes both earlier versions
+in full — the LaTeX blocks below are the current, complete replacement;
+nothing from v1/v2 should be pasted separately.
 
-## Correction notice (read this first)
+## What changed and why (read this first)
 
-The first version of this draft (2026-08-16) recommended changing the
-Taylor rule's output term to a log gap, on a generic dimensional-analysis
-argument. **That recommendation was wrong and is withdrawn.** The user
-pointed out that IS2017 — the paper this thesis explicitly follows for
-its public-authority block — uses exactly the level-gap form already
-present in the main text, Appendix B (B.31), and the `.mod`:
+**v1 → v2 (Taylor rule, 2026-08-17):** the original log-gap
+recommendation was wrong — IS2017's own eq. (11)/(A.21) use the level
+gap already present in the main text, Appendix B (B.31), and the
+`.mod`. Reverted. Full reasoning in `CHANGELOG_dynare_debug.md`,
+2026-08-17 entry.
 
-> IS2017 eq. (11): $r_t=\rho_r r_{t-1}+(1-\rho_r)\bigl[\varphi_\pi(\pi_t-\bar\pi)+\varphi_Y(Y_t/z_t-\bar Y/\bar z)+\bar r\bigr]$
->
-> IS2017 eq. (A.21), stationarized: $r_t=\rho_r r_{t-1}+(1-\rho_r)[\varphi_\pi(\pi_t-\bar\pi)+\varphi_Y(y_t-\bar y)+\bar r]$
+**v2 → v3 (Fisher equation placement, 2026-08-17):** the user asked
+whether the Fisher equation is needed at all, noting IS2017's own
+Public Authority section (their §2.4, pasted directly) contains *only*
+the Taylor rule — no separate Fisher equation. Correct observation, but
+the resolution is relocation, not deletion:
 
-Appendix A's log-gap form was the thing that had drifted from the
-template — not the main text, not Appendix B, not the `.mod`. Opus's
-original "A7 dimensional fix" didn't check IS2017 directly, and the
-2026-08-16 version of this draft compounded that by building a full
-justification for the wrong direction. **The Taylor rule section below
-is now the correction of that correction: back to the level-gap form,
-justified by direct citation to IS2017 (11)/(A.21) rather than an
-abstract dimensional argument.** The Fisher equation section is
-unaffected — see the note at the end of that section for why.
+- $R^f_t$ and $R^d_t$ are already fully pinned by the deposit Euler
+  (A.1.3) plus the definition (A.1.6) — clean, no covariance issue,
+  nothing missing. That was never in question.
+- $r_t$ (the nominal policy rate) is a *different* object. It appears
+  in exactly two places in the `.mod`: the Taylor rule (which sets it)
+  and the Fisher equation (which connects it to the real side via
+  inflation). Drop the second and the system is short one equation for
+  one variable — `r` becomes unpinned, and Dynare will not solve a
+  42-variable, 41-equation system. Some version of this equation has to
+  exist somewhere.
+- IS2017 do have this equation — it is not absent, just not in their
+  Public Authority section. Their household holds the nominal sovereign
+  bond directly, so their household's own bond Euler,
+  $\mathbb{E}_t[\mathcal{M}_{t,t+1}(1+r_t)/(1+\pi_{t+1})]=1$, plays
+  exactly this role, stated once in their Households section (§2.2) and
+  never restated in §2.4. This thesis's own text already quotes that
+  exact IS2017 equation (in the Households section, at the point where
+  it explains why the deposit Euler replaces it) but never actually
+  delivers the replacement — that gap is what the relocated paragraph
+  below fills.
 
-Two smaller fixes remain bundled in, both orthogonal to the level/log
-question and still valid:
+**Net structural change:** the full derivation (no-arbitrage argument +
+the collapse-condition analysis) moves into Households, immediately
+after the risk-free-rate/deposit-market discussion — mirroring where
+IS2017's own analogous equation lives. Public Authority shrinks to GBC +
+Taylor rule only, matching IS2017's leaner structure, with one
+cross-reference sentence back to Households. The mathematical content is
+identical to the v2 draft; only its location and the surrounding framing
+changed, plus the equation tags to fit Households numbering (A.1.7 in
+the appendix; the main text picks a compact numbered slot after 2.2.9).
 
-1. **Symbol collision.** The currently-implemented main text uses
-   `\lambda_\pi, \lambda_\Y` for the Taylor-rule coefficients. `\lambda_t`
-   is already the endogenous bank leverage multiplier throughout the
-   banking block (`.mod`'s `lev`). Reusing `\lambda` here creates a new
-   collision worse than the `\phi` collision it was presumably chosen to
-   avoid. Both replacements below use `\varphi_\pi, \varphi_Y` instead.
-2. **Factual correction.** The current Appendix A.4.3 closing sentence
-   says the model is "driven by the two structural innovations
-   `\varepsilon_{z,t}` and `\varepsilon_{\theta,t}`." The `.mod`'s
-   `varexo` block is `etheta er;` — there is no `\varepsilon_z` shock
-   declared at all (trend growth is purely deterministic in this
-   calibration); the second declared-but-inactive shock is monetary
-   (`er`, `stderr 0`), not TFP. Corrected below.
+Two smaller fixes remain bundled in from v1/v2, both orthogonal to
+placement and still valid:
 
-Both blocks are drop-in replacements — copy the LaTeX between the rules
-directly over the corresponding paragraphs. Equation tags are unchanged
-(2.5.2/2.5.3 main text, A.4.2/A.4.3 appendix) so no other cross-reference
-in the document needs to change.
+1. **Symbol collision.** `\lambda_\pi,\lambda_\Y` collides with the bank
+   leverage multiplier $\lambda_t$. Standardised on
+   $\varphi_\pi,\varphi_Y$ throughout.
+2. **Factual correction.** The model's only live shock is
+   $\varepsilon_{\theta,t}$ — no $\varepsilon_z$ exists in the `.mod`'s
+   `varexo` block at all; $\varepsilon_r$ is declared but held at
+   `stderr 0`.
 
-**Downstream, for the B/C deepening pass (not done here, per your
-instruction — flagging for you or Opus):**
-- **B.30 needs no change.** It already states the exact form
-  `E_t[M_{t,t+1}(1+r_t)/(1+\pi_{t+1})]=1` — the new A.4.2 below detrends
-  into exactly this, unchanged, since every term in it (`r`, `\pi`,
-  `\mathcal{M}_{t,t+1}`) is already trend-free. Appendix B was already
-  right; only Appendix A and the main text were behind it.
-- **B.31 also needs no change.** With the Taylor rule reverted to the
-  level-gap form, B.31's existing `\lambda_\Y(y_t-\bar y)` is already
-  correct in substance — only the coefficient symbol needs renaming to
-  `\varphi_\pi,\varphi_Y` for consistency with A.4.3 and the main text,
-  a cosmetic rename, not a rederivation.
-- The calibration table's citation for `phiy = 0.5` needs no
-  re-examination on dimensional grounds — the level-gap form matches
-  IS2017's own specification directly, so if `phiy` was already sourced
-  from IS2017's calibration it is already an apples-to-apples number.
+**Downstream, for the B/C deepening pass:**
+- **B.30 needs no change** — already states the exact form, and it's
+  already in the right conceptual place relative to the household block
+  it discretizes from. No relocation needed in Appendix B; B is
+  organised by *equation type* (SDF-discounted vs. trend-discounted),
+  not by which agent's problem an equation originally came from, so
+  B.30 sitting where it does was already fine.
+- **B.31 needs no change** beyond the coefficient-symbol rename
+  ($\varphi_\pi,\varphi_Y$), as established in v2.
+- One extra cross-reference to add when B is next touched: B.30's
+  surrounding text could note it corresponds to the newly-numbered
+  A.1.7 rather than the old A.4.2 — cosmetic, not urgent.
 
 ---
 
-## 1. Main text replacement (§2.5 Public Authority)
+## 1. Main text — Households (§2.2) insertion
 
-Replaces the paragraph beginning "We are then left with determining the
-Fisher Equation and Taylor Rule..." through the end of the Taylor-rule
-paragraph (currently tagged (2.5.2)/(2.5.3)). The Government Budget
-Constraint paragraph above it, and the Dräger (2016) paragraph below it,
-are untouched — paste this in between them.
+Insert immediately after the paragraph ending "...does not add an
+independent equation to the system." (the $R^d_t=R^f_t$ discussion,
+directly below eq. 2.2.9) and before the "Because households save
+exclusively..." paragraph, OR after that paragraph and before the
+Firms section starts — either position is fine; keep it inside
+Households, after the risk-free-rate material it depends on.
+
+**Also note, unrelated to this task but visible while locating the
+insertion point:** the sentence "As $R^d_t$ is known at $t$,
+\eqref{eq:HHO_Deposit_Euler} can be solved directly as..." currently
+appears twice, verbatim, back to back as separate paragraphs, in the
+current main text. Looks like a copy-paste duplication, not intentional
+repetition for emphasis — worth deleting the second copy whenever this
+section is next edited, independent of the Fisher-equation change.
 
 ```latex
-We are then left with determining the Fisher equation and the Taylor
-rule linking the nominal and real sides of the model.
-
-Let $r_t$ denote the net nominal policy rate set by the Taylor rule
-below. Because $r_t$ is a policy instrument rather than the return on
-an asset any household or bank actually holds, its relationship to the
-real risk-free rate $R^f_t$ of \eqref{eq:riskfree_rate} is fixed by
-requiring that a hypothetical, zero-net-supply nominal bond paying
-$(1+r_t)$ be correctly priced by the household stochastic discount
-factor $\mathcal{M}_{t,t+1}$ of \eqref{eq:SDF} — the same no-arbitrage
-logic already used to price the sovereign bond in
-Section~\ref{sec:Disaster_Transition}. This gives the exact Fisher
-relation
+The nominal policy rate $r_t$ set by the public authority's Taylor rule
+(Section~\ref{secmain:public_authority}) is not the return on any asset
+this household holds. \textcite{Isore2017} pin down the analogous object
+directly through their own household's bond Euler, stated above; because
+this household holds no bond of any kind, the same no-arbitrage
+restriction is imposed here as the pricing condition a hypothetical,
+zero-net-supply nominal bond would have to satisfy under the household
+stochastic discount factor $\mathcal{M}_{t,t+1}$ of \eqref{eq:SDF}:
 
 \begin{equation}
   \mathbb{E}_t\!\left[\mathcal{M}_{t,t+1}\,\frac{1+r_t}{1+\pi_{t+1}}\right] = 1
-  \tag{2.5.2}
+  \tag{2.2.10}
   \label{eq:A4_fisher}
 \end{equation}
 
@@ -102,15 +117,30 @@ and $1+\pi_{t+1}$ that this model does not impose: the disaster
 probability $\theta_t$ moves both the discount factor and expected
 inflation simultaneously, so the two are generically correlated.
 Equation~\eqref{eq:A4_fisher} is therefore carried in its exact form
-through stationarization (Appendix~\ref{sec:Stationarization}); the full
-derivation and the precise collapse condition are given in
-Appendix~\ref{par:A412}.
+through stationarization (Appendix~\ref{sec:Stationarization}, B.30);
+the full derivation and the precise collapse condition are given in
+Appendix~\ref{par:A17}.
+```
 
-Further, following \textcite{Isore2017}'s own public-authority block,
-the public authority sets the nominal interest rate $r_t$ according to a
+---
+
+## 2. Main text — Public Authority (§2.5) replacement
+
+Replaces the paragraph beginning "We are then left with determining the
+Fisher Equation and Taylor Rule..." through the end of the Taylor-rule
+paragraph (currently tagged (2.5.2)/(2.5.3)). The Government Budget
+Constraint paragraph above it, and the Dräger (2016) paragraph below it,
+are untouched.
+
+```latex
+Following \textcite{Isore2017}'s own public-authority block, the public
+authority sets the nominal interest rate $r_t$ according to a
 Taylor-type rule that targets the deviations of inflation from its
 steady-state value $\bar{\pi}$ and of detrended output from its
-steady-state level $\bar{Y}$:
+steady-state level $\bar{Y}$; its relationship to the real risk-free
+rate $R^f_t$ of Section~\ref{sec:households} is established there,
+following IS2017's own placement of the analogous condition in the
+household's problem rather than the public authority's:
 
 \begin{equation}
   r_t = \rho_r\, r_{t-1}
@@ -119,7 +149,7 @@ steady-state level $\bar{Y}$:
             + \varphi_Y\!\left(\frac{Y_t}{z_t} - \bar{Y}\right)
             + \bar{r}
           \right]
-  \tag{2.5.3}
+  \tag{2.5.2}
   \label{eq:A4_taylor}
 \end{equation}
 
@@ -131,33 +161,45 @@ enter the Taylor rule directly; it affects $r_t$ only through its
 general-equilibrium effects on $\pi_t$ and $Y_t$.
 ```
 
+Note the retag: this was (2.5.2)/(2.5.3) with two equations (Fisher +
+Taylor); it is now just (2.5.2) with one. Check for any other
+`\eqref{eq:A4_taylor}` or `\eqref{eq:A4_fisher}` reference in the main
+text that assumed the old tag numbers — a document-wide search for both
+labels before finalising is worth doing once, since the Fisher label now
+resolves to a Households equation, not a Public Authority one.
+
 ---
 
-## 2. Appendix A replacement (A.4.2 Fisher Equation + A.4.3 Taylor Rule)
+## 3. Appendix A — Households (A.1) insertion
 
-Replaces everything from "We are then left with determining the Fisher
-Equation and Taylor Rule." through the end of the current A.4.3
-paragraph (i.e. the `\paragraph{Fisher Equation}` and
-`\paragraph{Taylor Rule}` blocks together). The Government Budget
-Constraint paragraph above (`\paragraph{Government Budget Constraint}`)
-is untouched.
+Insert immediately after A.1.6 (the risk-free-rate definition) and its
+surrounding discussion — i.e. after "...done in equation~\eqref{eq:B_EQ}
+below." and before "\paragraph{Capital-Goods Producer.}" This becomes
+the new final paragraph of the Households subsection.
 
 ```latex
-We are then left with determining the Fisher equation and the Taylor
-rule.
-
 \paragraph{Fisher Equation}
-\label{par:A412}
+\label{par:A17}
 
-The nominal policy rate $r_t$ set by the Taylor rule below is not the
-price of any asset an optimising household or bank actually holds in
-this model — households save only through deposits
-(Appendix~\ref{appsec:households}), and banks hold only loans and
-sovereign bonds (\S\ref{sec:A3.2}). Its relationship to the model's real
-objects is instead pinned down by a standard no-arbitrage construction,
-exactly parallel to how the sovereign bond price $Q^b_t$ is pinned down
-in \S\ref{sec:Disaster_Transition} by requiring the household SDF to
-correctly price an asset the household does not literally hold.
+The nominal policy rate $r_t$ set by the Taylor rule of
+Appendix~\ref{sec:public} is not the price of any asset an optimising
+household or bank actually holds in this model — households save only
+through deposits, and banks hold only loans and sovereign bonds
+(\S\ref{sec:A3.2}). \textcite{Isore2017} pin down the analogous object
+directly, through their own household's bond Euler
+$\mathbb{E}_t[\mathcal{M}_{t,t+1}(1+r_t)/(1+\pi_{t+1})]=1$, since their
+household holds that bond. This model's household holds no bond of any
+kind, so the same relationship is imposed here as a no-arbitrage
+restriction rather than a household optimality condition — exactly
+parallel to how the sovereign bond price $Q^b_t$ is pinned down in
+\S\ref{sec:Disaster_Transition} by requiring the household SDF to
+correctly price an asset the household does not literally hold. This is
+a distinct point from the household's non-holding of physical capital
+noted above, which instead explains the absence of a capital-accumulation
+multiplier $\Lambda^C_t$ among the first-order conditions of this
+section: the relevant fact here is specifically the absence of any
+bond-holding, since that is what would otherwise have generated a
+nominal Euler equation directly.
 
 Consider a hypothetical one-period nominal bond in zero net supply,
 priced at $1$ in period $t$ and paying $(1+r_t)$ with certainty, in
@@ -172,7 +214,7 @@ payoff:
 
 \begin{equation}
   \mathbb{E}_t\!\left[\mathcal{M}_{t,t+1}\,\frac{1+r_t}{1+\pi_{t+1}}\right] = 1
-  \tag{A.4.2}
+  \tag{A.1.7}
   \label{eq:A4_fisher}
 \end{equation}
 
@@ -230,7 +272,20 @@ $R^f_t$ is the sovereign spread of \eqref{eq:A3_spread}.
 % --- scale-invariant, and $\mathcal{M}_{t,t+1}$ is already stationary
 % by~\eqref{eq:B_SDF}. Equation~\eqref{eq:A4_fisher} passes into B.30
 % unchanged. $\to$ Appendix~B.
+```
 
+---
+
+## 4. Appendix A — Public Authority (A.4) replacement
+
+Replaces everything from "We are then left with determining the Fisher
+Equation and Taylor Rule." through the end of the current A.4.3
+paragraph (i.e. the `\paragraph{Fisher Equation}` and
+`\paragraph{Taylor Rule}` blocks together, which collapse into one
+paragraph below). The Government Budget Constraint paragraph above
+(`\paragraph{Government Budget Constraint}`) is untouched.
+
+```latex
 \paragraph{Taylor Rule}
 \label{par:A413}
 
@@ -247,7 +302,7 @@ detrended output from its steady-state level $\bar{Y}$:
             + \varphi_\pi\bigl(\pi_t - \bar{\pi}\bigr)
             + \varphi_Y\!\left(\frac{Y_t}{z_t} - \bar{Y}\right)
           \right]
-  \tag{A.4.3}
+  \tag{A.4.2}
   \label{eq:A4_taylor}
 \end{equation}
 
@@ -261,7 +316,9 @@ of \S\ref{sec:A3.2}. The output term is a level, not a log, deviation of
 detrended output from its steady state, exactly as in
 \textcite{Isore2017}'s own specification; $\varphi_Y$ is calibrated
 against that same object, so the two are directly comparable without
-rescaling.
+rescaling. $r_t$'s relationship to the real risk-free rate $R^f_t$ is
+established in Appendix~\ref{par:A17}, following IS2017's own placement
+of the analogous condition in the household's problem.
 
 The model's only live stochastic driver is the disaster-risk innovation
 $\varepsilon_{\theta,t}$: a monetary-policy shock $\varepsilon_{r,t}$ is
@@ -271,3 +328,10 @@ all. The disaster probability $\theta_t$ does not enter the Taylor rule
 directly; it affects $r_t$ only through its general-equilibrium effects
 on $\pi_t$ and $Y_t/z_t$.
 ```
+
+Note the retag: A.4.2 was Fisher, A.4.3 was Taylor; A.4 now has only one
+numbered equation, so Taylor becomes A.4.2. If A.4 had any subsequent
+equations after the old A.4.3 in the current numbering, they shift down
+by one — check the Model Closing Conditions section immediately
+following for any hardcoded "(A.4.3)"-style forward reference before
+finalising.

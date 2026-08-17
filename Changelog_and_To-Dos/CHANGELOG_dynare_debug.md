@@ -3014,3 +3014,68 @@ required bringing Appendix A back down to what the main text, Appendix
 B, and `.mod` already had right. Two different directions, same
 underlying fix: align everything to what the cited source template
 actually says, checked directly rather than assumed.
+
+## 2026-08-17 (later) — Fisher equation relocated to Households, matching IS2017's own structure
+
+User pasted IS2017's actual §2.4 (Public Authority): Taylor rule only,
+no Fisher equation, and asked to challenge their own instinct that this
+thesis's Households block (deposit Euler + risk-free-rate definition)
+already "clears" R^f/R^d and might not need a separate Fisher equation
+at all.
+
+**Challenged and partly upheld, partly refined.** Confirmed: R^f_t and
+R^d_t are genuinely already fully pinned by the deposit Euler (A.1.3) +
+definition (A.1.6), no gap there. Pushed back on the conclusion: r_t
+(the nominal policy rate) is a different object, appears in exactly two
+places in the `.mod` (the Taylor rule that sets it, and the Fisher
+equation connecting it to the real side) — drop the second and the
+42-variable system is short one equation; `r` becomes unpinned and
+Dynare will not solve it. Some version of this equation has to exist
+somewhere.
+
+Resolved by checking IS2017 directly rather than assuming: they do have
+this equation, just not in Public Authority — their household directly
+holds the nominal sovereign bond, so their household's OWN bond Euler
+(`E_t[M_{t,t+1}(1+r_t)/(1+pi_{t+1})]=1`) plays this role, stated once in
+their Households section and never restated in Public Authority. This
+thesis's own text already quotes that exact IS2017 equation, in
+Households, at the point explaining why the deposit Euler replaces it on
+the household side — but never delivered the replacement equation there.
+That gap is what the relocated derivation now fills.
+
+**Action: relocated, not deleted.** The full Fisher-equation derivation
+(no-arbitrage argument + collapse-condition analysis, mathematically
+unchanged from the 2026-08-16 draft) moved from Appendix A.4 (Public
+Authority) to Appendix A.1 (Households), immediately after A.1.6 —
+retagged A.1.7 (was A.4.2). Public Authority now carries only GBC +
+Taylor rule (retagged A.4.2, was A.4.3), matching IS2017's own leaner
+structure, with a one-sentence cross-reference back to A.1 for how r_t
+relates to R^f_t. Main text mirrors the same split: a compact version in
+Households (2.2.10) and Public Authority trimmed to GBC + Taylor rule
+(2.5.2). `Fisher_Taylor_Replacement_Draft.md` rewritten as v3 with four
+LaTeX blocks (main text Households, main text Public Authority, Appendix
+A Households, Appendix A Public Authority) replacing the original two.
+`Appendix_A_Review_Assessment_Aug16.md` updated to match.
+
+Also caught while relocating, unrelated: the main text's $R^d_t=R^f_t$
+paragraph has one sentence duplicated verbatim, back to back, right
+where the new insertion point sits — flagged for cleanup, not fixed
+(not in scope, text-only, no equation content).
+
+No `.mod` or Appendix B/C change from any of this — B.30 already sits in
+the right conceptual place (Appendix B groups by equation type, not by
+originating agent) and needs no relocation, only an optional note that
+it now corresponds to A.1.7 rather than A.4.2.
+
+**Same-day follow-up check:** user asked whether "household holds no
+capital" was part of the reason for the relocation above. Verified
+against the actual drafted text — it wasn't; the operative fact cited
+throughout is specifically "holds no bond," a different, independent
+fact from the capital point (which explains the absence of a
+capital-accumulation multiplier `\Lambda^C_t` among the household's
+FOCs, not the Fisher equation). Worth checking precisely because the
+existing appendix text states both facts back-to-back as a pair,
+immediately above the new insertion point, which invites exactly this
+conflation. Added one disambiguating sentence to the Households
+insertion in `Fisher_Taylor_Replacement_Draft.md` making the distinction
+explicit rather than leaving it implicit.
