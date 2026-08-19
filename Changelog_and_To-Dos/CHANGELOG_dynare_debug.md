@@ -3079,3 +3079,217 @@ immediately above the new insertion point, which invites exactly this
 conflation. Added one disambiguating sentence to the Households
 insertion in `Fisher_Taylor_Replacement_Draft.md` making the distinction
 explicit rather than leaving it implicit.
+
+## 2026-08-19 — Opus-briefing verification pass: `.mod` fix confirmed, results regenerated, ready for write-up
+
+User liaised with Opus overnight, producing three ledgers plus a
+consolidated `Briefing Doc - Opus Update` — a strict protocol document
+for reconciling `thesis_model_v3.mod` against the newest text
+(`Status Quo - Thesis August 18th.txt`). Full detail and the complete
+item-by-item report in `ToDoAugust19th.md`; this entry is the pointer.
+
+**Real bug, already fixed by the user, syntactically broken until
+tonight:** the entrepreneur net-worth equation (`Ne`, line 466) had
+been correctly edited to stop double-counting the trend-growth factor on
+the capital terms, but used MATLAB's `...` line-continuation, which
+Dynare's `.mod` parser rejects — the file had not successfully compiled
+since that edit. Fixed the syntax only; verified the economics was
+already correct four independent ways (hand-derivation, git diff,
+Appendix C's C.28 closed form, and a live run showing all 42 residuals
+at exact zero). `iotae` moved ~0.2% (small because muz=0.003 is small).
+Rewrote the now-actively-wrong comment above it, which described the
+old, incorrect reasoning.
+
+**Also found and fixed, not in the briefing:** `local_calibration_table`
+was missing from `run_thesis_model.m` entirely — confirmed via
+`git log` to have never been committed at any point, lost from the
+working file before tonight. Reconstructed from memory of the original
+build. Two mislabelled result-table rows (briefing §7) also fixed: the
+"annualized bps" mislabel (fixed everywhere it appeared, not just the
+row flagged) and the entrepreneur-premium row (now reports both the
+realised and true expected premium, separately labelled).
+
+**Regression check held exactly:** sovereign spread unchanged at
+85.0769 bps across all three core φ scenarios after the fix and full
+results regeneration — confirms the fix is correctly isolated to the
+entrepreneur block, as it should be. φ-sweep still clean at all 14
+points including φ=0; tail-risk moments essentially unchanged.
+
+**Reported, not implemented, awaiting a decision:** the Fisher equation
+(`.mod` line 416) — independently re-derived the exact-form
+implementation from B.30, confirmed correct (verified `rss` stays
+`piss/Qss` unchanged), but this is a genuine equation-level model change
+and stays on hold per standing practice.
+
+**Verdict: no outstanding item blocks starting the Results-chapter
+write-up.** One cosmetic LaTeX fix (line 2904, mismatched
+`\begin{align*}`/`\end{align}`) and the Fisher-equation decision are the
+only two open items, neither blocking.
+
+## 2026-08-19 (later) — Fisher-equation exact-form diagnostic: implemented on a copy, quantified, NOT merged
+
+User asked to actually implement the exact-form Fisher equation (§2 of
+the Opus briefing, deferred earlier tonight) as a diagnostic exercise —
+explicitly "briefing material, not content for the thesis itself." Built
+as two parallel diagnostic files so nothing thesis-facing could be
+touched: **`thesis_model_v3_fisher_exact.mod`** (copy of
+`thesis_model_v3.mod`, eq(6) `Q=pi(+1)/r` replaced by a new auxiliary
+`FI = E_t[M(t,t+1)/pi(t+1)]` — same construction pattern as `CE` — and
+`r=1/FI`) and **`run_thesis_model_fisher_exact.m`** (copy of
+`run_thesis_model.m`, points at the new `.mod`, every output renamed
+`FisherExact_*` / `*_fisher_exact`, so nothing overwrites the real
+`Fig1-4`/`table_*.csv`/`thesis_model_results.mat`). The real
+`thesis_model_v3.mod` and `run_thesis_model.m` are untouched by any of
+this.
+
+**Verified before running the comparison:** all 43 equation residuals
+exact zero; rank condition holds with the **same 9 jumpers as before**
+(confirms `FI`, like `CE`/`Dcal`/`Ecal`/`Theta`, doesn't itself require a
+new BK-relevant terminal condition — reasoned by hand first, then
+confirmed empirically, not assumed); `rss` identical to 10 significant
+figures between the two `.mod` versions (1.00415202 = 1.00415202),
+exactly as derived — the steady state is genuinely unaffected, only the
+third-order dynamics change.
+
+**GIRF magnitude comparison, baseline phi=0.03 (max abs. difference as
+% of the baseline peak response):**
+
+| Variable | % of peak | Variable | % of peak |
+|---|---|---|---|
+| spread | 0.08% | y | 10.21% |
+| lev | 1.65% | w | 5.67% |
+| Nb | 3.46% | L | 14.11% |
+| r / pi / Rf / Q | 4.6-7.0% | i | 18.55% |
+| c | 3.56% | Ne | 15.40% |
+
+**Reading:** the approximation error is **not uniform**. The paper's own
+novel mechanism — the sovereign-bank channel, measured by `spread` and
+`lev` — is essentially untouched (0.08% and 1.65%). But broader macro
+propagation through the NK/monetary block is not: investment moves 18.6%
+of its own peak response, labour 14.1%, entrepreneur net worth 15.4%,
+output 10.2%. These are magnitude, not sign, differences — no variable
+reverses direction — but they are not negligible for a chapter that
+reports specific GIRF numbers.
+
+**One number likely to matter for the write-up specifically:** the
+two-channel decomposition's "impact-period share of peak" — the number
+that quantifies how much of the leverage channel's eventual peak
+response is already present before any realised loss — moves from
+4.69% (current, approximate Fisher) to 3.97% (exact Fisher), about a
+15% relative shift in a number the Results chapter's own decomposition
+argument is built around.
+
+**Phi-sweep comparison:** peak sovereign-spread response is virtually
+identical across all 14 phi points under both versions (e.g. 0.8582 vs
+0.8590 bps at baseline) — the amplification-in-phi story is robust to
+this choice. The impact-share-of-peak column shifts down consistently
+under the exact form at low-to-mid phi, converging and slightly
+reversing at phi=0.5 (24.14% vs 24.42%) — a detail, not a different
+story.
+
+**Answering the user's direct question — are we closer to our own
+derivations with this change: yes, unambiguously.** Appendix A.1.7 and
+B.30 already state the exact form and explicitly say "the approximate
+form is therefore not used." Until tonight the `.mod` contradicted that
+sentence. The exact-form `.mod` now matches what the text has claimed
+all along — this closes a real text/code gap, not a cosmetic one.
+
+**Not merged into the thesis-facing files.** This was run and reported
+as requested, on the isolated diagnostic copies described above.
+Deciding whether to adopt it — which would mean re-running the real
+pipeline, regenerating the real `Fig1-4`/`table_*.csv`, and checking the
+text for any place that quotes a specific GIRF magnitude for y, i, L, or
+Ne, or the 4.69%/4.63% impact-share number — is the user's call, not
+made here.
+
+**Files this session, all diagnostic, none thesis-facing:**
+`thesis_model_v3_fisher_exact.mod`, `run_thesis_model_fisher_exact.m`,
+`thesis_model_results_fisher_exact.mat`, `FisherExact_Fig1-4.png/.fig`,
+`FisherExact_table_*.csv`, `verify_fisher_exact.log`,
+`run_fisher_exact_full.log`.
+
+## 2026-08-19 (later still) — Correction: IS2017's own code uses the approximate Fisher form; thesis_model_v4.mod promoted to official
+
+**Correction, made openly.** Checked the actual IS2017 replication `.mod`
+(user-supplied) instead of relying on the thesis text's description of
+it. Traced their Q/r/pi relationship by hand: their line 128
+(`Q = pi(+1)/r`) is a standalone equation, and Dynare processes each
+equation's expectation independently — it does not algebraically
+substitute one equation into another first. Taking that equation alone:
+`E_t[Q - pi(+1)/r] = 0` gives exactly the approximate form, same as this
+thesis's v3 before tonight. Their line 126 is a separate equation (their
+version of "eq(4)", the SDF Euler — confirmed by re-deriving their own
+steady-state `Qss` formula from it and matching their line 88 exactly),
+not a second, exact-form Fisher equation. **So IS2017's own code does
+not use the exact form — the earlier claim that it does, made a few
+messages ago, was based on the thesis text's prose description of their
+equation, not a direct code check, and doesn't hold up.** Their Taylor
+rule (line 153) remains confirmed level-gap, unaffected by this
+correction.
+
+**What this changes:** adopting the exact form is a deliberate departure
+from IS2017's own practice, not an alignment with it. **What it doesn't
+change:** the user's actual decision criterion was internal consistency
+with what Appendix A.1.7/B.30 already derive, not "matches IS2017" — the
+covariance/Jensen-gap argument for exact-over-approximate stands on its
+own regardless of what IS2017's code does. Checked the current A.1.7 text
+for whether its justification still holds given this correction: yes —
+the IS2017 citation there only motivates *why* a Fisher-type equation
+needs constructing at all (parallel structure, household holds no bond
+directly), not *why the exact form specifically*; that's argued
+separately and independently via the covariance/Jensen decomposition.
+One precision-level imprecision flagged, not fixed (not mine to edit):
+the text states IS2017's bond Euler *is* the exact form, true as the
+textbook FOC for a bond-holding household, imprecise if read as "and
+that's what their code computes."
+
+**Action taken: `thesis_model_v4.mod` created and promoted to the
+official, thesis-facing model.** `thesis_model_v3.mod` (approximate
+Fisher) kept on disk, completely unchanged, for comparison. v4 = v3 +
+the exact-Fisher `FI` auxiliary (identical construction to the diagnostic
+copy earlier tonight, re-verified independently: 43 vars, same 9
+jumpers, all residuals exact zero, `rss` identical to 10 significant
+figures). `run_thesis_model.m` now points at v4 (`MODEL =
+'thesis_model_v4'`) — this is the new official driver.
+
+**Comment cleanup on v4, cosmetic only, verified.** Per this same
+request and the standing §5 comment-hygiene item from the 2026-08-19
+briefing (previously deferred as "do last, cosmetic only"): stripped the
+dated debugging narrative, "ORIGINAL was X / REPLACES" archaeology, and
+multi-paragraph justifications from `thesis_model_v4.mod`, matching
+IS2017's own leaner layout style (short header, brief per-variable
+comments, minimal section banners) — file went from 604 to 409 lines.
+**Verified cosmetic-only two ways:** (1) stripped comments from both the
+pre- and post-cleanup versions and confirmed the remaining executable
+lines are identical, line for line, in the same order (231 lines each,
+zero diff after two reordering fixes — variable-declaration and
+equation-block order were restored to match v3 exactly, even though
+Dynare doesn't depend on either); (2) re-ran resid/steady/check after
+cleanup and got byte-identical numbers to the pre-cleanup verification
+(`rss=1.00415202`, `FIss=0.9958651482`, same 9 jumpers, all residuals
+zero). `thesis_model_v3.mod` untouched throughout, still carries its
+original verbose comments as the historical record.
+
+**Two new charts added to `run_thesis_model.m`, both using data already
+computed (no new Dynare solves needed), proposed as "what a supervisor
+would want to see" and implemented directly per the user's request:**
+- `Fig5_Tail_Distributions`: histograms of the simulated ergodic
+  distributions (output, consumption, spread, bank leverage) from the
+  existing 20,000-quarter tail-risk simulation, with steady-state and
+  Output-/Spread-at-Risk percentile markers. This is the visual
+  companion the skewness/kurtosis table never had — the thing that
+  actually shows "tail" rather than just reporting a number for it.
+- `Fig6_Two_Channel_Decomposition`: the immediate-channel leverage
+  response shaded against its own peak, plus the N^b path confirming it
+  is exactly zero at impact — the picture version of the two-channel
+  table, showing directly why the channel separation claim holds.
+
+**Two more chart ideas proposed, not implemented tonight (both need a
+fresh Dynare solve, not free like the two above) — see the chat response
+for the full pitch:** a consumption-equivalent welfare cost of disaster
+risk (standard in this literature, currently absent), and an order-1 vs
+order-3 GIRF comparison (motivates why third-order perturbation is
+methodologically necessary here, currently asserted but not shown).
+
+**Full v4 pipeline re-run with both new charts**, results and final
+sign-off in the same-session chat response once the run completes.

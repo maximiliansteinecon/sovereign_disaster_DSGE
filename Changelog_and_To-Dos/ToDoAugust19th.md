@@ -184,3 +184,127 @@ above) before a final PDF compile, and a decision on the Fisher equation
 
 Not time-boxing this to the hour — the point is the write-up can
 legitimately start now, which is the actual ask tonight.
+
+## 4. Afternoon/evening session (Aug 19, ~11:00–18:45) — Fisher equation resolved, Appendix C closed out
+
+Picked up from §2/§3 above with Claude Code. Status at 18:45, **6 hours
+left today**:
+
+### §2 (Fisher equation) — RESOLVED, implemented, quantified
+
+Decision was made to implement-and-rerun. **`thesis_model_v4.mod` is now
+the canonical model** (`run_thesis_model.m` points at it as of 13:12).
+v4 = v3 + exact Fisher equation (`FI` auxiliary, eq 6 replaced) + the
+same eq-23/`iotae` fix already in v3, plus a comment cleanup pass
+(`thesis_model_v4_pre_cleanup.mod` is the pre-cleanup snapshot,
+numerically byte-identical — see §5 below). `thesis_model_v3.mod` was
+**deliberately left unchanged on disk** specifically to serve as the
+comparison baseline (confirmed in v4's own header comment).
+
+Full pipeline re-run on v4 completed cleanly (13:10–13:17,
+`run_v4_official.log`): 43/43 equations (one more than v3's 42, for the
+new `FI` variable), BK conditions clean (9=9), all figures/tables
+regenerated from v4. **This is the current headline result set** —
+`thesis_model_results.mat`, Fig1–6, all `table_*.csv`.
+
+**The GIRF-magnitude comparison the briefing asked for is now done.**
+Ran v3 (approximate, `Q=pi(+1)/r`) fresh at order=3, baseline φ=0.03,
+same shock/methodology as the main script, and diffed against v4
+(exact). Steady states match exactly (`r_ss=1.00415201983`, both, to
+11 digits — confirms the appendix's own claim that the two forms
+coincide at the non-stochastic steady state). Dynamics do not:
+
+| Variable | Peak GIRF diff (% of peak) |
+|---|---|
+| Investment `i` | 18.9% |
+| Entrepreneur net worth `Ne` | 16.0% |
+| Labour `L` | 12.4% |
+| Output `y` | 9.3% |
+| `Rf`/`Rd`/`Q` | 6.5% |
+| Nominal rate `r` | 5.9% |
+| Inflation `pi` | 4.4% |
+| Sovereign spread | 0.08% (essentially untouched) |
+| Bond resilience `Hb` | ~0 (1e-14, control check) |
+
+Pattern is exactly what a real, localized equation change should look
+like: variables downstream of the interest-rate/inflation block move by
+double digits, variables on the sovereign/bank side that don't route
+through that equation (spread, `Hb`) are untouched. This is the number
+that substantiates line ~1300 of the draft ("not invisible... at the
+third-order solution this thesis targets") — that line currently
+asserts the claim without a magnitude. **Still open: a one-sentence
+addition to the robustness section citing these figures.** Proposal
+pending, not yet drafted into the text (per standing rule: propose,
+don't edit the draft directly).
+
+Note on a dead end, recorded so it isn't re-run by mistake:
+`thesis_model_v3_fisher_exact.mod` (built earlier today, v3 + exact
+Fisher only, without the eq-23 fix folded in the same way v4 does it)
+was compared against v4 first. That comparison showed ~1e-13 agreement
+— because **both use the exact Fisher form**; it was an internal
+consistency check between two independent codings of the same equation,
+not a test of exact-vs-approximate. Confirmed by checking for the `FI`
+variable's presence in each `.mat`'s variable list. The real test is
+v3 (plain) vs v4, above. `thesis_model_v3_fisher_exact.*` is now
+redundant with v4 — see §5.
+
+### §0.2 (align/align* LaTeX bug) — STILL OPEN
+
+Rechecked tonight in the current draft (`Status Quo - Thesis August
+18th.txt`): still 14 `\begin{align}`/15 `\end{align}` and 27
+`\begin{align*}`/26 `\end{align*}`. The one-character fix flagged this
+morning (line ~2904, `\end{align}` → `\end{align*}`) has **not** been
+applied yet. Two-minute fix, still blocks a clean PDF compile.
+
+### §4 (Ξ_t formula) — STILL OPEN
+
+Rechecked: no `\Xi_t = ...` or `\Xi_t\equiv...` definition anywhere in
+the current draft. Still referenced/promised three times, never
+delivered. Not an economics error (confirmed again this morning), just
+the same documentation gap.
+
+### Appendix C — full verification complete (was the blocker from before
+tonight: earlier draft cut off mid-Appendix-C)
+
+With the updated draft, Appendix C runs D0, D2–D10 in full (D8 Bank
+Block, D9 Public Authority, D10 Solution Algorithm — the three sections
+missing from the copy available earlier today — are now present).
+Checked every closed-form equation (C.1–C.36) against the actual
+`steady_state_model` block, term by term, including the intricate D8
+value-function/diversion-parameter chain (`spreadAss`→`OmBss`→`etaBss`/
+`nuBss`→`lambdadiv`) and D9's fiscal residual. **No discrepancies.**
+D9's absence of a `T`/bond-quantity Dynare variable is intentional
+(matches the draft's own Isore-2017-style elimination of $T_t$, and
+v4.mod's header explicitly documents it as "a pure residual with no
+feedback"). Confirmed v3_fisher_exact's `steady_state_model` block
+(what was actually checked) is byte-identical in substance to v4's
+current one — comment wording differs, every formula is the same — so
+this verification applies to the canonical v4 file, not a stale one.
+Minor cosmetic-only nit: `sec:D0`→`sec:D2` skips `D1`, nothing
+references it, harmless.
+
+### File audit / cleanup — see same-session chat response for full
+categorization
+
+Working directory has accumulated the v3-plain / v3-fisher-exact /
+v4-pre-cleanup / v4 family plus matching logs, figures and tables for
+each. Canonical going forward: **v4** (model + results) and **v3**
+(kept intentionally as the comparison baseline, per above). Everything
+under the `thesis_model_v3_fisher_exact*` and
+`thesis_model_v4_pre_cleanup*` names is superseded/redundant now that
+v4 exists and has been verified against both. Full file-by-file list
+given in chat, not duplicated here — this is a to-do log, not a file
+manifest.
+
+### Revised sequencing, 6 hours left today
+
+1. Fix the align/align* bug (§0.2) — two minutes, still first, still
+   blocks a clean compile.
+2. Decide on and draft the one-sentence Fisher-magnitude addition to
+   the robustness section (table above is the source data).
+3. Clean up the working directory per the chat's categorization
+   (pending your confirmation on the delete list).
+4. Resume the Results-chapter write-up sequencing from §3 above — the
+   Fisher decision that was blocking it is now closed, nothing left
+   standing in the way of starting 5.1–5.4 transcription tonight if
+   time allows.
