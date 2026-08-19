@@ -1,6 +1,6 @@
 %% =======================================================================
 %  run_thesis_model.m
-%  Driver for the master-thesis benchmark model  thesis_model_v3.mod
+%  Driver for the master-thesis benchmark model  thesis_model_v4.mod
 %  ------------------------------------------------------------------------
 %  Maximilian Stein - Sovereign Disaster Risk, Banking Frictions and Macro
 %  Tail Outcomes in a NK-DSGE for the Euro Area.
@@ -18,7 +18,7 @@
 %      Isore-Szczerbowicz (2017) replication code (uses Dynare's simult_).
 %   3. Builds GENERALISED IRFs to a disaster-risk shock (etheta): the
 %      difference between the shocked path and the no-shock path, in
-%      percent of the ergodic mean (raw annualized bps for spread/Rb/Qb).
+%      percent of the ergodic mean (raw quarterly bps for spread/Rb/Qb).
 %   4. Produces THREE separate figures, because they answer different
 %      questions and must not be read as one continuous story (see
 %      CHANGELOG "2026-08-05"):
@@ -60,7 +60,7 @@
 %
 %  HOW TO RUN
 %   >> addpath /Applications/Dynare/6.3-x86_64/matlab   % <-- adjust to yours
-%   >> cd  <folder containing this file and thesis_model_v3.mod>
+%   >> cd  <folder containing this file and thesis_model_v4.mod>
 %   >> run_thesis_model
 %
 %  REQUIREMENTS: MATLAB (R2018b+, Statistics Toolbox for skewness/kurtosis/
@@ -69,7 +69,7 @@
 %  of the 5 scen points -- a full run takes on the order of 20-40 minutes.
 %  Set RUN_PHI_SWEEP=false / RUN_TAIL_RISK=false for a fast Fig1-3-only
 %  pass while iterating on plotting/table code.
-%  TIP for a first debug pass: open thesis_model_v3.mod and switch
+%  TIP for a first debug pass: open thesis_model_v4.mod and switch
 %  stoch_simul to  order=1  (faster; isolates steady-state / BK problems
 %  from any 3rd-order/pruning issues).  Once order=1 solves, go back to 3.
 %% =======================================================================
@@ -84,7 +84,7 @@ if isempty(which('dynare'))
 end
 
 %% ---------------------- user settings -----------------------------------
-MODEL      = 'thesis_model_v3';   % .mod file name (without extension)
+MODEL      = 'thesis_model_v4';   % .mod file name (without extension)
                                % MUST match the actual .mod filename exactly --
                                % this project has previously had a 'thesis_model.mod'
                                % that silently diverged from the file actually being
@@ -136,7 +136,7 @@ IDX_30     = 4;   % index of phi=0.30 in scen/R (beyond-calibration)
 IDX_50     = 5;   % index of phi=0.50 in scen/R (beyond-calibration)
 scenPhis   = [1e-4, 0.03, 0.20, 0.30, 0.50];   % must match scen row order exactly
 
-bpsVars = {'spread','Rb','Qb'};   % rate-wedge vars reported in raw ann. bps, not %
+bpsVars = {'spread','Rb','Qb'};   % rate-wedge vars reported in raw quarterly bps, not %
 
 %% ---------------------- solve each scenario ------------------------------
 R = struct();                                   % results container
@@ -349,7 +349,9 @@ else
     save('thesis_model_results.mat', 'R', 'plotVars', 'shockName', 'shockSize', 'scen', 'twoChannel');
 end
 fprintf('\nDone. Results saved to thesis_model_results.mat\n');
-fprintf('Figures saved: Fig1_Headline_GIRF, Fig2_Core_Phi_Sweep, Fig3_Beyond_Calibration (.fig/.png)\n');
+fprintf('Figures saved: Fig1_Headline_GIRF, Fig2_Core_Phi_Sweep, Fig3_Beyond_Calibration, Fig6_Two_Channel_Decomposition (.fig/.png)');
+if RUN_TAIL_RISK, fprintf(', Fig5_Tail_Distributions (.fig/.png)'); end
+fprintf('\n');
 fprintf('Tables saved: table_two_channel_safehaven.csv, table_steady_state.csv, table_calibration.csv');
 if RUN_TAIL_RISK,  fprintf(', table_tail_risk_moments.csv'); end
 if RUN_PHI_SWEEP,  fprintf(', table_phi_sweep.csv (+ Fig4_Phi_Sweep.png)'); end
@@ -460,6 +462,30 @@ function out = local_two_channel_safehaven(R, idxBase)
               sprintf('%.6f',nb_at_impact); mat2str(qb_never_reverses); mat2str(hb_dominates_all); mat2str(hb_dominates_post_impact)};
     T = table(Metric, Value);
     writetable(T, 'table_two_channel_safehaven.csv');
+
+    % Visual companion to the table above: the immediate channel is the
+    % share of the eventual lev response already present at t=0, before
+    % Nb (which the lagged channel operates through) has moved at all --
+    % a number is easy to miss the point of, a picture is not.
+    hz = 0:numel(lev_path)-1;
+    figure('Name','Fig6_Two_Channel_Decomposition','Position',[80 80 900 650]);
+    subplot(2,1,1); hold on; grid on;
+    area(hz, min(lev_path, impact_lev), 'FaceColor',[0.85 0.60 0.30], 'FaceAlpha',0.35, 'EdgeColor','none');
+    yline(impact_lev, ':', 'Color',[0.6 0.4 0.1], 'LineWidth',1.1);
+    plot(hz, lev_path, '-', 'Color',[0.00 0.45 0.74], 'LineWidth',1.8);
+    plot(0, impact_lev, 'o', 'MarkerFaceColor',[0.85 0.33 0.10], 'MarkerEdgeColor','none', 'MarkerSize',7);
+    title(sprintf('Bank leverage response: immediate channel = %.1f%% of peak (shaded)', impact_share_pct), 'Interpreter','tex');
+    xlabel('quarters'); ylabel('% dev.'); xlim([0 numel(hz)-1]);
+    legend({'immediate-channel share','impact level (t=0)','full response','impact point'}, 'Location','southeast', 'FontSize',7);
+
+    subplot(2,1,2); hold on; grid on;
+    plot(hz, girf(jNb,:), '-', 'Color',[0.49 0.18 0.56], 'LineWidth',1.8);
+    plot(0, girf(jNb,1), 'o', 'MarkerFaceColor',[0.85 0.33 0.10], 'MarkerEdgeColor','none', 'MarkerSize',7);
+    yline(0, '-', 'Color',[0.5 0.5 0.5]);
+    title('Bank net worth N^b: exactly zero at impact -- confirms the lagged channel has not yet activated', 'Interpreter','tex');
+    xlabel('quarters'); ylabel('% dev.'); xlim([0 numel(hz)-1]);
+    savefig('Fig6_Two_Channel_Decomposition.fig');
+    print('Fig6_Two_Channel_Decomposition.png', '-dpng', '-r150');
 end
 
 function v = local_tern(cond, a, b)
@@ -467,16 +493,30 @@ function v = local_tern(cond, a, b)
 end
 
 function local_steady_state_table(R, idxList)
-    labels = {'Bank net worth Nb','Bank leverage lev','Sovereign spread (raw, ann. bps)', ...
-        'Bank sovereign-bond holdings QbB','Entrepreneur premium E[R^K]/R^S','Bank margin R^S/R^d', ...
+    % Row "Sovereign spread": 10000*ss(jSpread) is a QUARTERLY bps figure
+    % (no x4 annualisation) -- matches Appendix C's own quoted 0.8504%
+    % quarterly. Do not annualise here; that would put the table out of
+    % step with the thesis text.
+    % Two premium rows, not one: RK is the model's DISASTER-FREE Rtilde^K
+    % (thesis notation), so ss(jRK)/ss(jRS) is the realised premium
+    % premE/(1-thetass*Deltak), not the calibration target premE itself.
+    % The true unconditional E[R^K]/R^S needs the (1-thetass*Deltak)
+    % correction -- reporting both avoids silently picking one.
+    labels = {'Bank net worth Nb','Bank leverage lev','Sovereign spread (raw, quarterly bps)', ...
+        'Bank sovereign-bond holdings QbB','Entrepreneur premium, realised RK/RS', ...
+        'Entrepreneur premium, E[R^K]/R^S (=premE target)','Bank margin R^S/R^d', ...
         'Output y','Consumption c','Investment i'};
     names = R(idxList(1)).names;
     jNb=strcmp(names,'Nb'); jLev=strcmp(names,'lev'); jSpread=strcmp(names,'spread');
     jQbB=strcmp(names,'QbB'); jRK=strcmp(names,'RK'); jRS=strcmp(names,'RS'); jRd=strcmp(names,'Rd');
     jy=strcmp(names,'y'); jc=strcmp(names,'c'); ji=strcmp(names,'i');
+    Mp = R(idxList(1)).M;
+    thetass = Mp.params(strcmp(Mp.param_names,'thetass'));
+    Deltak  = Mp.params(strcmp(Mp.param_names,'Deltak'));
 
     n = numel(idxList);
-    Mtab = zeros(9,n);
+    nrows = numel(labels);
+    Mtab = zeros(nrows,n);
     colNames = cell(1,n);
     for c1 = 1:n
         s = idxList(c1);
@@ -487,17 +527,18 @@ function local_steady_state_table(R, idxList)
         Mtab(3,c1) = 10000*ss(jSpread);
         Mtab(4,c1) = ss(jQbB);
         Mtab(5,c1) = ss(jRK)/ss(jRS);
-        Mtab(6,c1) = ss(jRS)/ss(jRd);
-        Mtab(7,c1) = ss(jy);
-        Mtab(8,c1) = ss(jc);
-        Mtab(9,c1) = ss(ji);
+        Mtab(6,c1) = (1 - thetass*Deltak) * ss(jRK)/ss(jRS);
+        Mtab(7,c1) = ss(jRS)/ss(jRd);
+        Mtab(8,c1) = ss(jy);
+        Mtab(9,c1) = ss(jc);
+        Mtab(10,c1) = ss(ji);
     end
 
     fprintf('\n=========== STEADY-STATE COMPARISON TABLE ===========\n');
     fprintf('%-38s', 'Variable');
     for c1=1:n, fprintf('%20s', R(idxList(c1)).label); end
     fprintf('\n');
-    for r1=1:9
+    for r1=1:nrows
         fprintf('%-38s', labels{r1});
         for c1=1:n, fprintf('%20.6g', Mtab(r1,c1)); end
         fprintf('\n');
@@ -505,6 +546,62 @@ function local_steady_state_table(R, idxList)
 
     T = array2table(Mtab, 'VariableNames', colNames, 'RowNames', labels);
     writetable(T, 'table_steady_state.csv', 'WriteRowNames', true);
+end
+
+function local_calibration_table(M, ss, names)
+    % {parameter name in .mod, description, source} -- value pulled live
+    % from M.params so the table can never drift out of sync with the
+    % .mod file itself.
+    rows = { ...
+        'thetass',  'Steady-state disaster probability',              'Isore & Szczerbowicz (2017)'; ...
+        'Deltak',   'Capital/productivity destruction in disaster',    'Isore & Szczerbowicz (2017)'; ...
+        'rhotheta', 'Disaster-probability persistence',                'Isore & Szczerbowicz (2017)'; ...
+        'sigtheta', 'Std. dev. of disaster-risk shock',                 'Isore & Szczerbowicz (2017)'; ...
+        'beta0',    'Subjective discount factor',                       'Gourio (2012) / Isore & Szczerbowicz (2017)'; ...
+        'psitilde', 'Inverse EIS (pre-transformation)',                  'Gourio (2012)'; ...
+        'gamma',    'Relative risk aversion',                            'Gourio (2012) / Isore & Szczerbowicz (2017)'; ...
+        'varpi',    'Leisure preference weight',                         'Gourio (2012)'; ...
+        'delta0',   'Capital depreciation rate',                         'Standard NK calibration'; ...
+        'tau',      'Capital adjustment cost curvature',                 'Standard NK calibration'; ...
+        'alpha',    'Capital share in production',                       'Standard NK / euro-area calibration'; ...
+        'zeta',     'Calvo price stickiness',                            'Standard NK calibration'; ...
+        'upsilon',  'Elasticity of substitution across varieties',       'Standard NK calibration'; ...
+        'muz',      'Trend TFP growth rate',                             'Euro-area trend growth'; ...
+        'piss',     'Gross inflation target',                            'ECB inflation target (quarterly gross)'; ...
+        'phipi',    'Taylor rule: inflation response',                   'Taylor (1993)'; ...
+        'phiy',     'Taylor rule: output response',                      'Taylor (1993)'; ...
+        'rhor',     'Interest-rate smoothing',                           'Standard NK calibration'; ...
+        'Deltab',   'Sovereign haircut in a disaster',                   'Cruces & Trebesch (2013)'; ...
+        'chie',     'Elasticity of entrepreneur premium wrt leverage',   'Gelain (2010), ECB WP 1171, posterior mean'; ...
+        'sigma_e',  'Entrepreneur survival rate',                        'Gelain (2010), ECB WP 1171, posterior mean'; ...
+        'sigma_b',  'Banker survival rate',                              'Gertler & Karadi (2011) standard value'; ...
+        'levE',     'Target entrepreneur leverage Qk/N^e',               'Bernanke, Gertler & Gilchrist (1999) target'; ...
+        'premE',    'Target entrepreneur premium E[R^K]/R^S',            'BGG (1999)-style, ~120bp annual'; ...
+        'sprL',     'Bank loan spread R^S/R^d',                          'Calibrated bank funding margin'; ...
+        'phi',      'Home-bias: sovereign-bond share of bank assets',    'Buch (2026), ECB speech, euro-area avg.'; ...
+    };
+    n = size(rows,1);
+    vals = zeros(n,1);
+    for r1=1:n
+        vals(r1) = M.params(strcmp(M.param_names, rows{r1,1}));
+    end
+
+    % levss is NOT a declared parameter -- it's a local steady_state_model
+    % computation variable, discarded after the steady state is solved.
+    % The number it targets is exactly the endogenous var `lev`'s own
+    % steady state, which IS available (in ss/names).
+    rows(end+1,:) = {'lev (s.s.)', 'Bank leverage target (steady state)', 'Coenen, Karadi, Schmidt & Warne (2018), NAWM II'};
+    vals(end+1) = ss(strcmp(names,'lev'));
+    n = n+1;
+
+    fprintf('\n=========== CALIBRATION TABLE ===========\n');
+    for r1=1:n
+        fprintf('%-10s %12.6g   %-50s %s\n', rows{r1,1}, vals(r1), rows{r1,2}, rows{r1,3});
+    end
+
+    T = table(rows(:,1), vals, rows(:,2), rows(:,3), ...
+        'VariableNames', {'Parameter','Value','Description','Source'});
+    writetable(T, 'table_calibration.csv');
 end
 
 function local_tail_risk(Rbase, T, burninT, seedVal, korder)
@@ -540,6 +637,30 @@ function local_tail_risk(Rbase, T, burninT, seedVal, korder)
 
     Tout = cell2table(rowsOut, 'VariableNames', {'Variable','Mean','Std','Skewness','Kurtosis'});
     writetable(Tout, 'table_tail_risk_moments.csv');
+
+    % Tail-distribution histograms -- the visual companion to the moments
+    % table above; this is what actually shows the "tail" the thesis title
+    % promises, rather than just reporting skew/kurtosis as numbers. VaR-
+    % style markers (5th/95th pct, steady state) on the two variables the
+    % thesis names Output-/Spread-at-Risk.
+    figure('Name','Fig5_Tail_Distributions','Position',[80 80 900 700]);
+    for v = 1:numel(varList)
+        jv = strcmp(Rbase.names, varList{v});
+        x  = path(jv,:);
+        subplot(3,2,v); hold on;
+        histogram(x, 60, 'Normalization','pdf', 'FaceColor',[0.30 0.55 0.75], 'EdgeColor','none');
+        xline(Rbase.ss(jv), '-', 'steady state', 'Color',[0.2 0.2 0.2], 'LineWidth',1.2, 'LabelVerticalAlignment','top');
+        if strcmp(varList{v},'y')
+            xline(oar, '--', '5th pct (OaR)', 'Color',[0.75 0.2 0.2], 'LineWidth',1.4);
+        elseif strcmp(varList{v},'spread')
+            xline(sar, '--', '95th pct (SaR)', 'Color',[0.75 0.2 0.2], 'LineWidth',1.4);
+        end
+        title(labels{v}, 'Interpreter','tex');
+        xlabel('level'); ylabel('density');
+    end
+    sgtitle(sprintf('Simulated ergodic distributions (T=%d quarters, seed=%d)', T, seedVal));
+    savefig('Fig5_Tail_Distributions.fig');
+    print('Fig5_Tail_Distributions.png', '-dpng', '-r150');
 end
 
 function local_phi_sweep_report(Rsweep)
