@@ -302,7 +302,7 @@ Qtobss = 1;    RKss = RKtildess;
 knss  = exp(muz)*kss;
 Ness  = knss/levE;
 f0    = premE*(1/levE)^(chie);
-iotae = Ness - sigma_e*exp(-muz)*(RKss*kss - RSss*(kss - Ness));
+iotae = Ness - sigma_e*(RKss*kss - RSss*(kss - exp(-muz)*Ness)  );
 QSss  = knss - Ness;                    % bank loans = capital value NET of entrepreneur equity
 
 % --- bank block: leverage TARGET (4.0, same numeric target as the old
@@ -459,11 +459,14 @@ RK = (Pkr*u + Qtob*(1-delta0*u^eta))/Qtob(-1);
 % (see CHANGELOG for why this does not reintroduce the earlier BK issue).
 (1-theta*Deltak)*RK(+1) = RS * f0 * (Ne/(Qtob*exp(muz)*k))^(-chie);
 % (23) entrepreneur net-worth accumulation                            (B.18)
-% FIXED: Gamma^-1 (exp(-muz)) must scale the ENTIRE bracket, not just the
-% Ne(-1) term -- thesis B.18 explicitly states "factor Gamma_t^{-1}"
-% applied to the whole [R^K*Q*k^n - R^S*(Q*k^n-N^e)] bracket, exactly
-% mirroring eq (27)/B.23's bank net-worth structure.
-Ne = sigma_e*exp(-muz)*( RK*Qtob(-1)*k(-1) - RS(-1)*(Qtob(-1)*k(-1) - Ne(-1)) ) + iotae;
+% Gamma^-1 scales Ne(-1) only, not the k^n terms: k(-1) is k_t=K_t/z_t,
+% already carrying one Gamma^-1 relative to k^n_t=exp(muz)*k(-1) (eq 24
+% uses the same substitution for k^n_{t+1}); writing k^n_t this way makes
+% the outer and inner exp(muz) cancel on the capital terms, leaving
+% exp(-muz) on Ne(-1) alone. No eq-(27)/B.23 analogy: that equation has
+% no k^n term, each piece deflated by its own date's trend individually.
+Ne = sigma_e*exp(-muz)*( RK*Qtob(-1)*exp(muz)*k(-1)
+                        - RS(-1)*(Qtob(-1)*exp(muz)*k(-1) - Ne(-1)) ) + iotae;
 % (24) entrepreneur balance sheet  (defines loan value QS)            (B.19)
 QS = Qtob*exp(muz)*k - Ne;
 

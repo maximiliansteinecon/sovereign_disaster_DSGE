@@ -1,7 +1,7 @@
 Metric,Value
-"Impact-period lev response (%)",0.0027
-"Peak lev response (%)",0.0593
-"Impact share of peak (%)",4.63
+"Impact-period lev response (%)",0.0028
+"Peak lev response (%)",0.0592
+"Impact share of peak (%)",4.69
 "Nb at impact (%, ~0 check)",0.000000
 "Qb stays below s.s., no sign reversal",true
 "Hb dominates Rf, every horizon incl. impact",false
