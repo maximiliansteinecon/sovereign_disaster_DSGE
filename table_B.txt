@@ -1,0 +1,69 @@
+Overall, the stationarised system consists of equations \eqref{eq:HHO_Deposit_Euler}, \eqref{eq:riskfree_rate} and \eqref{eq:B_capital}--\eqref{eq:stat_closing}.
+\newpage
+
+\begin{center}
+\small
+\begin{tabular}{lll}
+\toprule
+Equation & Determines & Notes \\
+\midrule
+\multicolumn{3}{l}{\textit{Households (A.1 / B.1--B.5)}}\\
+Capital LOM (B.1)              & $k_{t+1}$        & \\
+SDF (B.3)                      & $\mathcal{M}_{t,t+1}$      & \\
+Bellman value (B.2)            & $v_t$            & \\
+Labour--leisure (B.4)         & $c_t$            & \\
+Deposit Euler (A.1.3)          & $R^d_t$          & \\
+Risk-free definition (A.1.6)   & $R^f_t$          & \\
+Tobin's Q (B.5)                & $Q_t$            & capital-goods producer\\
+\midrule
+\multicolumn{3}{l}{\textit{Firms (A.2 / B.6--B.14)}}\\
+Real wage (B.6)                & $w_t$     & \\
+Rental rate (B.7)              & $P^{k,real}_t$   & stationary\\
+Effective capital (B.8)        & $\tilde k_t$     & \\
+Productivity process           & $z_t$            & $\varepsilon_z=0$ baseline\\
+Marginal cost def.             & $mc^*_t$         & \\
+Reset inflation (B.9)          & $\pi^*_t$        & \\
+Calvo auxiliary 1 (B.10)       & $\xi_{1t}$       & \\
+Calvo auxiliary 2 (B.11)       & $\xi_{2t}$       & \\
+Aggregate inflation (B.12)     & $\pi_t$          & \\
+Price dispersion (B.13)        & $\Omega_t$       & \\
+Production (B.14)              & $y_t$            & \\
+\midrule
+\multicolumn{3}{l}{\textit{Entrepreneurs (A.3.1 / B.15--B.19)}}\\
+Utilisation FOC (B.15)         & $u_t$            & \\
+Return on capital (B.16)       & $R^K_t$          & definition; $\tilde R^K$ split\\
+Participation / EFP (B.17)     & $R^S_t$          & $\mathcal{K}(\theta_t)$ moment\\
+Net worth (B.18)               & $n^e_t$          & $\Gamma_t^{-1}$ on whole bracket\\
+Balance sheet (B.19)           & $Q_ts_t$         & loan demand\\
+\midrule
+\multicolumn{3}{l}{\textit{Banks (A.3.2 / B.20--B.23)}}\\
+Balance sheet (B.20)           & $d_t$            & residual\\
+Leverage, binding (B.21)       & $Q^b_tb^b_t$     & with home-bias\\
+Asset value coefficient (B.21a)& $\eta^b_t$       & \\
+Net-worth coefficient (B.21b)  & $\nu^b_t$        & \\
+Continuation value (B.21c)     & $\Omega^b_t$     & \\
+Leverage multiplier (B.21d)    & $\lambda_t$      & endogenous, time-varying\\
+Home-bias (B.22)               & ratio            & pins bond/loan split\\
+Bank net worth (B.23)          & $n^b_t$          & $\Gamma_t^{-1}$ on whole bracket\\
+\midrule
+\multicolumn{3}{l}{\textit{Disaster transmission (A.3.3 / B.24--B.28)}}\\
+Resilience (B.24)              & $H^b_t$          & $\tilde\Lambda^M_t$ closed form\\
+Bond price (B.25)              & $Q^b_t$          & \\
+Bond return (B.26)             & $R^b_t$          & definition\\
+\midrule
+\multicolumn{3}{l}{\textit{Public authority \& clearing (B.29--B.32)}}\\
+Government budget (B.29)        & $T_t$            & real, discount bond\\
+Taylor rule (B.31)             & $r_t$            & \\
+Goods clearing (B.32)          & $c_t$ consistency & Walras check\\
+\midrule
+\multicolumn{3}{l}{\textit{Non-independent (not counted)}}\\
+EFP schedule (A.3.1.3)         & --- & \emph{definition} of $f(\cdot)$\\
+Banker value fn (A.3.2.2)      & --- & level-form groundwork for B.21a--B.21d\\
+Fisher (B.30)                  & --- & links $r_t,R^f_t$\\
+Expected bond return (B.27)    & --- & $=$ B.26 in expectation\\
+Spread (B.28)                  & --- & reporting definition\\
+Bond clearing (\S\ref{par:A513})      & --- & $=$ B.22\\
+Loan clearing (A.5.4)                 & --- & $=$ B.19 $+$ B.21 $+$ B.22\\
+\bottomrule
+\end{tabular}
+\end{center}

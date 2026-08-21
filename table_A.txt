@@ -1,0 +1,72 @@
+% ============================================================
+%  VARIABLE AND EQUATION INVENTORY — A.1 and A.5
+% ============================================================
+\subsection{Non-Detrended equation system}
+The equilibrium in a non-detrended path is determined by equations\eqref{eq:Cisaster_AR}, \eqref{eq:A3_LOM} and \eqref{eq:SDF}-\eqref{eq:A5_labour} corresponding to the 31 variables.
+ 
+\begin{center}
+\small
+\begin{tabular}{lll}
+\toprule
+Equation & Content & Variable determined \\
+\midrule
+\multicolumn{3}{l}{\textit{A.1 Households}} \\
+Eq. \eqref{eq:A3_LOM} & Capital accumulation law of motion & $K_{t+1}$ \\
+A.1.1 & Stochastic discount factor (EZ consumption FOC) & $\mathcal{M}_{t,t+1}$ \\
+A.1.2 & Labour-leisure FOC & $L_t$ \\
+A.1.3 & Deposit Euler & (jointly with A.1.6: $R^d_t=R^f_t$) \\
+A.1.4$^{\dagger}$ & Certainty-equivalent decomposition (groundwork for A.1.5) & --- \\
+A.1.5 & Pseudo-discount factor $\beta(\theta_t)$ & definitional \\
+A.1.6 & Risk-free rate definition & $R^f_t$ \\
+A.1.7 & Fisher equation (links existing variables) & --- \\
+A.1.8 & Capital-goods producer Tobin's Q & $Q_t$ \\
+\midrule
+\multicolumn{3}{l}{\textit{A.2 Firms}} \\
+A.2.4 & Real wage & $W^{\text{real}}_t$ \\
+A.2.5 & Real capital rental rate & $P^{k,\text{real}}_t$ \\
+A.2.6 & Effective capital definition & $\tilde{K}_t$ \\
+A.2.7 & Productivity growth process & $z_t$ \\
+A.2.9 & Optimal reset inflation & $\pi^*_t$ \\
+A.2.10 & Calvo recursive auxiliary $\Xi_{1t}$ & $\Xi_{1t}$ \\
+A.2.11 & Calvo recursive auxiliary $\Xi_{2t}$ & $\Xi_{2t}$ \\
+A.2.12 & Aggregate inflation & $\pi_t$ \\
+A.2.13 & Price dispersion recursion & $\Omega_t$ \\
+A.2.14 & Aggregate production function & $Y_t$ \\
+\midrule
+\multicolumn{3}{l}{\textit{A.3.1 Entrepreneurs}} \\
+A.3.1.1 & Utilisation FOC & $u_t$ \\
+A.3.1.2 & Return on capital & $R^K_{t+1}$ (definitional) \\
+A.3.1.3$^{\dagger}$ & External finance premium schedule $f(\cdot)$ & definition; enters A.3.1.6 \\
+A.3.1.4 & Entrepreneur net worth accumulation & $N^e_t$ \\
+A.3.1.5 & Entrepreneur balance sheet identity & $Q_tS_t$ \\
+A.3.1.6 & Free-entry (indifference) condition & $R^S_t$, jointly with A.3.1.3 \\
+\midrule
+\multicolumn{3}{l}{\textit{A.3.2 Banks}} \\
+A.3.2.1 & Bank balance sheet identity & $D_t$ (residual) \\
+A.3.2.2$^{\dagger}$ & Banker value function (theoretical foundation) & --- \\
+A.3.2.3 & Leverage constraint (binding), jointly with A.3.2.4 & $Q_tS_t+Q^b_tB^b_t$ \\
+A.3.2.4 & Home-bias portfolio identity & $Q^b_tB^b_t$ given $Q_tS_t$ \\
+A.3.2.5 & Bank net worth accumulation & $N^b_t$ \\
+\midrule
+\multicolumn{3}{l}{\textit{A.3.3 Disaster Transmission}} \\
+Eq. \eqref{eq:Cisaster_AR} & Disaster probability process & $\theta_t$ (exogenous) \\
+A.3.3.1$^{\dagger}$ & Equilibrium bond pricing condition (groundwork) & --- \\
+A.3.3.2/2b/2c & Resilience; $\Lambda^M$ closed form, $\tilde\Lambda^M_t$ normalised & $H^b_t$; $\tilde\Lambda^M_t$ varies with $\theta_t$ \\
+A.3.3.3 & Sovereign bond price (closed form) & $Q^b_t$ \\
+A.3.3.4$^{\dagger}$ & Sovereign bond return (state-contingent) & --- \\
+A.3.3.5$^{\ddagger}$ & Expected sovereign bond return (restates A.3.3.4 in expectation) & --- \\
+A.3.3.6$^{\ddagger}$ & Sovereign spread (reporting definition) & --- \\
+\midrule
+\multicolumn{3}{l}{\textit{A.4 Public Authority}} \\
+A.4.1 & Government budget constraint & $T_t$ (endogenous) \\
+A.4.2 & Taylor rule & $r_t$ \\
+\midrule
+\multicolumn{3}{l}{\textit{A.5 Market Clearing}} \\
+A.5.1 & Goods market clearing & $C_t$ \\
+A.5.2 , A.5.3 & Labour market and capital services clearing & $L_t, K_t$ (consistency check) \\
+A.5.4$^{\ddagger}$ & Loan-market clearing (restates A.3.1.5 + A.3.2.3 + A.3.2.4) & --- \\
+\bottomrule
+\end{tabular}
+\end{center}
+\footnote{$^{\dagger}$Theoretical groundwork; the closed-form result it justifies is what enters the implemented system. $^{\ddagger}$Restates an equation already counted elsewhere; included for narrative completeness, not as an independent equation.}
+ 
